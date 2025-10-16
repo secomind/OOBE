@@ -8,6 +8,9 @@
   "components.Sidebar.developerCenter": {
     "defaultMessage": "Developer Center"
   },
+  "components.Sidebar.connectToClea": {
+    "defaultMessage": "Connect to Clea"
+  },
   "components.Sidebar.exit": {
     "defaultMessage": "Exit"
   }

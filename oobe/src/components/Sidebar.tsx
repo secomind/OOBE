@@ -44,6 +44,12 @@ const Sidebar = () => {
             defaultMessage="Developer Center"
           />
         </NavLink>
+        <NavLink to="/connect" className="nav-link">
+          <FormattedMessage
+            id="components.Sidebar.connectToClea"
+            defaultMessage="Connect to Clea"
+          />
+        </NavLink>
       </Nav>
       <hr className="border-top border-secondary w-100" />
       <Container fluid className="sidebar-bottom px-3 py-2">

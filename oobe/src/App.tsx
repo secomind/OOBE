@@ -30,6 +30,17 @@ function App() {
                 />
               }
             />
+            <Route
+              path="/connect"
+              element={
+                <EmbeddedApp
+                  url={
+                    "https://developer.seco.com/clea-os/version-kirkstone_1-10-00/get_started/requirements"
+                  }
+                  title="Connect to Clea"
+                />
+              }
+            />
           </Routes>
         </main>
       </section>
