@@ -1,4 +1,28 @@
 {
+  "components.GeolocalizationCard.addressLabel": {
+    "defaultMessage": "Address:"
+  },
+  "components.GeolocalizationCard.addressUnavailable": {
+    "defaultMessage": "Address unavailable"
+  },
+  "components.GeolocalizationCard.loading": {
+    "defaultMessage": "Loading position..."
+  },
+  "components.GeolocalizationCard.loadingAddress": {
+    "defaultMessage": "Loading address..."
+  },
+  "components.GeolocalizationCard.offline": {
+    "defaultMessage": "Device Offline"
+  },
+  "components.GeolocalizationCard.offlineDescription": {
+    "defaultMessage": "Geolocation will be available once the device is connected to the internet."
+  },
+  "components.GeolocalizationCard.statusLabel": {
+    "defaultMessage": "Status:"
+  },
+  "components.GeolocalizationCard.title": {
+    "defaultMessage": "Geolocalization"
+  },
   "components.Sidebar.applicationHub": {
     "defaultMessage": "Application Hub"
   },

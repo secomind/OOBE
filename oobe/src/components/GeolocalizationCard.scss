@@ -1,0 +1,31 @@
+.geoloc-card {
+  max-width: 100%;
+  width: 100%;
+  margin: 0 auto;
+  max-height: none;
+
+  .map-wrapper {
+    flex-grow: 1;
+    width: 100%;
+    padding: 0 1rem;
+  }
+
+  .map-container {
+    height: 635px;
+    border-radius: 15px;
+    overflow: hidden;
+    margin-top: 3rem;
+
+    @media (max-width: 1200px) {
+      height: 465px;
+    }
+
+    @media (max-width: 576px) {
+      height: 350px;
+    }
+  }
+
+  .offline-state {
+    padding: 0 1rem;
+  }
+}
