@@ -3,8 +3,14 @@ import Dashboard from "./pages/Dashboard";
 import "./App.css";
 import EmbeddedApp from "./components/EmbeddedApp";
 import { Routes, Route, Navigate } from "react-router-dom";
+import { useMemo } from "react";
+import { APIClient } from "./api/APIClient";
 
 function App() {
+  const apiClient = useMemo(() => {
+    return new APIClient();
+  }, []);
+
   return (
     <div className="d-flex vh-100">
       <aside className="flex-shrink-0">
@@ -13,7 +19,10 @@ function App() {
       <section className="flex-grow-1 d-flex flex-column overflow-auto">
         <main className="flex-grow-1">
           <Routes>
-            <Route path="/dashboard" element={<Dashboard />} />
+            <Route
+              path="/dashboard"
+              element={<Dashboard apiClient={apiClient} />}
+            />
             <Route
               path="/hub"
               element={

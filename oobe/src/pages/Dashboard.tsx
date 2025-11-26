@@ -6,8 +6,13 @@ import SystemResourceUsage from "../components/SystemResourceUsage";
 import Geolocalization from "../components/GeolocalizationCard";
 import LogCard from "../components/LogCard";
 import DeviceDetailsCard from "../components/DeviceDetails";
+import type { APIClient } from "../api/APIClient";
 
-const Dashboard: React.FC = () => {
+interface DashboardProps {
+  apiClient: APIClient
+}
+
+const Dashboard = ({apiClient}: DashboardProps) => {
   const [time, setTime] = useState("");
 
   const updateTime = () => {
@@ -54,7 +59,7 @@ const Dashboard: React.FC = () => {
         </Col>
         <Col xs={12} md={6} lg={4} className="d-flex flex-column gap-4">
           <LogCard />
-          <DeviceDetailsCard />
+          <DeviceDetailsCard apiClient={apiClient} />
         </Col>
       </Row>
     </Container>

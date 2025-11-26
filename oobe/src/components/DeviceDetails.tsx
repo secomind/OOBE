@@ -1,25 +1,36 @@
-import React from "react";
-import { Card, Row, Col } from "react-bootstrap";
+import { useEffect, useState } from "react";
+import { Card, Row, Col, Alert } from "react-bootstrap";
 import { FormattedMessage } from "react-intl";
 import "./DeviceDetails.scss";
+import { APIClient } from "../api/APIClient";
 
-type DeviceInfo = {
+interface DeviceDetailsCardProps {
+  apiClient: APIClient
+}
+
+export type DeviceInfo = {
   cpuArchitecture: string;
   cpuModelCode: string;
   cpuModelName: string;
   cpuVendor: string;
-  totalMemory: string;
+  totalMemory?: string;
 };
 
-const deviceInfo: DeviceInfo = {
-  cpuArchitecture: "Armv8 (64-bit)",
-  cpuModelCode: "Broadcom BCM2712",
-  cpuModelName: "Quad-core Cortex-A76 @ 2.4 GHz",
-  cpuVendor: "Broadcom",
-  totalMemory: "8 GB LPDDR4-4267 SDRAM",
-};
+const DeviceDetailsCard = ({apiClient}: DeviceDetailsCardProps) => {
+  const [deviceInfo, setDeviceInfo] = useState<DeviceInfo | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-const DeviceDetailsCard: React.FC = () => {
+  useEffect(() => {
+    apiClient
+      .getSystemInfo()
+      .then((data) => {
+        setDeviceInfo(data);
+      })
+      .catch(() => {
+        setError("Failed to fetch system info");
+      });
+  }, [apiClient]);
+
   return (
     <Card className="device-details-card bg-dark rounded-5 border-secondary border-2">
       <Card.Body className="p-4 d-flex flex-column">
@@ -30,6 +41,17 @@ const DeviceDetailsCard: React.FC = () => {
           />
         </Card.Title>
 
+        {error && (
+          <Alert
+            onClose={() => setError(null)}
+            dismissible
+            variant="danger"
+            className="mb-3"
+          >
+            {error}
+          </Alert>
+        )}
+
         <Row className="device-details-card__item align-items-start mb-3">
           <Col xs={5} sm={4} md={3} className="device-details-card__label">
             <FormattedMessage
@@ -38,7 +60,7 @@ const DeviceDetailsCard: React.FC = () => {
             />
           </Col>
           <Col xs={7} sm={8} md={9} className="device-details-card__value">
-            {deviceInfo.cpuArchitecture}
+            {deviceInfo?.cpuArchitecture ?? "N/A"}
           </Col>
         </Row>
 
@@ -50,7 +72,7 @@ const DeviceDetailsCard: React.FC = () => {
             />
           </Col>
           <Col xs={7} sm={8} md={9} className="device-details-card__value">
-            {deviceInfo.cpuModelCode}
+            {deviceInfo?.cpuModelCode ?? "N/A"}
           </Col>
         </Row>
 
@@ -62,7 +84,7 @@ const DeviceDetailsCard: React.FC = () => {
             />
           </Col>
           <Col xs={7} sm={8} md={9} className="device-details-card__value">
-            {deviceInfo.cpuModelName}
+            {deviceInfo?.cpuModelName ?? "N/A"}
           </Col>
         </Row>
 
@@ -74,7 +96,7 @@ const DeviceDetailsCard: React.FC = () => {
             />
           </Col>
           <Col xs={7} sm={8} md={9} className="device-details-card__value">
-            {deviceInfo.cpuVendor}
+            {deviceInfo?.cpuVendor ?? "N/A"}
           </Col>
         </Row>
 
@@ -86,7 +108,7 @@ const DeviceDetailsCard: React.FC = () => {
             />
           </Col>
           <Col xs={7} sm={8} md={9} className="device-details-card__value">
-            {deviceInfo.totalMemory}
+            {deviceInfo?.totalMemory ?? "N/A"}
           </Col>
         </Row>
       </Card.Body>
