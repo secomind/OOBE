@@ -1,4 +1,3 @@
-import React from "react";
 import { Card, Row, Col, ListGroup } from "react-bootstrap";
 import { FormattedMessage } from "react-intl";
 import "./LogCard.scss";
@@ -10,14 +9,11 @@ export type UsageLogEntry = {
   time: string;
 };
 
-const usageLogs: UsageLogEntry[] = [
-  { cpu: 53, ram: 75, date: "16/06/2025", time: "15.45" },
-  { cpu: 53, ram: 75, date: "16/06/2025", time: "15.45" },
-  { cpu: 56, ram: 45, date: "16/06/2025", time: "09.12" },
-  { cpu: 33, ram: 37, date: "15/06/2025", time: "19.01" },
-];
+interface SystemUsageLogProps {
+  usageLogs: UsageLogEntry[];
+}
 
-const SystemUsageLog: React.FC = () => {
+const SystemUsageLog = ({ usageLogs }: SystemUsageLogProps) => {
   return (
     <Card className="system-log-card bg-dark text-light rounded-5 border-2 border-secondary">
       <Card.Body className="p-4 d-flex flex-column">
