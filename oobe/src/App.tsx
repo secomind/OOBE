@@ -5,6 +5,8 @@ import EmbeddedApp from "./components/EmbeddedApp";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useMemo } from "react";
 import { APIClient } from "./api/APIClient";
+import DemoApp from "./pages/DemoApp";
+import TestingTool from "./pages/TestingTool";
 
 function App() {
   const apiClient = useMemo(() => {
@@ -23,6 +25,8 @@ function App() {
               path="/dashboard"
               element={<Dashboard apiClient={apiClient} />}
             />
+            <Route path="/demo" element={<DemoApp />} />
+            <Route path="/tool" element={<TestingTool />} />
             <Route
               path="/hub"
               element={

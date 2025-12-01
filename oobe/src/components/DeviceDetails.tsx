@@ -5,7 +5,7 @@ import "./DeviceDetails.scss";
 import { APIClient } from "../api/APIClient";
 
 interface DeviceDetailsCardProps {
-  apiClient: APIClient
+  apiClient: APIClient;
 }
 
 export type DeviceInfo = {
@@ -16,7 +16,7 @@ export type DeviceInfo = {
   totalMemory?: string;
 };
 
-const DeviceDetailsCard = ({apiClient}: DeviceDetailsCardProps) => {
+const DeviceDetailsCard = ({ apiClient }: DeviceDetailsCardProps) => {
   const [deviceInfo, setDeviceInfo] = useState<DeviceInfo | null>(null);
   const [error, setError] = useState<string | null>(null);
 

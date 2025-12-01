@@ -32,6 +32,19 @@ const Sidebar = () => {
             defaultMessage="Dashboard"
           />
         </NavLink>
+        <NavLink to="/demo" className="nav-link">
+          <FormattedMessage
+            id="components.Sidebar.demo"
+            defaultMessage="Demo App"
+          />
+        </NavLink>
+        <NavLink to="/tool" className="nav-link">
+          <FormattedMessage
+            id="components.Sidebar.tool"
+            defaultMessage="Testing tool"
+          />
+        </NavLink>
+
         <NavLink to="/hub" className="nav-link">
           <FormattedMessage
             id="components.Sidebar.applicationHub"

@@ -50,11 +50,17 @@
   "components.Sidebar.dashboard": {
     "defaultMessage": "Dashboard"
   },
+  "components.Sidebar.demo": {
+    "defaultMessage": "Demo App"
+  },
   "components.Sidebar.developerCenter": {
     "defaultMessage": "Developer Center"
   },
   "components.Sidebar.exit": {
     "defaultMessage": "Exit"
+  },
+  "components.Sidebar.tool": {
+    "defaultMessage": "Testing tool"
   },
   "components.SystemResourceUsage.cpuUsage": {
     "defaultMessage": "CPU usage"
@@ -82,5 +88,44 @@
   },
   "pages.Dashboard.title": {
     "defaultMessage": "Dashboard"
+  },
+  "pages.DemoApp.industrialAutomation.desc": {
+    "defaultMessage": "Monitor machines and resolve alerts in the factory"
+  },
+  "pages.DemoApp.industrialAutomation.title": {
+    "defaultMessage": "Industrial Automation"
+  },
+  "pages.DemoApp.medical.desc": {
+    "defaultMessage": "Monitor machines and resolve alerts in the factory"
+  },
+  "pages.DemoApp.medical.title": {
+    "defaultMessage": "Medical"
+  },
+  "pages.DemoApp.smartBuilding.desc": {
+    "defaultMessage": "Control building systems and detect issues in real time"
+  },
+  "pages.DemoApp.smartBuilding.title": {
+    "defaultMessage": "Smart Building"
+  },
+  "pages.DemoApp.title": {
+    "defaultMessage": "Demo Apps"
+  },
+  "pages.TestingTool.easyTransfer": {
+    "defaultMessage": "Easy Image/Video transfer"
+  },
+  "pages.TestingTool.highResolution": {
+    "defaultMessage": "High-resolution visuals"
+  },
+  "pages.TestingTool.multitouch": {
+    "defaultMessage": "Multitouch capabilities"
+  },
+  "pages.TestingTool.rgbPattern": {
+    "defaultMessage": "RGB pattern"
+  },
+  "pages.TestingTool.title": {
+    "defaultMessage": "Testing Tools"
+  },
+  "pages.TestingTool.videoPlayer": {
+    "defaultMessage": "Video player"
   }
 }
