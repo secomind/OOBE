@@ -86,7 +86,9 @@ export class APIClient {
 
   connectDashboard(onUpdate: (update: DashboardUpdate) => void) {
     this.ws = new WebSocket(
-      `${this.config.apiUrl.toString().replace(/\/$/, "")}/ws`,
+      `${this.config.apiUrl.toString()
+          .replace(/\/$/, "")}/ws`
+          .replace(/^http/, "ws"),
     );
 
     this.ws.onopen = () => {
@@ -124,7 +126,9 @@ export class APIClient {
 
   connectSmart(onUpdate: (update: SmartUpdate) => void) {
     this.ws = new WebSocket(
-      `${this.config.apiUrl.toString().replace(/\/$/, "")}/ws`,
+      `${this.config.apiUrl.toString()
+          .replace(/\/$/, "")}/ws`
+          .replace(/^http/, "ws"),
     );
 
     this.ws.onopen = () => {
@@ -169,7 +173,9 @@ export class APIClient {
 
   connectMedical(onUpdate: (update: MedicalUpdate) => void) {
     this.ws = new WebSocket(
-      `${this.config.apiUrl.toString().replace(/\/$/, "")}/ws`,
+      `${this.config.apiUrl.toString()
+          .replace(/\/$/, "")}/ws`
+          .replace(/^http/, "ws"),
     );
 
     this.ws.onopen = () => {
@@ -214,7 +220,9 @@ export class APIClient {
 
   connectIndustrial(onUpdate: (update: IndustrialUpdate) => void) {
     this.ws = new WebSocket(
-      `${this.config.apiUrl.toString().replace(/\/$/, "")}/ws`,
+      `${this.config.apiUrl.toString()
+          .replace(/\/$/, "")}/ws`
+          .replace(/^http/, "ws"),
     );
 
     this.ws.onopen = () => {
