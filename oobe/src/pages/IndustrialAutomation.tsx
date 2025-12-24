@@ -76,21 +76,23 @@ const IndustrialAutomation = () => {
         </Col>
 
         <Col>
-          <CardComponent
-            icon={settingsEthernet}
-            title={
-              <FormattedMessage
-                id="pages.IndustrialAutomation.qualityInspection.title"
-                defaultMessage="Quality Inspection"
-              />
-            }
-            description={
-              <FormattedMessage
-                id="pages.IndustrialAutomation.qualityInspection.desc"
-                defaultMessage="Inspect objects and analyze their faults and conformity."
-              />
-            }
-          />
+          <NavLink to="/quality-inspection" className="nav-link">
+            <CardComponent
+              icon={settingsEthernet}
+              title={
+                <FormattedMessage
+                  id="pages.IndustrialAutomation.qualityInspection.title"
+                  defaultMessage="Quality Inspection"
+                />
+              }
+              description={
+                <FormattedMessage
+                  id="pages.IndustrialAutomation.qualityInspection.desc"
+                  defaultMessage="Inspect objects and analyze their faults and conformity."
+                />
+              }
+            />
+          </NavLink>
         </Col>
       </div>
     </Container>

@@ -16,6 +16,9 @@ import hd from "./hd.png";
 import settings from "./settings.png";
 import rgbPattern1 from "./rgb_pattern1.jpg";
 import rgbPattern2 from "./rgb_pattern2.jpg";
+import embeddedSBCFront from "./embedded_sbc_front.png";
+import embeddedSBCFrontScanned from "./embedded_sbc_front_scanned.png";
+import embeddedSBCBack from "./embedded_sbc_back.png";
 
 export {
   logo,
@@ -36,4 +39,7 @@ export {
   settings,
   rgbPattern1,
   rgbPattern2,
+  embeddedSBCFront,
+  embeddedSBCFrontScanned,
+  embeddedSBCBack,
 };

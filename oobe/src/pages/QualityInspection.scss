@@ -1,0 +1,90 @@
+.quality-inspection-container {
+  background-color: #000 !important;
+
+  @media (max-width: 768px) {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    min-height: none;
+    overflow-y: auto !important;
+    overflow-x: auto !important;
+  }
+
+  .logo-big {
+    height: 52px;
+    width: auto;
+  }
+
+  .logo-small {
+    height: 30px;
+    width: auto;
+  }
+
+  .greeting-message {
+    font-size: 1.75rem;
+    font-weight: 700;
+    max-width: 80%;
+    line-height: 1.4;
+  }
+
+  .analysis-message {
+    font-size: 1.45rem;
+    font-weight: 700;
+    max-width: 80%;
+    line-height: 1.4;
+  }
+
+  .close-icon-button {
+    background: none;
+    border: none;
+    font-size: 1.4rem;
+    padding: 8px !important;
+    border-radius: 12px;
+    color: white;
+    &:hover {
+      background-color: #222;
+      color: white;
+    }
+  }
+
+  .greeting-button {
+    background-color: #e2e5f3;
+    border: none;
+    border-radius: 6px;
+    color: #1a1a1a;
+    font-size: 1rem;
+    min-width: 300px;
+    height: 52px;
+
+    &:hover {
+      background-color: #d1d5e8;
+    }
+  }
+
+  .analysis-result-left-button {
+    @extend .greeting-button;
+    height: 52px;
+
+    &:disabled {
+      color: #919191 !important;
+      background-color: #e2e5f3 !important;
+      opacity: 1;
+    }
+  }
+
+  .analysis-result-right-button {
+    @extend .greeting-button;
+    height: 52px;
+  }
+
+  .image {
+    height: 70vh;
+    width: auto;
+    border-radius: 20px;
+  }
+
+  .spinner {
+    width: 160px;
+    height: 160px;
+    border-width: 6px;
+  }
+}

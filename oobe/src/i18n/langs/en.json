@@ -41,6 +41,18 @@
   "components.GeolocalizationCard.title": {
     "defaultMessage": "Geolocalization"
   },
+  "components.QualityInspection.analyzeNextObjectButton": {
+    "defaultMessage": "Analyze next object"
+  },
+  "components.QualityInspection.mainMessage": {
+    "defaultMessage": "Place the object in front of the camera within the detection area."
+  },
+  "components.QualityInspection.startAnalysisButton": {
+    "defaultMessage": "Start analysis"
+  },
+  "components.QualityInspection.tryAgainButton": {
+    "defaultMessage": "Try Again"
+  },
   "components.Sidebar.dashboard": {
     "defaultMessage": "Dashboard"
   },
@@ -196,6 +208,18 @@
   },
   "pages.general.title": {
     "defaultMessage": "What would you like to do?"
+  },
+  "qualityInspection.Compliant product": {
+    "defaultMessage": "Compliant product!"
+  },
+  "qualityInspection.analyseMessage": {
+    "defaultMessage": "Scanning in progress..."
+  },
+  "qualityInspection.anomaliesDetectedMessage": {
+    "defaultMessage": "Anomalies detected"
+  },
+  "qualityInspection.upsideDownMessage": {
+    "defaultMessage": "The board is upside down"
   },
   "smartAlertManagement.gantryTemperature": {
     "defaultMessage": "GANTRY TEMPERATURE"
