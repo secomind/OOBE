@@ -140,6 +140,51 @@
   "components.SystemUsageLog.title": {
     "defaultMessage": "Log"
   },
+  "electricityMeter.additional.title": {
+    "defaultMessage": "Additional Info"
+  },
+  "electricityMeter.averageDailyUsage": {
+    "defaultMessage": "Average Daily Usage"
+  },
+  "electricityMeter.consumption.title": {
+    "defaultMessage": "Consumption"
+  },
+  "electricityMeter.cost.title": {
+    "defaultMessage": "Cost"
+  },
+  "electricityMeter.currentReading": {
+    "defaultMessage": "Current Reading"
+  },
+  "electricityMeter.currentTariff": {
+    "defaultMessage": "Current Tariff"
+  },
+  "electricityMeter.customer": {
+    "defaultMessage": "Customer"
+  },
+  "electricityMeter.estimatedCost": {
+    "defaultMessage": "Estimated Cost"
+  },
+  "electricityMeter.meterId": {
+    "defaultMessage": "Meter ID"
+  },
+  "electricityMeter.peakDemand": {
+    "defaultMessage": "Peak Demand"
+  },
+  "electricityMeter.periodConsumption": {
+    "defaultMessage": "Period Consumption"
+  },
+  "electricityMeter.previousReading": {
+    "defaultMessage": "Previous Reading"
+  },
+  "electricityMeter.readingDate": {
+    "defaultMessage": "Reading Date"
+  },
+  "electricityMeter.status": {
+    "defaultMessage": "Status"
+  },
+  "electricityMeter.title": {
+    "defaultMessage": "Electricity Meter"
+  },
   "industrialAlertManagement.dischargePressure": {
     "defaultMessage": "DISCHARGE PRESSURE"
   },
@@ -268,6 +313,48 @@
   },
   "pages.SmartClinical.weight": {
     "defaultMessage": "Weight:"
+  },
+  "pages.SmartLobby.ElectricityMeterReading": {
+    "defaultMessage": "Electricity Meter Reading"
+  },
+  "pages.SmartLobby.car.price": {
+    "defaultMessage": "Starting from {price}"
+  },
+  "pages.SmartLobby.car.title": {
+    "defaultMessage": "CAR"
+  },
+  "pages.SmartLobby.locker.description": {
+    "defaultMessage": "Scan the QR code with the Condominium App to unlock your smart locker."
+  },
+  "pages.SmartLobby.locker.title": {
+    "defaultMessage": "SMART LOCKER"
+  },
+  "pages.SmartLobby.messages.title": {
+    "defaultMessage": "Messages"
+  },
+  "pages.SmartLobby.profile.inbox": {
+    "defaultMessage": "INBOX MESSAGES"
+  },
+  "pages.SmartLobby.profile.name": {
+    "defaultMessage": "EMILY CARTER"
+  },
+  "pages.SmartLobby.profile.nextMeeting": {
+    "defaultMessage": "NEXT CONDO MEETING"
+  },
+  "pages.SmartLobby.profile.nextRent": {
+    "defaultMessage": "NEXT RENT PAYMENT"
+  },
+  "pages.SmartLobby.profile.unscheduled": {
+    "defaultMessage": "Unscheduled"
+  },
+  "pages.SmartLobby.weather.day": {
+    "defaultMessage": "Monday"
+  },
+  "pages.SmartLobby.weather.location": {
+    "defaultMessage": "New York, USA"
+  },
+  "pages.SmartLobby.weather.temp": {
+    "defaultMessage": "28°c"
   },
   "pages.TestingTool.easyTransfer": {
     "defaultMessage": "Easy Image/Video transfer"

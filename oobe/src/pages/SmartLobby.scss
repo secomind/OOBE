@@ -218,7 +218,9 @@
   }
 
   .assistant-panel {
-    text-align: center;
+    button {
+      margin-top: auto;
+    }
 
     p {
       font-size: 12px;
@@ -345,5 +347,8 @@
       border-radius: 50%;
       display: inline-block;
     }
+  }
+  .locker-text {
+    color: #989898 !important;
   }
 }

@@ -140,6 +140,51 @@
   "components.SystemUsageLog.title": {
     "defaultMessage": "Log"
   },
+  "electricityMeter.additional.title": {
+    "defaultMessage": "Informazioni aggiuntive"
+  },
+  "electricityMeter.averageDailyUsage": {
+    "defaultMessage": "Consumo medio giornaliero"
+  },
+  "electricityMeter.consumption.title": {
+    "defaultMessage": "Consumo"
+  },
+  "electricityMeter.cost.title": {
+    "defaultMessage": "Costo"
+  },
+  "electricityMeter.currentReading": {
+    "defaultMessage": "Lettura attuale"
+  },
+  "electricityMeter.currentTariff": {
+    "defaultMessage": "Tariffa attuale"
+  },
+  "electricityMeter.customer": {
+    "defaultMessage": "Cliente"
+  },
+  "electricityMeter.estimatedCost": {
+    "defaultMessage": "Costo stimato"
+  },
+  "electricityMeter.meterId": {
+    "defaultMessage": "ID contatore"
+  },
+  "electricityMeter.peakDemand": {
+    "defaultMessage": "Picco di domanda"
+  },
+  "electricityMeter.periodConsumption": {
+    "defaultMessage": "Consumo del periodo"
+  },
+  "electricityMeter.previousReading": {
+    "defaultMessage": "Lettura precedente"
+  },
+  "electricityMeter.readingDate": {
+    "defaultMessage": "Data lettura"
+  },
+  "electricityMeter.status": {
+    "defaultMessage": "Stato"
+  },
+  "electricityMeter.title": {
+    "defaultMessage": "Contatore elettrico"
+  },
   "industrialAlertManagement.dischargePressure": {
     "defaultMessage": "DISCHARGE PRESSURE"
   },
