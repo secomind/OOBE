@@ -23,6 +23,13 @@ const SystemUsageLog = ({ usageLogs }: SystemUsageLogProps) => {
         />
       </Card.Title>
 
+      <Card.Subtitle className="fw-semibold fs-5">
+        <FormattedMessage
+          id="components.SystemUsageLog.subtitle"
+          defaultMessage="Usage Update"
+        />
+      </Card.Subtitle>
+
       <ListGroup variant="flush" className="flex-grow-1">
         {usageLogs.map((log, index) => (
           <ListGroup key={index} className="text-light py-3">

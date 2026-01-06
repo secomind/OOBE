@@ -91,7 +91,7 @@ const Dashboard = ({ apiClient }: DashboardProps) => {
           <h2 className="dashboard-title fw-bold text-center mt-2">
             <FormattedMessage
               id="pages.Dashboard.title"
-              defaultMessage="Dashboard"
+              defaultMessage="Device Status"
             />
           </h2>
         </Col>

@@ -78,23 +78,21 @@ const SmartBuilding = () => {
         </Col>
 
         <Col>
-          <NavLink to="/smart-alert-management" className="nav-link">
-            <CardComponent
-              icon={falling}
-              title={
-                <FormattedMessage
-                  id="pages.SmartBuilding.detection.title"
-                  defaultMessage="Crowd and fall detection"
-                />
-              }
-              description={
-                <FormattedMessage
-                  id="pages.SmartBuilding.detection.desc"
-                  defaultMessage="Count people and detect falls in common areas."
-                />
-              }
-            />
-          </NavLink>
+          <CardComponent
+            icon={falling}
+            title={
+              <FormattedMessage
+                id="pages.SmartBuilding.detection.title"
+                defaultMessage="Crowd and fall detection"
+              />
+            }
+            description={
+              <FormattedMessage
+                id="pages.SmartBuilding.detection.desc"
+                defaultMessage="Count people and detect falls in common areas."
+              />
+            }
+          />
         </Col>
       </div>
     </Container>

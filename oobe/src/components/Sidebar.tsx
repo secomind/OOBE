@@ -72,6 +72,9 @@ const Sidebar = () => {
             </Nav>
 
             <Container fluid className="sidebar-bottom mt-4">
+              <Row className="mb-1">
+                <hr className="text-light" />
+              </Row>
               <Row className="w-100">
                 <Col>
                   <Button
@@ -88,7 +91,7 @@ const Sidebar = () => {
                 <Col>
                   <Button
                     variant="outline-light"
-                    className="px-3 mx-1 w-100"
+                    className="px-2 mx-1 w-100"
                     onClick={() => {
                       navigate("/developer");
                       setOpen(false);

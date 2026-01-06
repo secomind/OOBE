@@ -71,11 +71,12 @@
 
 .sidebar-toggle {
   position: fixed;
-  top: 20px;
+  top: 0px;
+  left: 16px;
   background: none;
   border: none;
   color: #fff;
-  font-size: 2.6rem;
+  font-size: 4rem;
   cursor: pointer;
   z-index: 1100;
 }

@@ -51,7 +51,7 @@ const SampleIntegrityCheck = () => {
         {status != "greeting" && (
           <Button
             variant="link"
-            className="text-white p-0"
+            className="close-icon-button p-0"
             onClick={() => navigate("/medical")}
           >
             <FontAwesomeIcon icon={faX} size="lg" />

@@ -137,6 +137,9 @@
   "components.SystemUsageLog.ram": {
     "defaultMessage": "RAM"
   },
+  "components.SystemUsageLog.subtitle": {
+    "defaultMessage": "Usage Update"
+  },
   "components.SystemUsageLog.title": {
     "defaultMessage": "Log"
   },
@@ -222,7 +225,7 @@
     "defaultMessage": "Discover our demos"
   },
   "pages.Dashboard.title": {
-    "defaultMessage": "Dashboard"
+    "defaultMessage": "Device Status"
   },
   "pages.DemoApp.industrialAutomation.desc": {
     "defaultMessage": "Monitor machines and resolve alerts in the factory"
