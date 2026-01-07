@@ -96,6 +96,10 @@ export class APIClient {
     return response.data;
   }
 
+  async exitApp(): Promise<void> {
+    await this.axiosInstance.post("/exit");
+  }
+
   connectDashboard(onUpdate: (update: DashboardUpdate) => void) {
     this.ws = new WebSocket(
       `${this.config.apiUrl.toString().replace(/\/$/, "")}/ws`.replace(

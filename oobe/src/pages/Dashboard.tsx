@@ -80,6 +80,15 @@ const Dashboard = ({ apiClient }: DashboardProps) => {
     return () => apiClient.disconnectDashboard();
   }, [apiClient]);
 
+  const handleExit = async () => {
+    try {
+      await apiClient.exitApp();
+      console.log("Exiting App...");
+    } catch (error) {
+      console.error("Exit failed", error);
+    }
+  };
+
   return (
     <Container
       fluid
@@ -103,7 +112,10 @@ const Dashboard = ({ apiClient }: DashboardProps) => {
             </Dropdown.Toggle>
 
             <Dropdown.Menu className="settings-dropdown">
-              <Dropdown.Item className="dropdown-item-custom exit-item">
+              <Dropdown.Item
+                className="dropdown-item-custom exit-item"
+                onClick={handleExit}
+              >
                 <FormattedMessage
                   id="components.Sidebar.exit"
                   defaultMessage="Exit"
