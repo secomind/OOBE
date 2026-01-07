@@ -1,5 +1,5 @@
 .card-component {
-  background-color: #111 !important;
+  background-color: #1517178f !important;
   color: white !important;
   min-width: 400px !important;
   flex: 0 1 calc((100% - 2rem * 2) / 3);
@@ -42,4 +42,8 @@
     flex: 0 1 100%;
     min-width: 300px !important;
   }
+}
+
+.card-description {
+  padding-bottom: 3rem;
 }

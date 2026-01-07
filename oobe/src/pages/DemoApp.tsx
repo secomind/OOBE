@@ -32,68 +32,67 @@ const DemoApp = () => {
         <h2 className="demo-title fw-bold text-center mt-2">
           <FormattedMessage
             id="pages.DemoApp.title"
-            defaultMessage="Demo Apps"
+            defaultMessage="Demo apps"
           />
         </h2>
       </Col>
       <div className="cards-wrapper">
-        <Col>
-          <NavLink to="/smart-building" className="nav-link">
-            <CardComponent
-              icon={corporateFare}
-              title={
-                <FormattedMessage
-                  id="pages.DemoApp.smartBuilding.title"
-                  defaultMessage="Smart Building"
-                />
-              }
-              description={
-                <FormattedMessage
-                  id="pages.DemoApp.smartBuilding.desc"
-                  defaultMessage="Control building systems and detect issues in real time"
-                />
-              }
-            />
-          </NavLink>
-        </Col>
-        <Col>
-          <NavLink to="/medical" className="nav-link">
-            <CardComponent
-              icon={vitalSigns}
-              title={
-                <FormattedMessage
-                  id="pages.DemoApp.medical.title"
-                  defaultMessage="Medical"
-                />
-              }
-              description={
-                <FormattedMessage
-                  id="pages.DemoApp.medical.desc"
-                  defaultMessage="Monitor machines and resolve alerts in the factory"
-                />
-              }
-            />
-          </NavLink>
-        </Col>
-        <Col>
-          <NavLink to="/industrial" className="nav-link">
-            <CardComponent
-              icon={factory}
-              title={
-                <FormattedMessage
-                  id="pages.DemoApp.industrialAutomation.title"
-                  defaultMessage="Industrial Automation"
-                />
-              }
-              description={
-                <FormattedMessage
-                  id="pages.DemoApp.industrialAutomation.desc"
-                  defaultMessage="Monitor machines and resolve alerts in the factory"
-                />
-              }
-            />
-          </NavLink>
-        </Col>
+        <NavLink to="/smart-building" className="nav-link">
+          <CardComponent
+            icon={corporateFare}
+            title={
+              <FormattedMessage
+                id="pages.DemoApp.smartBuilding.title"
+                defaultMessage="Smart Building"
+              />
+            }
+            description={
+              <FormattedMessage
+                id="pages.DemoApp.smartBuilding.desc"
+                defaultMessage="Control building systems and detect {br} issues in real time"
+                values={{ br: <br /> }}
+              />
+            }
+          />
+        </NavLink>
+
+        <NavLink to="/medical" className="nav-link">
+          <CardComponent
+            icon={vitalSigns}
+            title={
+              <FormattedMessage
+                id="pages.DemoApp.medical.title"
+                defaultMessage="Medical"
+              />
+            }
+            description={
+              <FormattedMessage
+                id="pages.DemoApp.medical.desc"
+                defaultMessage="Monitor machines and resolve alerts in {br} the factory"
+                values={{ br: <br /> }}
+              />
+            }
+          />
+        </NavLink>
+
+        <NavLink to="/industrial" className="nav-link">
+          <CardComponent
+            icon={factory}
+            title={
+              <FormattedMessage
+                id="pages.DemoApp.industrialAutomation.title"
+                defaultMessage="Industrial Automation"
+              />
+            }
+            description={
+              <FormattedMessage
+                id="pages.DemoApp.industrialAutomation.desc"
+                defaultMessage="Monitor machines and resolve alerts in {br} the factory"
+                values={{ br: <br /> }}
+              />
+            }
+          />
+        </NavLink>
       </div>
     </Container>
   );

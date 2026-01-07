@@ -228,19 +228,19 @@
     "defaultMessage": "Device Status"
   },
   "pages.DemoApp.industrialAutomation.desc": {
-    "defaultMessage": "Monitor machines and resolve alerts in the factory"
+    "defaultMessage": "Monitor machines and resolve alerts in {br} the factory"
   },
   "pages.DemoApp.industrialAutomation.title": {
     "defaultMessage": "Industrial Automation"
   },
   "pages.DemoApp.medical.desc": {
-    "defaultMessage": "Monitor machines and resolve alerts in the factory"
+    "defaultMessage": "Monitor machines and resolve alerts in {br} the factory"
   },
   "pages.DemoApp.medical.title": {
     "defaultMessage": "Medical"
   },
   "pages.DemoApp.smartBuilding.desc": {
-    "defaultMessage": "Control building systems and detect issues in real time"
+    "defaultMessage": "Control building systems and detect {br} issues in real time"
   },
   "pages.DemoApp.smartBuilding.title": {
     "defaultMessage": "Smart Building"
