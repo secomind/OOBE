@@ -1,7 +1,6 @@
 import Sidebar from "./components/Sidebar";
 import Dashboard from "./pages/Dashboard";
 import "./App.css";
-import EmbeddedApp from "./components/EmbeddedApp";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useMemo } from "react";
 import { APIClient } from "./api/APIClient";
@@ -20,6 +19,7 @@ import RGBPatternTestTool from "./pages/RGBPatternTestTool";
 import SampleIntegrityCheck from "./pages/SampleIntegrityCheck";
 import SmartClinical from "./pages/SmartClinical";
 import QualityInspection from "./pages/QualityInspection";
+import HighResolutionVisuals from "./pages/HighResolutionVisuals";
 
 const HIDE_SIDEBAR_ROUTES = [
   "/medical-alert-management",
@@ -33,6 +33,7 @@ const HIDE_SIDEBAR_ROUTES = [
   "/sample-integrity-check",
   "/smart-clinical",
   "/quality-inspection",
+  "/high-resolution-visuals",
 ];
 
 function App() {
@@ -86,15 +87,8 @@ function App() {
               element={<SmartClinical apiClient={apiClient} />}
             />
             <Route
-              path="/connect"
-              element={
-                <EmbeddedApp
-                  url={
-                    "https://developer.seco.com/clea-os/version-kirkstone_1-10-00/get_started/requirements"
-                  }
-                  title="Connect to Clea"
-                />
-              }
+              path="/high-resolution-visuals"
+              element={<HighResolutionVisuals />}
             />
             <Route path="*" element={<Navigate to="/dashboard" replace />} />
           </Routes>

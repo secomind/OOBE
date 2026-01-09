@@ -24,6 +24,7 @@ import expand from "./expand_content.png";
 import embeddedSBCFront from "./embedded_sbc_front.png";
 import embeddedSBCFrontScanned from "./embedded_sbc_front_scanned.png";
 import embeddedSBCBack from "./embedded_sbc_back.png";
+import resolutionVisuals from "./resolution_visuals.png";
 
 export {
   logo,
@@ -52,4 +53,5 @@ export {
   embeddedSBCFront,
   embeddedSBCFrontScanned,
   embeddedSBCBack,
+  resolutionVisuals,
 };

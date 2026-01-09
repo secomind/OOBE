@@ -1,0 +1,32 @@
+.high-resolution-visuals-container {
+  display: flex;
+  flex-direction: column;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  overflow-y: auto;
+  background-color: #000 !important;
+
+  .logo {
+    display: block;
+    margin: 0 auto 1rem auto;
+    max-width: 100%;
+    height: auto;
+    width: 20%;
+    padding: 0.8rem;
+    padding-left: 0;
+    margin-bottom: 2rem;
+  }
+
+  .close-icon-button {
+    background: none;
+    border: none;
+    font-size: 2.6rem !important;
+    padding: 8px !important;
+    border-radius: 12px;
+    color: white;
+    &:hover {
+      background-color: #222;
+      color: white;
+    }
+  }
+}
