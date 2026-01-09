@@ -1,20 +1,11 @@
 import { useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
-import {
-  Nav,
-  Container,
-  Row,
-  Col,
-  Button,
-  Image,
-  Collapse,
-} from "react-bootstrap";
+import { NavLink } from "react-router-dom";
+import { Nav, Container, Row, Col, Image, Collapse } from "react-bootstrap";
 import { FormattedMessage } from "react-intl";
 import "./Sidebar.scss";
 import { logo } from "../assets/images";
 
 const Sidebar = () => {
-  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
 
   return (
@@ -70,38 +61,6 @@ const Sidebar = () => {
                 />
               </NavLink>
             </Nav>
-
-            <Container fluid className="sidebar-bottom mt-4">
-              <Row className="mb-1">
-                <hr className="text-light" />
-              </Row>
-              <Row className="w-100">
-                <Col>
-                  <Button
-                    variant="light"
-                    className="px-3 mx-1 w-100"
-                    onClick={() => {
-                      navigate("/hub");
-                      setOpen(false);
-                    }}
-                  >
-                    App Hub
-                  </Button>
-                </Col>
-                <Col>
-                  <Button
-                    variant="outline-light"
-                    className="px-2 mx-1 w-100"
-                    onClick={() => {
-                      navigate("/developer");
-                      setOpen(false);
-                    }}
-                  >
-                    Dev Center
-                  </Button>
-                </Col>
-              </Row>
-            </Container>
           </div>
         </Collapse>
       </div>

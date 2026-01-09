@@ -86,24 +86,6 @@ function App() {
               element={<SmartClinical apiClient={apiClient} />}
             />
             <Route
-              path="/hub"
-              element={
-                <EmbeddedApp
-                  url={"https://apphub.seco.com/"}
-                  title="Application Hub"
-                />
-              }
-            />
-            <Route
-              path="/developer"
-              element={
-                <EmbeddedApp
-                  url={"https://developer.seco.com/"}
-                  title="Developer Center"
-                />
-              }
-            />
-            <Route
               path="/connect"
               element={
                 <EmbeddedApp
