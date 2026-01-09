@@ -353,14 +353,8 @@
   "pages.SmartLobby.weather.temp": {
     "defaultMessage": "28°c"
   },
-  "pages.TestingTool.easyTransfer": {
-    "defaultMessage": "Easy Image/Video transfer"
-  },
   "pages.TestingTool.highResolution": {
     "defaultMessage": "High-resolution visuals"
-  },
-  "pages.TestingTool.multitouch": {
-    "defaultMessage": "Multitouch capabilities"
   },
   "pages.TestingTool.rgbPattern": {
     "defaultMessage": "RGB pattern"

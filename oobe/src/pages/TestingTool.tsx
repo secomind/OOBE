@@ -1,7 +1,7 @@
-import { Container } from "react-bootstrap";
+import { Container, Col } from "react-bootstrap";
 import "./TestingTool.scss";
 import CardComponent from "../components/CardComponent";
-import { gradient, hd, playCircle, touchLong, openJam } from "../assets/images";
+import { gradient, hd, playCircle } from "../assets/images";
 import { FormattedMessage } from "react-intl";
 import { NavLink } from "react-router-dom";
 
@@ -19,59 +19,47 @@ const TestingTool = () => {
       </h1>
 
       <div className="cards-wrapper">
-        <NavLink to="/rgb-pattern-test-tool" className="nav-link">
-          <CardComponent
-            icon={gradient}
-            title={
-              <FormattedMessage
-                id="pages.TestingTool.rgbPattern"
-                defaultMessage="RGB pattern"
-              />
-            }
-          />
-        </NavLink>
-
-        <CardComponent
-          icon={hd}
-          title={
-            <FormattedMessage
-              id="pages.TestingTool.highResolution"
-              defaultMessage="High-resolution visuals"
+        <Col>
+          <NavLink to="/rgb-pattern-test-tool" className="nav-link">
+            <CardComponent
+              icon={gradient}
+              title={
+                <FormattedMessage
+                  id="pages.TestingTool.rgbPattern"
+                  defaultMessage="RGB pattern"
+                />
+              }
             />
-          }
-        />
+          </NavLink>
+        </Col>
 
-        <NavLink to="/video-player" className="nav-link">
-          <CardComponent
-            icon={playCircle}
-            title={
-              <FormattedMessage
-                id="pages.TestingTool.videoPlayer"
-                defaultMessage="Video player"
-              />
-            }
-          />
-        </NavLink>
-
-        <CardComponent
-          icon={touchLong}
-          title={
-            <FormattedMessage
-              id="pages.TestingTool.multitouch"
-              defaultMessage="Multitouch capabilities"
+        <Col>
+          <NavLink to="/high-resolution-visuals" className="nav-link">
+            <CardComponent
+              icon={hd}
+              title={
+                <FormattedMessage
+                  id="pages.TestingTool.highResolution"
+                  defaultMessage="High-resolution visuals"
+                />
+              }
             />
-          }
-        />
+          </NavLink>
+        </Col>
 
-        <CardComponent
-          icon={openJam}
-          title={
-            <FormattedMessage
-              id="pages.TestingTool.easyTransfer"
-              defaultMessage="Easy Image/Video transfer"
+        <Col>
+          <NavLink to="/video-player" className="nav-link">
+            <CardComponent
+              icon={playCircle}
+              title={
+                <FormattedMessage
+                  id="pages.TestingTool.videoPlayer"
+                  defaultMessage="Video player"
+                />
+              }
             />
-          }
-        />
+          </NavLink>
+        </Col>
       </div>
     </Container>
   );
