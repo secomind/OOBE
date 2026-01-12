@@ -60,7 +60,7 @@
     }
   }
 
-  .analysis-result-left-button {
+  .try-again-button {
     @extend .greeting-button;
     height: 52px;
 
@@ -71,7 +71,7 @@
     }
   }
 
-  .analysis-result-right-button {
+  .analyze-next-button {
     @extend .greeting-button;
     height: 52px;
   }

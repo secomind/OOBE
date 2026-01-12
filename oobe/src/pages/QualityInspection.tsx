@@ -39,6 +39,8 @@ const QualityInspection = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (status !== "analysis") return;
+
     const timer = setTimeout(() => {
       if (
         status === "analysis" &&
@@ -136,7 +138,7 @@ const QualityInspection = () => {
                 <Button
                   variant="light"
                   disabled={status === "analysis"}
-                  className="analysis-result-left-button py-2 px-5 fw-bold"
+                  className="try-again-button py-2 px-5 fw-bold"
                   onClick={() => {
                     if (currentImage === embeddedSBCFrontScanned) {
                       setStatus("analysis");
@@ -160,14 +162,20 @@ const QualityInspection = () => {
               <div>
                 <Button
                   variant="light"
-                  className="analysis-result-right-button py-2 px-5 fw-bold"
+                  className="analyze-next-button py-2 px-5 fw-bold"
                   onClick={() => {
                     if (
                       currentImage === embeddedSBCFront ||
                       currentImage === embeddedSBCFrontScanned
                     ) {
-                      setCurrentImage(embeddedSBCBack);
-                      setStatus("analysis");
+                      if (successfullScan) {
+                        setCurrentImage(embeddedSBCFront);
+                        setStatus("analysis");
+                        setSuccessfulScan(false);
+                      } else {
+                        setCurrentImage(embeddedSBCBack);
+                        setStatus("analysis");
+                      }
                     } else if (currentImage === embeddedSBCBack) {
                       setStatus("analysis");
                       setCurrentImage(embeddedSBCFront);
