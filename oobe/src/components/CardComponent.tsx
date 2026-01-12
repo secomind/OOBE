@@ -19,9 +19,7 @@ const CardComponent = ({ icon, title, description }: CardComponentProps) => {
           />
         )}
         {title && <Card.Title className="card-title">{title}</Card.Title>}
-        {description && (
-          <Card.Text className="card-description">{description}</Card.Text>
-        )}
+        {description && <Card.Text>{description}</Card.Text>}
       </Card.Body>
     </Card>
   );
