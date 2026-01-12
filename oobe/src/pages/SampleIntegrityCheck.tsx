@@ -125,6 +125,9 @@ const SampleIntegrityCheck = () => {
                   ) {
                     setCurrentImage(whitePills);
                     setStatus("analysis");
+                  } else if (currentImage === whitePills) {
+                    setCurrentImage(redPills);
+                    setStatus("analysis");
                   }
                 }}
               >
