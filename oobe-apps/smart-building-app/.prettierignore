@@ -1,0 +1,5 @@
+__generated__
+dist
+build
+node_modules
+*.lock
