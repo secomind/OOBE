@@ -4,14 +4,15 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "start": "vite",
-    "build": "tsc -b && vite build",
-    "lint": "eslint .",
-    "preview": "vite preview",
-    "format": "prettier --write .",
-    "type-check": "tsc --noEmit",
+    "build": "vite build",
+    "prebuild": "npm run i18n:compile",
+    "watch": "vite build --watch",
+    "prewatch": "npm run i18n:compile",
+    "serve": "vite preview",
     "i18n:extract": "formatjs extract 'src/**/*.ts*' --ignore='**/*.d.ts' --out-file src/i18n/langs/en.json --id-interpolation-pattern '[sha512:contenthash:base64:6]'",
-    "i18n:compile": "formatjs compile-folder src/i18n/langs --ast src/i18n/langs-compiled"
+    "i18n:compile": "formatjs compile-folder src/i18n/langs --ast src/i18n/langs-compiled",
+    "format": "prettier --write .",
+    "check-types": "tsc"
   },
   "dependencies": {
     "@formatjs/cli": "^6.12.2",
