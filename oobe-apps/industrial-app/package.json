@@ -14,8 +14,9 @@
     "i18n:compile": "formatjs compile-folder src/i18n/langs --ast src/i18n/langs-compiled"
   },
   "dependencies": {
+    "bootstrap": "^5.3.8",
     "react": "^19.2.0",
-    "react-dom": "^19.2.0"
+    "react-bootstrap": "^2.10.10"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
