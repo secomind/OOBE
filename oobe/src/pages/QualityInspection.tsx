@@ -149,7 +149,7 @@ const QualityInspection = ({ apiClient }: QualityInspectionProps) => {
         className={
           status === "greeting"
             ? "flex-grow-1 d-flex align-items-center justify-content-center text-center"
-            : "mb-4 mt-5 text-center"
+            : "flex-grow-1 d-flex align-items-left mb-4 mt-5 text-center"
         }
       >
         <h2
@@ -198,7 +198,7 @@ const QualityInspection = ({ apiClient }: QualityInspectionProps) => {
           </div>
 
           <div className="col-md-5 d-flex flex-column align-items-center justify-content-center">
-            <div className="mb-5 text-center">
+            <div className="mb-5 mt-5 text-center">
               {status === "analysis" && (
                 <div className="spinner-border mb-5 spinner" role="status" />
               )}
@@ -229,11 +229,11 @@ const QualityInspection = ({ apiClient }: QualityInspectionProps) => {
               </h3>
             </div>
 
-            <div className="d-flex justify-content-end gap-3 mt-auto mb-4">
+            <div className="d-flex flex-wrap justify-content-center gap-3 mt-auto mb-4">
               <Button
                 variant="light"
                 disabled={status === "analysis"}
-                className="py-2 px-5 fw-bold"
+                className="try-again-button py-2 px-5 fw-bold"
                 onClick={() => setStatus("analysis")}
               >
                 <FormattedMessage
@@ -244,7 +244,7 @@ const QualityInspection = ({ apiClient }: QualityInspectionProps) => {
 
               <Button
                 variant="light"
-                className="py-2 px-5 fw-bold"
+                className="analyze-next-button py-2 px-5 fw-bold"
                 onClick={() => {
                   const images = [
                     pcbMissingHole00,

@@ -1,4 +1,7 @@
 :root {
   font-size: 0.9rem;
   --cp-sidebar-width: 15em;
+  touch-action: none;
+  overscroll-behavior: none;
+  overflow: hidden;
 }
