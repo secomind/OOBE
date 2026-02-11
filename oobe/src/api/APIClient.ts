@@ -1,5 +1,6 @@
 import axios, { type AxiosInstance } from "axios";
 import type { DeviceInfo } from "../components/DeviceDetails";
+import type { DefectResult } from "../pages/QualityInspection";
 
 type Config = {
   apiUrl: URL;
@@ -73,6 +74,12 @@ type ClientMessage = {
   views: string[];
 };
 
+interface BackendDefectResult {
+  category_id: number;
+  bbox: number[];
+  score: number;
+}
+
 export class APIClient {
   private config: Config;
   private axiosInstance: AxiosInstance;
@@ -94,6 +101,25 @@ export class APIClient {
   async getSystemInfo(): Promise<DeviceInfo> {
     const response = await this.axiosInstance.get<DeviceInfo>("/static");
     return response.data;
+  }
+
+  async getDefectResult(imageFile: File): Promise<DefectResult[]> {
+    const response = await this.axiosInstance.post<BackendDefectResult[]>(
+      "/pcb-defect-detect",
+      imageFile,
+      {
+        headers: {
+          "Content-Type": imageFile.type,
+        },
+      },
+    );
+    return response.data.map(
+      (item): DefectResult => ({
+        categoryId: item.category_id,
+        bbox: item.bbox,
+        score: item.score,
+      }),
+    );
   }
 
   async exitApp(): Promise<void> {

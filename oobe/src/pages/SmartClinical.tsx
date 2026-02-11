@@ -190,7 +190,7 @@ const SmartClinical = ({ apiClient }: SmartClinicalProps) => {
                     id="pages.SmartClinical.age"
                     defaultMessage="Age:"
                   />
-                   &nbsp;
+                  &nbsp;
                   {personData.age}
                 </p>
               </div>
@@ -199,9 +199,9 @@ const SmartClinical = ({ apiClient }: SmartClinicalProps) => {
                   <FormattedMessage
                     id="pages.SmartClinical.bloodType"
                     defaultMessage="Blood Type:"
-                    />
+                  />
                 </strong>
-                    &nbsp;
+                &nbsp;
                 {personData.bloodType}
               </p>
               <p>
@@ -211,7 +211,7 @@ const SmartClinical = ({ apiClient }: SmartClinicalProps) => {
                     defaultMessage="Height:"
                   />
                 </strong>
-                 &nbsp;
+                &nbsp;
                 {personData.heightCm} Cm
               </p>
               <p>

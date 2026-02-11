@@ -21,10 +21,17 @@ import redPillsScanned from "./red_pills_scanned.png";
 import whitePills from "./white_pills.png";
 import person from "./person.png";
 import expand from "./expand_content.png";
-import embeddedSBCFront from "./embedded_sbc_front.png";
-import embeddedSBCFrontScanned from "./embedded_sbc_front_scanned.png";
-import embeddedSBCBack from "./embedded_sbc_back.png";
 import resolutionVisuals from "./resolution_visuals.png";
+import pcbMissingHole00 from "./missing_hole_00.jpg";
+import pcbMissingHole01 from "./missing_hole_01.jpg";
+import pcbMissingHole02 from "./missing_hole_02.jpg";
+import pcbMissingHole03 from "./missing_hole_03.jpg";
+import pcbMissingHole04 from "./missing_hole_04.jpg";
+import pcbShortCircuit01 from "./short_circuit_00.jpg";
+import pcbShortCircuit02 from "./short_circuit_01.jpg";
+import pcbShortCircuit03 from "./short_circuit_02.jpg";
+import pcbShortCircuit04 from "./short_circuit_03.jpg";
+import pcbShortCircuit05 from "./short_circuit_04.jpg";
 
 export {
   logo,
@@ -50,8 +57,15 @@ export {
   whitePills,
   person,
   expand,
-  embeddedSBCFront,
-  embeddedSBCFrontScanned,
-  embeddedSBCBack,
   resolutionVisuals,
+  pcbMissingHole00,
+  pcbMissingHole01,
+  pcbMissingHole02,
+  pcbMissingHole03,
+  pcbMissingHole04,
+  pcbShortCircuit01,
+  pcbShortCircuit02,
+  pcbShortCircuit03,
+  pcbShortCircuit04,
+  pcbShortCircuit05,
 };

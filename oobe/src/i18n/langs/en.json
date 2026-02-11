@@ -377,17 +377,17 @@
   "pages.general.title": {
     "defaultMessage": "What would you like to do?"
   },
-  "qualityInspection.Compliant product": {
-    "defaultMessage": "Compliant product!"
-  },
   "qualityInspection.analyseMessage": {
     "defaultMessage": "Scanning in progress..."
   },
   "qualityInspection.anomaliesDetectedMessage": {
     "defaultMessage": "Anomalies detected"
   },
-  "qualityInspection.upsideDownMessage": {
-    "defaultMessage": "The board is upside down"
+  "qualityInspection.missingHole": {
+    "defaultMessage": "Missing hole"
+  },
+  "qualityInspection.shortCircuit": {
+    "defaultMessage": "Short circuit"
   },
   "smartAlertManagement.gantryTemperature": {
     "defaultMessage": "GANTRY TEMPERATURE"

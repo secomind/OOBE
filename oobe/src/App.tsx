@@ -77,7 +77,10 @@ function App() {
               path="/rgb-pattern-test-tool"
               element={<RGBPatternTestTool />}
             />
-            <Route path="/quality-inspection" element={<QualityInspection />} />
+            <Route
+              path="/quality-inspection"
+              element={<QualityInspection apiClient={apiClient} />}
+            />
             <Route
               path="/sample-integrity-check"
               element={<SampleIntegrityCheck />}
