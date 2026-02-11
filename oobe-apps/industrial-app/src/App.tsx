@@ -1,4 +1,5 @@
-import { useState } from "react";
+import AstarteAPIClient from "./api/AstarteAPIClient";
+import { useMemo, useState } from "react";
 import { Container, Spinner } from "react-bootstrap";
 
 export type AppProps = {
@@ -10,6 +11,10 @@ export type AppProps = {
 
 const App = ({ astarteUrl, realm, deviceId, token }: AppProps) => {
   const [dataFetching, setDataFetching] = useState(false);
+
+  const astarteClient = useMemo(() => {
+    return new AstarteAPIClient({ astarteUrl, realm, token });
+  }, [astarteUrl, realm, token]);
 
   return (
     <Container fluid className="p-4">
