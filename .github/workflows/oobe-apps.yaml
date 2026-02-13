@@ -1,0 +1,29 @@
+name: Build Docker Image
+
+on:
+  # Run when pushing to stable branches
+  push:
+    paths:
+      - "oobe-apps/industrial-app/**"
+      - "oobe-apps/medical-app/**"
+      - "oobe-apps/smart-building-app/**"
+      - "oobe-apps/Dockerfile"
+    branches:
+      - "main"
+  # Run on pull requests matching apps
+  pull_request:
+    paths:
+      - "oobe-apps/industrial-app/**"
+      - "oobe-apps/medical-app/**"
+      - "oobe-apps/smart-building-app/**"
+      - "oobe-apps/Dockerfile"
+
+jobs:
+  test-build-container:
+    name: Test Container Build
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Building Docker Image
+        working-directory: oobe-apps
+        run: docker build . --file Dockerfile --tag oobe-apps:$(date +%s)
