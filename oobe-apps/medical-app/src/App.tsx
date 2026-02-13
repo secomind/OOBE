@@ -5,6 +5,7 @@ import Sidebar, { SidebarSection } from "./components/Sidebar";
 import PatientOverview from "./components/PatientOverview";
 import AstarteAPIClient from "./api/AstarteAPIClient";
 import { PatientOverviewData, MedicalReportsData } from "types";
+import MedicalReports from "./components/MedicalReports";
 
 export type AppProps = {
   astarteUrl: URL;
@@ -63,13 +64,7 @@ const App = ({ astarteUrl, realm, deviceId, token }: AppProps) => {
 
   const sectionContent: Record<SidebarSection, JSX.Element> = {
     overview: <PatientOverview data={patientOverview} />,
-    reports: (
-      <div>
-        <h3>
-          <FormattedMessage id="reports" defaultMessage="Medical reports" />
-        </h3>
-      </div>
-    ),
+    reports: <MedicalReports reports={medicalReports} />,
     vitalSigns: (
       <div>
         <h3>

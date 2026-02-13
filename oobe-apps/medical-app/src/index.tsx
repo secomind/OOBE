@@ -31,7 +31,7 @@ const AppLifecycle = {
         <link href={themeUrl} type="text/css" rel="stylesheet" />
         <IntlProvider
           messages={messages[language]}
-          locale={language}
+          locale="en-GB"
           defaultLocale="en"
         >
           <App {...appProps} />

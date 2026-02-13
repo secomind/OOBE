@@ -32,6 +32,21 @@
   "reports": {
     "defaultMessage": "Medical Reports"
   },
+  "reports.date": {
+    "defaultMessage": "Date of medical service"
+  },
+  "reports.facility": {
+    "defaultMessage": "Performing facility"
+  },
+  "reports.noMedicalReports": {
+    "defaultMessage": "No medical reports available."
+  },
+  "reports.tableName": {
+    "defaultMessage": "Patient Medical Reports"
+  },
+  "reports.type": {
+    "defaultMessage": "Type"
+  },
   "vitalSigns": {
     "defaultMessage": "Vital Signs"
   }
