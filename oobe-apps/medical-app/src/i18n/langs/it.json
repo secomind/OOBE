@@ -29,10 +29,19 @@
   "overview.title": {
     "defaultMessage": "Patient Overview"
   },
-  "reports": {
-    "defaultMessage": "Medical Reports"
+  "reports.noMedicalReports": {
+    "defaultMessage": "noMedicalReports"
+  },
+  "reports.tableName": {
+    "defaultMessage": "Patient Medical Reports"
   },
   "vitalSigns": {
     "defaultMessage": "Vital Signs"
+  },
+  "reports.date": {
+    "defaultMessage": "Date of medical service"
+  },
+  "reports.facility": {
+    "defaultMessage": "Performing facility"
   }
 }

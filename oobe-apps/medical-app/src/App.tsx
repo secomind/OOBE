@@ -4,7 +4,8 @@ import { FormattedMessage } from "react-intl";
 import Sidebar, { SidebarSection } from "./components/Sidebar";
 import PatientOverview from "./components/PatientOverview";
 import AstarteAPIClient from "./api/AstarteAPIClient";
-import { PatientOverviewData } from "types";
+import { PatientOverviewData, MedicalReportsData } from "types";
+import MedicalReports from "./components/MedicalReports";
 
 export type AppProps = {
   astarteUrl: URL;
@@ -19,7 +20,9 @@ const App = ({ astarteUrl, realm, deviceId, token }: AppProps) => {
   const [patientOverview, setPatientOverview] =
     useState<PatientOverviewData | null>(null);
   const [dataFetching, setDataFetching] = useState(false);
-
+  const [medicalReports, setMedicalReports] = useState<
+    MedicalReportsData[] | null
+  >(null);
   const handleSectionChange = (e: SidebarSection) => {
     setSelectedSection(e);
   };
@@ -43,15 +46,25 @@ const App = ({ astarteUrl, realm, deviceId, token }: AppProps) => {
       });
   }, [astarteClient, deviceId]);
 
+  useEffect(() => {
+    setDataFetching(true);
+
+    astarteClient
+      .getMedicalReports(deviceId)
+      .then((medicalData) => {
+        setMedicalReports(medicalData);
+      })
+      .catch(() => {
+        setMedicalReports(null);
+      })
+      .finally(() => {
+        setDataFetching(false);
+      });
+  }, [astarteClient, deviceId]);
+
   const sectionContent: Record<SidebarSection, JSX.Element> = {
     overview: <PatientOverview data={patientOverview} />,
-    reports: (
-      <div>
-        <h3>
-          <FormattedMessage id="reports" defaultMessage="Medical reports" />
-        </h3>
-      </div>
-    ),
+    reports: <MedicalReports reports={medicalReports} />,
     vitalSigns: (
       <div>
         <h3>
