@@ -92,18 +92,19 @@ class AstarteAPIClient {
           params: query,
         },
       )
-      .then((response) =>
-        response.data.map(
+      .then((response) => {
+        const rawData = response.data?.data || [];
+        return rawData.map(
           (data: any) =>
             ({
-              cycleEndTime: data.cycle_end_time,
-              cycleStartTime: data.cycle_start_time,
+              cycleEndTime: new Date(data.cycle_end_time),
+              cycleStartTime: new Date(data.cycle_start_time),
               productName: data.product_name,
               quality: data.quality,
-              timestamp: data.timestamp,
+              timestamp: new Date(data.timestamp),
             }) as LineData,
-        ),
-      )
+        );
+      })
       .catch((error) => {
         throw error;
       });
