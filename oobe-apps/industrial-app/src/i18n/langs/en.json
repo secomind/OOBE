@@ -1,11 +1,29 @@
 {
-  "line": {
-    "defaultMessage": "Line ({lineId})"
-  },
   "allLines": {
     "defaultMessage": "All Lines (Global Views)"
   },
-  "loading": {
-    "defaultMessage": "Loading..."
+  "components.DashboardFilters.monitoringSystem": {
+    "defaultMessage": "Monitoring System"
+  },
+  "components.DashboardStats.activeLines": {
+    "defaultMessage": "Active Lines"
+  },
+  "components.DashboardStats.avgCycleTime": {
+    "defaultMessage": "Avg Cycle Time"
+  },
+  "components.DashboardStats.qualityKo": {
+    "defaultMessage": "Quality KO"
+  },
+  "components.DashboardStats.qualityOk": {
+    "defaultMessage": "Quality OK"
+  },
+  "components.DashboardStats.qualityRate": {
+    "defaultMessage": "Quality Rate"
+  },
+  "components.DashboardStats.totalPieces": {
+    "defaultMessage": "Total Pieces"
+  },
+  "line": {
+    "defaultMessage": "Line ({lineId})"
   }
 }

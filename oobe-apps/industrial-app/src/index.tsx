@@ -29,6 +29,14 @@ const AppLifecycle = {
 
     root.render(
       <>
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        />
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/react-datepicker@9.1.0/dist/react-datepicker.min.css"
+        />
         <link href={themeUrl} type="text/css" rel="stylesheet" />
         <IntlProvider
           messages={messages[language]}
