@@ -51,7 +51,7 @@ class AstarteAPIClient {
             height: response.data.data.height,
             phisician: response.data.data.phisician,
             weight: response.data.data.weight,
-            hospitalization_reason: response.data.data.hospitalization_reason,
+            hospitalizationReason: response.data.data.hospitalizationReason,
           }) as PatientOverviewData,
       )
       .catch((error) => {

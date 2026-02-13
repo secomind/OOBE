@@ -5,5 +5,5 @@ export type PatientOverviewData = {
   height: number;
   phisician: string;
   weight: number;
-  hospitalization_reason: string;
+  hospitalizationReason: string;
 };

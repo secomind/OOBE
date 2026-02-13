@@ -52,7 +52,7 @@ const PatientOverview = ({ data }: PatientOverviewProps) => {
               <Form.Control
                 as="textarea"
                 rows={4}
-                value={data?.hospitalization_reason || ""}
+                value={data?.hospitalizationReason || ""}
                 readOnly
               />
             </Form.Group>
