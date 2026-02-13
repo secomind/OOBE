@@ -3,6 +3,8 @@ import AstarteAPIClient from "./api/AstarteAPIClient";
 import { useEffect, useMemo, useState } from "react";
 import { Alert, Col, Row, Spinner } from "react-bootstrap";
 import { FormattedMessage } from "react-intl";
+import HistoryCameraTable from "./components/CameraHistroyTable";
+import { CameraHistoryExtended } from "types";
 
 export type AppProps = {
   astarteUrl: URL;
@@ -16,9 +18,12 @@ const App = ({ astarteUrl, realm, deviceId, token }: AppProps) => {
   const [selectedSection, setSelectedSection] = useState<string>("history");
   const [cameraIds, setCameraIds] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [historyData, setHistoryData] = useState<
+    Record<string, CameraHistoryExtended[]>
+  >({});
 
-  const handleSectionChange = (e: string) => {
-    setSelectedSection(e);
+  const handleSectionChange = (section: string) => {
+    setSelectedSection(section);
   };
 
   const astarteClient = useMemo(() => {
@@ -40,6 +45,81 @@ const App = ({ astarteUrl, realm, deviceId, token }: AppProps) => {
         setDataFetching(false);
       });
   }, [astarteClient, deviceId]);
+
+  useEffect(() => {
+    if (!cameraIds.length) return;
+
+    setDataFetching(true);
+    setError(null);
+
+    if (selectedSection === "history") {
+      Promise.all(
+        cameraIds.map((cameraId) =>
+          astarteClient.getCameraHistory({
+            deviceId,
+            cameraId,
+          }),
+        ),
+      )
+        .then((results) => {
+          const newData: Record<string, CameraHistoryExtended[]> = {};
+
+          cameraIds.forEach((id, index) => {
+            newData[id] = results[index].map((item) => ({
+              ...item,
+              cameraId: id,
+            }));
+          });
+
+          setHistoryData(newData);
+        })
+        .catch(() => {
+          setError("Failed to fetch camera history.");
+        })
+        .finally(() => {
+          setDataFetching(false);
+        });
+    } else {
+      if (historyData[selectedSection]) {
+        setDataFetching(false);
+        return;
+      }
+
+      astarteClient
+        .getCameraHistory({
+          deviceId,
+          cameraId: selectedSection,
+        })
+        .then((data) => {
+          const formatted: CameraHistoryExtended[] = data.map((item) => ({
+            ...item,
+            cameraId: selectedSection,
+          }));
+
+          setHistoryData((prev) => ({
+            ...prev,
+            [selectedSection]: formatted,
+          }));
+        })
+        .catch(() => {
+          setError("Failed to fetch camera history.");
+        })
+        .finally(() => {
+          setDataFetching(false);
+        });
+    }
+  }, [selectedSection, cameraIds, astarteClient, deviceId]);
+
+  const visibleData = useMemo(() => {
+    const data =
+      selectedSection === "history"
+        ? Object.values(historyData).flat()
+        : historyData[selectedSection] || [];
+
+    return [...data].sort(
+      (a, b) => new Date(b.datetime).getTime() - new Date(a.datetime).getTime(),
+    );
+  }, [historyData, selectedSection]);
 
   return (
     <Row className="app-container p-4">
@@ -65,21 +145,19 @@ const App = ({ astarteUrl, realm, deviceId, token }: AppProps) => {
         ) : (
           <>
             {selectedSection === "history" ? (
-              <h6>
+              <h5>
                 <FormattedMessage
                   id="historyTitle"
                   defaultMessage="All Cameras History"
                 />
-              </h6>
+              </h5>
             ) : (
-              <h6>
-                <FormattedMessage
-                  id="cameraTitle"
-                  defaultMessage="{cameraId}"
-                  values={{ cameraId: selectedSection }}
-                />
-              </h6>
+              <h5>{selectedSection}</h5>
             )}
+            <HistoryCameraTable
+              data={visibleData}
+              isAllHistory={selectedSection === "history"}
+            />
             {error && (
               <Alert
                 variant="danger"

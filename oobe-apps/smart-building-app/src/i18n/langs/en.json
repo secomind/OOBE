@@ -2,8 +2,20 @@
   "camera": {
     "defaultMessage": "Camera ({cameraId})"
   },
-  "cameraTitle": {
-    "defaultMessage": "{cameraId}"
+  "cameraHistoryTable.behavior": {
+    "defaultMessage": "Behavior"
+  },
+  "cameraHistoryTable.date": {
+    "defaultMessage": "Date"
+  },
+  "cameraHistoryTable.event": {
+    "defaultMessage": "Event"
+  },
+  "cameraHistoryTable.number": {
+    "defaultMessage": "Number"
+  },
+  "cameraHistoryTable.time": {
+    "defaultMessage": "Time"
   },
   "history": {
     "defaultMessage": "History"

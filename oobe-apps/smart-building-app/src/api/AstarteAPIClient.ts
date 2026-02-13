@@ -1,5 +1,6 @@
 import axios, { AxiosInstance } from "axios";
 import qs from "qs";
+import { CameraHistoryData, CameraHistoryDTO } from "types";
 
 type AstarteAPIClientProps = {
   astarteUrl: URL;
@@ -19,14 +20,6 @@ type CameraHistoryParameters = {
   to?: Date;
   limit?: number;
 };
-
-type CameraHistoryData = {
-  event: "Person detected" | "Group of people" | "Incident";
-  behavior: "Entering" | "Leaving" | "Gathering";
-  datetime: Date;
-  numberOfPeople: number;
-};
-
 class AstarteAPIClient {
   private config: Config;
   private axiosInstance: AxiosInstance;
@@ -83,7 +76,17 @@ class AstarteAPIClient {
         `v1/${realm}/devices/${deviceId}/interfaces/com.oobe.camera.History/${cameraId}`,
         { params: query },
       )
-      .then((response) => response.data?.data ?? [])
+      .then((response) => {
+        return response.data.data.map(
+          (data: CameraHistoryDTO) =>
+            ({
+              event: data.event,
+              behavior: data.behavior,
+              datetime: data.timestamp,
+              numberOfPeople: data.number_of_people,
+            }) as CameraHistoryData,
+        );
+      })
       .catch((error) => {
         throw error;
       });
@@ -91,4 +94,4 @@ class AstarteAPIClient {
 }
 
 export default AstarteAPIClient;
-export type { CameraHistoryData, CameraHistoryParameters };
+export type { CameraHistoryParameters };
