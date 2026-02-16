@@ -4,7 +4,7 @@ import "./QualityInspection.scss";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX } from "@fortawesome/free-solid-svg-icons";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import { useState, useEffect, useRef } from "react";
 import {
   pcbMissingHole00,
@@ -18,8 +18,11 @@ import {
   pcbShortCircuit04,
   pcbShortCircuit05,
 } from "../assets/images";
-import { defineMessages } from "react-intl";
 import { APIClient } from "../api/APIClient";
+
+const MISSING_HOLE_COLOR = "#FF0000";
+const SHORT_CIRCUIT_COLOR = "#FFC107";
+const DEFAULT_COLOR = "#222322";
 
 interface QualityInspectionProps {
   apiClient: APIClient;
@@ -30,25 +33,6 @@ export type DefectResult = {
   bbox: number[];
   score: number;
 };
-
-const messages = defineMessages({
-  scanningMessage: {
-    id: "qualityInspection.analyseMessage",
-    defaultMessage: "Scanning in progress...",
-  },
-  anomaliesDetectedMessage: {
-    id: "qualityInspection.anomaliesDetectedMessage",
-    defaultMessage: "Anomalies detected",
-  },
-  missingHole: {
-    id: "qualityInspection.missingHole",
-    defaultMessage: "Missing hole",
-  },
-  shortCircuit: {
-    id: "qualityInspection.shortCircuit",
-    defaultMessage: "Short circuit",
-  },
-});
 
 const urlToFile = async (url: string): Promise<File> => {
   const response = await fetch(url);
@@ -67,6 +51,7 @@ const QualityInspection = ({ apiClient }: QualityInspectionProps) => {
 
   const imageRef = useRef<HTMLImageElement>(null);
   const navigate = useNavigate();
+  const intl = useIntl();
 
   const handleImageLoad = () => {
     if (imageRef.current) {
@@ -102,12 +87,28 @@ const QualityInspection = ({ apiClient }: QualityInspectionProps) => {
         const data = await apiClient.getDefectResult(file);
         setDefectResults(data);
       } catch {
-        setError("Backend rejected the image format.");
+        setError(
+          intl.formatMessage({
+            id: "imageFormatError",
+            defaultMessage: "Backend rejected the image format.",
+          }),
+        );
       }
     };
 
     if (currentImage) processImage();
-  }, [apiClient, currentImage, status]);
+  }, [apiClient, currentImage, status, intl]);
+
+  const handleBBoxColor = (categoryId: number) => {
+    switch (categoryId) {
+      case 0:
+        return MISSING_HOLE_COLOR;
+      case 3:
+        return SHORT_CIRCUIT_COLOR;
+      default:
+        return DEFAULT_COLOR;
+    }
+  };
 
   return (
     <Container
@@ -180,7 +181,7 @@ const QualityInspection = ({ apiClient }: QualityInspectionProps) => {
                       top: `${defect.bbox[1] * scale.y}px`,
                       width: `${defect.bbox[2] * scale.x}px`,
                       height: `${defect.bbox[3] * scale.y}px`,
-                      border: `3px solid ${defect.categoryId === 0 ? "#ff0000" : "#ffc107"}`,
+                      border: `3px solid ${handleBBoxColor(defect.categoryId)}`,
                       backgroundColor: "rgba(255, 0, 0, 0.1)",
                       pointerEvents: "none",
                     }}
@@ -204,25 +205,37 @@ const QualityInspection = ({ apiClient }: QualityInspectionProps) => {
               )}
               <h3 className="fw-bold d-flex flex-column align-items-start text-start">
                 {status === "analysis" ? (
-                  <FormattedMessage {...messages.scanningMessage} />
+                  <FormattedMessage
+                    id="qualityInspection.analyseMessage"
+                    defaultMessage="Scanning in progress..."
+                  />
                 ) : (
                   <div className="d-flex flex-column align-items-start gap-1">
-                    <FormattedMessage {...messages.anomaliesDetectedMessage} />
+                    <FormattedMessage
+                      id="qualityInspection.anomaliesDetectedMessage"
+                      defaultMessage="Anomalies detected"
+                    />
 
                     <div className="d-flex align-items-center">
                       <span
                         className="status-box me-2"
-                        style={{ borderColor: "#ff0000" }}
+                        style={{ borderColor: MISSING_HOLE_COLOR }}
                       ></span>
-                      <FormattedMessage {...messages.missingHole} />
+                      <FormattedMessage
+                        id="qualityInspection.missingHole"
+                        defaultMessage="Missing hole"
+                      />
                     </div>
 
                     <div className="d-flex align-items-center">
                       <span
                         className="status-box me-2"
-                        style={{ borderColor: "#ffc107" }}
+                        style={{ borderColor: SHORT_CIRCUIT_COLOR }}
                       ></span>
-                      <FormattedMessage {...messages.shortCircuit} />
+                      <FormattedMessage
+                        id="qualityInspection.shortCircuit"
+                        defaultMessage="Short circuit"
+                      />
                     </div>
                   </div>
                 )}
