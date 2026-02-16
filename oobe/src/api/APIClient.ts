@@ -1,6 +1,7 @@
 import axios, { type AxiosInstance } from "axios";
 import type { DeviceInfo } from "../components/DeviceDetails";
 import type { DefectResult } from "../pages/QualityInspection";
+import type { BlisterPackResult } from "../pages/SampleIntegrityCheck";
 
 type Config = {
   apiUrl: URL;
@@ -74,7 +75,7 @@ type ClientMessage = {
   views: string[];
 };
 
-interface BackendDefectResult {
+interface AIDetectionResult {
   category_id: number;
   bbox: number[];
   score: number;
@@ -104,7 +105,7 @@ export class APIClient {
   }
 
   async getDefectResult(imageFile: File): Promise<DefectResult[]> {
-    const response = await this.axiosInstance.post<BackendDefectResult[]>(
+    const response = await this.axiosInstance.post<AIDetectionResult[]>(
       "/pcb-defect-detect",
       imageFile,
       {
@@ -115,6 +116,25 @@ export class APIClient {
     );
     return response.data.map(
       (item): DefectResult => ({
+        categoryId: item.category_id,
+        bbox: item.bbox,
+        score: item.score,
+      }),
+    );
+  }
+
+  async getBlisterPackResult(imageFile: File): Promise<BlisterPackResult[]> {
+    const response = await this.axiosInstance.post<AIDetectionResult[]>(
+      "/blister-pack-detect",
+      imageFile,
+      {
+        headers: {
+          "Content-Type": imageFile.type,
+        },
+      },
+    );
+    return response.data.map(
+      (item): BlisterPackResult => ({
         categoryId: item.category_id,
         bbox: item.bbox,
         score: item.score,

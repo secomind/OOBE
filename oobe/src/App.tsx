@@ -83,7 +83,7 @@ function App() {
             />
             <Route
               path="/sample-integrity-check"
-              element={<SampleIntegrityCheck />}
+              element={<SampleIntegrityCheck apiClient={apiClient} />}
             />
             <Route
               path="/smart-clinical"

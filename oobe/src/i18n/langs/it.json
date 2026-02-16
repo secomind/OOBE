@@ -1,12 +1,15 @@
 {
-  "SampleIntegrityCheck.Compliant product": {
-    "defaultMessage": "Compliant product!"
-  },
   "SampleIntegrityCheck.analyseMessage": {
     "defaultMessage": "Scanning in progress..."
   },
   "SampleIntegrityCheck.anomaliesDetectedMessage": {
     "defaultMessage": "Anomalies detected"
+  },
+  "SampleIntegrityCheck.emptyBlister": {
+    "defaultMessage": "Empty blister"
+  },
+  "SampleIntegrityCheck.fullBlister": {
+    "defaultMessage": "Full blister"
   },
   "components.BloodCountMedical.birthDate": {
     "defaultMessage": "Date of Birth:"
@@ -187,6 +190,9 @@
   },
   "electricityMeter.title": {
     "defaultMessage": "Electricity Meter"
+  },
+  "imageFormatError": {
+    "defaultMessage": "Backend rejected the image format."
   },
   "industrialAlertManagement.dischargePressure": {
     "defaultMessage": "DISCHARGE PRESSURE"

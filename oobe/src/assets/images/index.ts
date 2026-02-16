@@ -16,9 +16,6 @@ import hd from "./hd.png";
 import settings from "./settings.png";
 import rgbPattern1 from "./rgb_pattern1.jpg";
 import rgbPattern2 from "./rgb_pattern2.jpg";
-import redPills from "./red_pills.png";
-import redPillsScanned from "./red_pills_scanned.png";
-import whitePills from "./white_pills.png";
 import person from "./person.png";
 import expand from "./expand_content.png";
 import resolutionVisuals from "./resolution_visuals.png";
@@ -32,6 +29,21 @@ import pcbShortCircuit02 from "./short_circuit_01.jpg";
 import pcbShortCircuit03 from "./short_circuit_02.jpg";
 import pcbShortCircuit04 from "./short_circuit_03.jpg";
 import pcbShortCircuit05 from "./short_circuit_04.jpg";
+import blisterPackEmpty00 from "./empty_00.jpg";
+import blisterPackEmpty01 from "./empty_01.jpg";
+import blisterPackFull00 from "./full_00.jpg";
+import blisterPackFull01 from "./full_01.jpg";
+import blisterPackPartial00 from "./partial_00.jpg";
+import blisterPackPartial01 from "./partial_01.jpg";
+import blisterPackPartial02 from "./partial_02.jpg";
+import blisterPackPartial03 from "./partial_03.jpg";
+import blisterPackPartial04 from "./partial_04.jpg";
+import blisterPackPartial05 from "./partial_05.jpg";
+import blisterPackPartial06 from "./partial_06.jpg";
+import blisterPackPartial07 from "./partial_07.jpg";
+import blisterPackPartial08 from "./partial_08.jpg";
+import blisterPackPartial09 from "./partial_09.jpg";
+import blisterPackPartial10 from "./partial_10.jpg";
 
 export {
   logo,
@@ -52,9 +64,6 @@ export {
   settings,
   rgbPattern1,
   rgbPattern2,
-  redPills,
-  redPillsScanned,
-  whitePills,
   person,
   expand,
   resolutionVisuals,
@@ -68,4 +77,19 @@ export {
   pcbShortCircuit03,
   pcbShortCircuit04,
   pcbShortCircuit05,
+  blisterPackEmpty00,
+  blisterPackEmpty01,
+  blisterPackFull00,
+  blisterPackFull01,
+  blisterPackPartial00,
+  blisterPackPartial01,
+  blisterPackPartial02,
+  blisterPackPartial03,
+  blisterPackPartial04,
+  blisterPackPartial05,
+  blisterPackPartial06,
+  blisterPackPartial07,
+  blisterPackPartial08,
+  blisterPackPartial09,
+  blisterPackPartial10,
 };
