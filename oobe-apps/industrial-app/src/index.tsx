@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import { IntlProvider } from "react-intl";
 
 import App, { AppProps } from "./App";
+import datePickerStyle from "react-datepicker/dist/react-datepicker.css";
 
 import en from "./i18n/langs-compiled/en.json";
 import it from "./i18n/langs-compiled/it.json";
@@ -30,6 +31,7 @@ const AppLifecycle = {
     root.render(
       <>
         <link href={themeUrl} type="text/css" rel="stylesheet" />
+        <style>{datePickerStyle.toString()}</style>
         <IntlProvider
           messages={messages[language]}
           locale={language}

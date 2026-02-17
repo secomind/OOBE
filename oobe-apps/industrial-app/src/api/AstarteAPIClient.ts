@@ -36,12 +36,25 @@ class AstarteAPIClient {
     });
   }
 
-  async getImagesData(deviceId: string): Promise<Record<string, ImageData>> {
+  async getImagesData(
+    deviceId: string,
+    since?: Date,
+    to?: Date,
+  ): Promise<Record<string, ImageData>> {
     const { realm } = this.config;
+
+    const params: {
+      since?: string;
+      to?: string;
+    } = {};
+
+    if (since) params.since = since.toISOString();
+    if (to) params.to = to.toISOString();
 
     return this.axiosInstance
       .get(
         `v1/${realm}/devices/${deviceId}/interfaces/com.oobe.quality.Inspection`,
+        { params },
       )
       .then((response) => response.data?.data ?? [])
       .catch((error) => {

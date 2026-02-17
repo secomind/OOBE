@@ -1,7 +1,10 @@
-import AstarteAPIClient from "./api/AstarteAPIClient";
 import { useEffect, useMemo, useState } from "react";
 import { Container, Spinner, Alert } from "react-bootstrap";
-import IndustrialBarChart from "./component/IndustrialBarChart";
+import AstarteAPIClient from "./api/AstarteAPIClient";
+import TopBar from "./components/TopBar";
+import { isRangePreset, presetToDateRange } from "./components/RangeSelect";
+import StatsOverview from "./components/StatsOverview";
+import IndustrialBarChart from "./components/IndustrialBarChart";
 import { ImageData } from "types";
 import { FormattedMessage, useIntl } from "react-intl";
 
@@ -13,7 +16,7 @@ const TOP_PRODUCTS = [
   "SMD-X330656 pcs",
 ];
 
-export type AppProps = {
+type AppProps = {
   astarteUrl: URL;
   realm: string;
   deviceId: string;
@@ -24,27 +27,46 @@ const App = ({ astarteUrl, realm, deviceId, token }: AppProps) => {
   const intl = useIntl();
   const [dataFetching, setDataFetching] = useState(false);
   const [imagesData, setImagesData] = useState<Record<string, ImageData>>({});
+  const [statsImagesData, setStatsImagesData] = useState<ImageData[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [selectedRange, setSelectedRange] = useState<any>("Day");
 
   const astarteClient = useMemo(() => {
     return new AstarteAPIClient({ astarteUrl, realm, token });
   }, [astarteUrl, realm, token]);
 
-  useEffect(() => {
+  const [since, to] = useMemo(() => {
+    return isRangePreset(selectedRange)
+      ? presetToDateRange(selectedRange)
+      : selectedRange;
+  }, [selectedRange]);
+
+  const fetchData = () => {
+    if (!astarteClient || !deviceId) return;
+
     setDataFetching(true);
+    setError(null);
 
     astarteClient
-      .getImagesData(deviceId)
+      .getImagesData(deviceId, since, to)
       .then((data) => {
         setImagesData(data);
+        const allImagesArray = Object.values(data);
+        setStatsImagesData(allImagesArray);
       })
       .catch(() => {
         setError("Failed to fetch data.");
+        setImagesData({});
+        setStatsImagesData([]);
       })
       .finally(() => {
         setDataFetching(false);
       });
-  }, [astarteClient, deviceId]);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [astarteClient, deviceId, since, to]);
 
   const categories = Object.keys(imagesData);
 
@@ -60,17 +82,34 @@ const App = ({ astarteUrl, realm, deviceId, token }: AppProps) => {
   ];
 
   return (
-    <Container fluid className="p-4">
-      {dataFetching ? (
-        <div className="text-center">
-          <Spinner animation="border" />
+    <Container fluid className="p-4" style={{ minHeight: "100vh" }}>
+      {error && (
+        <Alert variant="danger" className="mx-2 shadow-sm">
+          {error}
+        </Alert>
+      )}
+
+      {dataFetching && (
+        <div className="text-center p-5 mt-5">
+          <Spinner animation="border" variant="primary" />
         </div>
-      ) : (
+      )}
+
+      {!dataFetching && (
         <>
-          <h1>Industrial App</h1>
+          <TopBar
+            title="Quality inspection"
+            selectedRange={selectedRange}
+            isDisabled={dataFetching}
+            onRangeChange={setSelectedRange}
+            onRefresh={fetchData}
+          />
+          <hr className="my-4 text-muted opacity-25" />
 
-          {error && <Alert variant="danger">{error}</Alert>}
-
+          <StatsOverview
+            imagesData={statsImagesData}
+            imageIdsCount={Object.keys(imagesData).length}
+          />
           <h6>
             <FormattedMessage id="topProducts" defaultMessage="Top Products" />
           </h6>
@@ -81,7 +120,7 @@ const App = ({ astarteUrl, realm, deviceId, token }: AppProps) => {
             ))}
           </ul>
 
-          {categories.length ? (
+          {categories.length > 0 ? (
             <IndustrialBarChart
               categories={categories}
               series={series}

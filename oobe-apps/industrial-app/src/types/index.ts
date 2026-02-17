@@ -3,3 +3,5 @@ export type ImageData = {
   drillError: number;
   shortCircuit: number;
 };
+
+export type RangePreset = "Day" | "Week" | "Month" | "Year";
