@@ -1,9 +1,9 @@
 {
-  "line": {
-    "defaultMessage": "Line ({lineId})"
+  "defections": {
+    "defaultMessage": "Defections"
   },
-  "allLines": {
-    "defaultMessage": "All Lines (Global Views)"
+  "noData": {
+    "defaultMessage": "No data available."
   },
   "loading": {
     "defaultMessage": "Loading..."

@@ -1,5 +1,6 @@
 import axios, { AxiosInstance } from "axios";
 import qs from "qs";
+import { ImageData } from "types";
 
 type AstarteAPIClientProps = {
   astarteUrl: URL;
@@ -9,22 +10,6 @@ type AstarteAPIClientProps = {
 
 type Config = AstarteAPIClientProps & {
   appEngineUrl: URL;
-};
-
-type ImageParameters = {
-  deviceId: string;
-  imageId: string;
-  sinceAfter?: Date;
-  since?: Date;
-  to?: Date;
-  limit?: number;
-};
-
-type ImageData = {
-  productName: string;
-  drillError: number;
-  shortCircuit: number;
-  timestamp: Date;
 };
 
 class AstarteAPIClient {
@@ -38,6 +23,7 @@ class AstarteAPIClient {
       token,
       appEngineUrl: new URL("appengine/", astarteUrl),
     };
+
     this.axiosInstance = axios.create({
       baseURL: this.config.appEngineUrl.toString(),
       headers: {
@@ -50,35 +36,12 @@ class AstarteAPIClient {
     });
   }
 
-  async getImagesIds(deviceId: string): Promise<string[]> {
+  async getImagesData(deviceId: string): Promise<Record<string, ImageData>> {
     const { realm } = this.config;
-    const response = await this.axiosInstance.get(
-      `v1/${realm}/devices/${deviceId}/interfaces/com.oobe.quality.Inspection`,
-    );
-
-    return Object.keys(response.data?.data ?? {});
-  }
-
-  async getImagesData({
-    deviceId,
-    imageId,
-    sinceAfter,
-    since,
-    to,
-    limit,
-  }: ImageParameters): Promise<ImageData[]> {
-    const { realm } = this.config;
-
-    const query: Record<string, string> = {};
-    if (sinceAfter) query.sinceAfter = sinceAfter.toISOString();
-    if (since) query.since = since.toISOString();
-    if (to) query.to = to.toISOString();
-    if (limit) query.limit = limit.toString();
 
     return this.axiosInstance
       .get(
-        `v1/${realm}/devices/${deviceId}/interfaces/com.oobe.quality.Inspection/${imageId}`,
-        { params: query },
+        `v1/${realm}/devices/${deviceId}/interfaces/com.oobe.quality.Inspection`,
       )
       .then((response) => response.data?.data ?? [])
       .catch((error) => {
@@ -88,4 +51,3 @@ class AstarteAPIClient {
 }
 
 export default AstarteAPIClient;
-export type { ImageData, ImageParameters };

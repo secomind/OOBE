@@ -1,6 +1,9 @@
 import AstarteAPIClient from "./api/AstarteAPIClient";
 import { useEffect, useMemo, useState } from "react";
-import { Container, Spinner } from "react-bootstrap";
+import { Container, Spinner, Alert } from "react-bootstrap";
+import IndustrialBarChart from "./component/IndustrialBarChart";
+import { ImageData } from "types";
+import { FormattedMessage, useIntl } from "react-intl";
 
 export type AppProps = {
   astarteUrl: URL;
@@ -10,8 +13,9 @@ export type AppProps = {
 };
 
 const App = ({ astarteUrl, realm, deviceId, token }: AppProps) => {
+  const intl = useIntl();
   const [dataFetching, setDataFetching] = useState(false);
-  const [imageIds, setImageIds] = useState<string[]>([]);
+  const [imagesData, setImagesData] = useState<Record<string, ImageData>>({});
   const [error, setError] = useState<string | null>(null);
 
   const astarteClient = useMemo(() => {
@@ -22,9 +26,9 @@ const App = ({ astarteUrl, realm, deviceId, token }: AppProps) => {
     setDataFetching(true);
 
     astarteClient
-      .getImagesIds(deviceId)
-      .then((ids) => {
-        setImageIds(ids);
+      .getImagesData(deviceId)
+      .then((data) => {
+        setImagesData(data);
       })
       .catch(() => {
         setError("Failed to fetch data.");
@@ -34,15 +38,44 @@ const App = ({ astarteUrl, realm, deviceId, token }: AppProps) => {
       });
   }, [astarteClient, deviceId]);
 
+  const categories = Object.keys(imagesData);
+
+  const series = [
+    {
+      name: "Short Circuit (SC)",
+      data: categories.map((key) => imagesData[key].shortCircuit),
+    },
+    {
+      name: "Drill Error (Hole)",
+      data: categories.map((key) => imagesData[key].drillError),
+    },
+  ];
+
   return (
     <Container fluid className="p-4">
       {dataFetching ? (
-        <div className="p-2 p-md-4 text-center">
-          <Spinner />
+        <div className="text-center">
+          <Spinner animation="border" />
         </div>
       ) : (
-        <h1>Industrial App</h1>
-        // TODO: implement components
+        <>
+          <h1>Industrial App</h1>
+
+          {error && <Alert variant="danger">{error}</Alert>}
+
+          {categories.length ? (
+            <IndustrialBarChart
+              categories={categories}
+              series={series}
+              title={intl.formatMessage({
+                id: "defections",
+                defaultMessage: "Defections",
+              })}
+            />
+          ) : (
+            <FormattedMessage id="noData" defaultMessage="No data available." />
+          )}
+        </>
       )}
     </Container>
   );
