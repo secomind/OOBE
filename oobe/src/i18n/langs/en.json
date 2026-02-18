@@ -11,6 +11,33 @@
   "SampleIntegrityCheck.fullBlister": {
     "defaultMessage": "Full blister"
   },
+  "alarmResolvingSidebar.alarmCheckInstructions": {
+    "defaultMessage": "Welcome"
+  },
+  "alarmResolvingSidebar.alarmResolved": {
+    "defaultMessage": "Alarm solved"
+  },
+  "alarmResolvingSidebar.authenticatingUser": {
+    "defaultMessage": "Authorization confirmed"
+  },
+  "alarmResolvingSidebar.checkingAlarm": {
+    "defaultMessage": "Checking, please wait"
+  },
+  "alarmResolvingSidebar.checkingPermissions": {
+    "defaultMessage": "Authorized technician successfully recognized."
+  },
+  "alarmResolvingSidebar.notAuthenticatedUser": {
+    "defaultMessage": "Access required"
+  },
+  "alarmResolvingSidebar.resolvingAlarmInstructions": {
+    "defaultMessage": "Once performed the necessary actions, press the button below to verify that the problem is resolved."
+  },
+  "alarmResolvingSidebar.tenantRecognized": {
+    "defaultMessage": "Waiting for authorized technician identification"
+  },
+  "alarmResolvingSidebar.verifyResolutionButton": {
+    "defaultMessage": "Check if solved"
+  },
   "components.BloodCountMedical.birthDate": {
     "defaultMessage": "Date of Birth:"
   },
