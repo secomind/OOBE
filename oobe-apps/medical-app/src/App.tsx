@@ -6,6 +6,7 @@ import PatientOverview from "./components/PatientOverview";
 import AstarteAPIClient from "./api/AstarteAPIClient";
 import { PatientOverviewData, MedicalReportsData, VitalSignsData } from "types";
 import MedicalReports from "./components/MedicalReports";
+import VitalSigns from "./components/VitalSigns";
 
 export type AppProps = {
   astarteUrl: URL;
@@ -32,45 +33,44 @@ const App = ({ astarteUrl, realm, deviceId, token }: AppProps) => {
     return new AstarteAPIClient({ astarteUrl, realm, token });
   }, [astarteUrl, realm, token]);
 
-  useEffect(() => {
-    const fetchAllData = async () => {
-      setDataFetching(true);
-
-      try {
-        // Patient Overview
-        const patientData = await astarteClient.getPatientOverview(deviceId);
-        if (patientData) {
-          setPatientOverview(patientData);
-        } else {
-          setPatientOverview(null);
-        }
-
-        // Medical Reports
-        const medicalData = await astarteClient.getMedicalReports(deviceId);
-        if (medicalData && medicalData.length > 0) {
-          setMedicalReports(medicalData);
-        } else {
-          setMedicalReports([]);
-        }
-
-        // Vital Signs
-        const vitalSignsData = await astarteClient.getVitalSigns(deviceId);
-        if (vitalSignsData && vitalSignsData.length > 0) {
-          setVitalSigns(vitalSignsData);
-        } else {
-          setVitalSigns([]);
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-
+  const fetchAllData = async () => {
+    setDataFetching(true);
+    const patientOverviewPromise = astarteClient
+      .getPatientOverview(deviceId)
+      .then((patientData) => {
+        setPatientOverview(patientData);
+      })
+      .catch(() => {
         setPatientOverview(null);
-        setMedicalReports([]);
-        setVitalSigns([]);
-      } finally {
-        setDataFetching(false);
-      }
-    };
+      });
 
+    const medicalReportsPromise = astarteClient
+      .getMedicalReports(deviceId)
+      .then((medicalData) => {
+        setMedicalReports(medicalData);
+      })
+      .catch(() => {
+        setMedicalReports([]);
+      });
+
+    const vitalSignsPromise = astarteClient
+      .getVitalSigns(deviceId)
+      .then((vitalSignsData) => {
+        setVitalSigns(vitalSignsData);
+      })
+      .catch(() => {
+        setVitalSigns([]);
+      });
+    Promise.all([
+      patientOverviewPromise,
+      medicalReportsPromise,
+      vitalSignsPromise,
+    ]).finally(() => {
+      setDataFetching(false);
+    });
+  };
+
+  useEffect(() => {
     fetchAllData();
   }, [astarteClient, deviceId]);
 
@@ -136,13 +136,7 @@ const App = ({ astarteUrl, realm, deviceId, token }: AppProps) => {
   const sectionContent: Record<SidebarSection, JSX.Element> = {
     overview: <PatientOverview data={patientOverview} />,
     reports: <MedicalReports reports={medicalReports} />,
-    vitalSigns: (
-      <div>
-        <h3>
-          <FormattedMessage id="vitalSigns" defaultMessage="Vital signs" />
-        </h3>
-      </div>
-    ),
+    vitalSigns: <VitalSigns vitalSigns={vitalSigns} />,
   };
 
   return (

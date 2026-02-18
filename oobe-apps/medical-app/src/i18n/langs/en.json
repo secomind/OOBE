@@ -47,6 +47,18 @@
   "reports.type": {
     "defaultMessage": "Type"
   },
+  "vital.bloodPressure": {
+    "defaultMessage": "Blood Pressure"
+  },
+  "vital.ecgRecording": {
+    "defaultMessage": "ECG Recording"
+  },
+  "vital.oxygenSaturation": {
+    "defaultMessage": "Oxygen Saturation"
+  },
+  "vital.realTimeName": {
+    "defaultMessage": "Real Time Vital Signs"
+  },
   "vitalSigns": {
     "defaultMessage": "Vital Signs"
   }

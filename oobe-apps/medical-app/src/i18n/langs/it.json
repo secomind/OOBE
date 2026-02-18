@@ -29,19 +29,37 @@
   "overview.title": {
     "defaultMessage": "Patient Overview"
   },
-  "reports.noMedicalReports": {
-    "defaultMessage": "noMedicalReports"
-  },
-  "reports.tableName": {
-    "defaultMessage": "Patient Medical Reports"
-  },
-  "vitalSigns": {
-    "defaultMessage": "Vital Signs"
+  "reports": {
+    "defaultMessage": "Medical Reports"
   },
   "reports.date": {
     "defaultMessage": "Date of medical service"
   },
   "reports.facility": {
     "defaultMessage": "Performing facility"
+  },
+  "reports.noMedicalReports": {
+    "defaultMessage": "No medical reports available."
+  },
+  "reports.tableName": {
+    "defaultMessage": "Patient Medical Reports"
+  },
+  "reports.type": {
+    "defaultMessage": "Type"
+  },
+  "vital.bloodPressure": {
+    "defaultMessage": "Blood Pressure"
+  },
+  "vital.ecgRecording": {
+    "defaultMessage": "ECG Recording"
+  },
+  "vital.oxygenSaturation": {
+    "defaultMessage": "Oxygen Saturation"
+  },
+  "vital.realTimeName": {
+    "defaultMessage": "Real Time Vital Signs"
+  },
+  "vitalSigns": {
+    "defaultMessage": "Vital Signs"
   }
 }
