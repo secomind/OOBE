@@ -1,138 +1,138 @@
 {
   "SampleIntegrityCheck.analyseMessage": {
-    "defaultMessage": "Scanning in progress..."
+    "defaultMessage": "Scansione in corso..."
   },
   "SampleIntegrityCheck.anomaliesDetectedMessage": {
-    "defaultMessage": "Anomalies detected"
+    "defaultMessage": "Anomalie rilevate"
   },
   "SampleIntegrityCheck.emptyBlister": {
-    "defaultMessage": "Empty blister"
+    "defaultMessage": "Blister vuoto"
   },
   "SampleIntegrityCheck.fullBlister": {
-    "defaultMessage": "Full blister"
+    "defaultMessage": "Blister pieno"
   },
   "components.BloodCountMedical.birthDate": {
-    "defaultMessage": "Date of Birth:"
+    "defaultMessage": "Data di nascita:"
   },
   "components.BloodCountMedical.collectionDate": {
-    "defaultMessage": "Collection Date:"
+    "defaultMessage": "Data di raccolta:"
   },
   "components.BloodCountMedical.gender": {
-    "defaultMessage": "Gender:"
+    "defaultMessage": "Sesso:"
   },
   "components.BloodCountMedical.laboratoryReport": {
-    "defaultMessage": "Laboratory Report"
+    "defaultMessage": "Referto di laboratorio"
   },
   "components.BloodCountMedical.name": {
-    "defaultMessage": "Name:"
+    "defaultMessage": "Nome:"
   },
   "components.BloodCountMedical.patientID": {
-    "defaultMessage": "Patient ID:"
+    "defaultMessage": "ID paziente:"
   },
   "components.BloodCountMedical.patientInfo": {
-    "defaultMessage": "Patient Information"
+    "defaultMessage": "Informazioni del paziente"
   },
   "components.BloodCountMedical.referenceRange": {
-    "defaultMessage": "Reference Range"
+    "defaultMessage": "Intervallo di riferimento"
   },
   "components.BloodCountMedical.reportDate": {
-    "defaultMessage": "Report Date:"
+    "defaultMessage": "Data del referto:"
   },
   "components.BloodCountMedical.result": {
-    "defaultMessage": "Result"
+    "defaultMessage": "Risultato"
   },
   "components.BloodCountMedical.test": {
     "defaultMessage": "Test"
   },
   "components.BloodCountMedical.testType": {
-    "defaultMessage": "Test Type:"
+    "defaultMessage": "Tipo di test:"
   },
   "components.BloodCountMedical.unit": {
-    "defaultMessage": "Unit"
+    "defaultMessage": "Unità"
   },
   "components.DeviceDetailsCard.cpuArchitecture": {
-    "defaultMessage": "CPU architecture"
+    "defaultMessage": "Architettura CPU"
   },
   "components.DeviceDetailsCard.cpuModelCode": {
-    "defaultMessage": "CPU model code"
+    "defaultMessage": "Codice modello CPU"
   },
   "components.DeviceDetailsCard.cpuModelName": {
-    "defaultMessage": "CPU model name"
+    "defaultMessage": "Nome modello CPU"
   },
   "components.DeviceDetailsCard.cpuVendor": {
-    "defaultMessage": "CPU vendor"
+    "defaultMessage": "Produttore CPU"
   },
   "components.DeviceDetailsCard.title": {
-    "defaultMessage": "Device details"
+    "defaultMessage": "Dettagli del dispositivo"
   },
   "components.DeviceDetailsCard.totalMemory": {
-    "defaultMessage": "Total memory"
+    "defaultMessage": "Memoria totale"
   },
   "components.GeolocalizationCard.addressLabel": {
-    "defaultMessage": "Address:"
+    "defaultMessage": "Indirizzo:"
   },
   "components.GeolocalizationCard.addressUnavailable": {
-    "defaultMessage": "Address unavailable"
+    "defaultMessage": "Indirizzo non disponibile"
   },
   "components.GeolocalizationCard.loading": {
-    "defaultMessage": "Loading position..."
+    "defaultMessage": "Caricamento posizione..."
   },
   "components.GeolocalizationCard.loadingAddress": {
-    "defaultMessage": "Loading address..."
+    "defaultMessage": "Caricamento indirizzo..."
   },
   "components.GeolocalizationCard.offline": {
-    "defaultMessage": "Device Offline"
+    "defaultMessage": "Dispositivo Offline"
   },
   "components.GeolocalizationCard.offlineDescription": {
-    "defaultMessage": "Geolocation will be available once the device is connected to the internet."
+    "defaultMessage": "La geolocalizzazione sarà disponibile una volta che il dispositivo sarà connesso a Internet."
   },
   "components.GeolocalizationCard.statusLabel": {
-    "defaultMessage": "Status:"
+    "defaultMessage": "Stato:"
   },
   "components.GeolocalizationCard.title": {
-    "defaultMessage": "Geolocalization"
+    "defaultMessage": "Geolocalizzazione"
   },
   "components.QualityInspection.analyzeNextObjectButton": {
-    "defaultMessage": "Analyze next object"
+    "defaultMessage": "Analizza il prossimo oggetto"
   },
   "components.QualityInspection.mainMessage": {
-    "defaultMessage": "This is a demo environment, the camera feed is simulated. Click ‘Start analysis’ to run inference."
+    "defaultMessage": "Questo è un ambiente demo, il feed della telecamera è simulato. Clicca su ‘Avvia analisi’ per eseguire l’inferenza."
   },
   "components.QualityInspection.startAnalysisButton": {
-    "defaultMessage": "Start analysis"
+    "defaultMessage": "Avvia analisi"
   },
   "components.QualityInspection.tryAgainButton": {
-    "defaultMessage": "Try Again"
+    "defaultMessage": "Riprova"
   },
   "components.SampleIntegrityCheck.analyzeNextButton": {
-    "defaultMessage": "Analyze next object"
+    "defaultMessage": "Analizza il prossimo oggetto"
   },
   "components.SampleIntegrityCheck.mainMessage": {
-    "defaultMessage": "This is a demo environment, the camera feed is simulated. Click ‘Start analysis’ to run inference."
+    "defaultMessage": "Questo è un ambiente demo, il feed della telecamera è simulato. Clicca su ‘Avvia analisi’ per eseguire l’inferenza."
   },
   "components.SampleIntegrityCheck.startButton": {
-    "defaultMessage": "Start analysis"
+    "defaultMessage": "Avvia analisi"
   },
   "components.Sidebar.dashboard": {
     "defaultMessage": "Dashboard"
   },
   "components.Sidebar.demo": {
-    "defaultMessage": "Demo app"
+    "defaultMessage": "App demo"
   },
   "components.Sidebar.exit": {
-    "defaultMessage": "Exit"
+    "defaultMessage": "Esci"
   },
   "components.Sidebar.tool": {
-    "defaultMessage": "Testing tool"
+    "defaultMessage": "Strumento di test"
   },
   "components.SystemResourceUsage.cpuUsage": {
-    "defaultMessage": "CPU usage"
+    "defaultMessage": "Utilizzo CPU"
   },
   "components.SystemResourceUsage.ramUsage": {
     "defaultMessage": "RAM"
   },
   "components.SystemResourceUsage.title": {
-    "defaultMessage": "Resource usage"
+    "defaultMessage": "Aggiornamento utilizzo"
   },
   "components.SystemUsageLog.cpu": {
     "defaultMessage": "CPU"
@@ -141,217 +141,217 @@
     "defaultMessage": "RAM"
   },
   "components.SystemUsageLog.subtitle": {
-    "defaultMessage": "Usage Update"
+    "defaultMessage": "Aggiornamento utilizzo"
   },
   "components.SystemUsageLog.title": {
     "defaultMessage": "Log"
   },
   "electricityMeter.additional.title": {
-    "defaultMessage": "Additional Info"
+    "defaultMessage": "Informazioni aggiuntive"
   },
   "electricityMeter.averageDailyUsage": {
-    "defaultMessage": "Average Daily Usage"
+    "defaultMessage": "Consumo medio giornaliero"
   },
   "electricityMeter.consumption.title": {
-    "defaultMessage": "Consumption"
+    "defaultMessage": "Consumo"
   },
   "electricityMeter.cost.title": {
-    "defaultMessage": "Cost"
+    "defaultMessage": "Costo"
   },
   "electricityMeter.currentReading": {
-    "defaultMessage": "Current Reading"
+    "defaultMessage": "Lettura corrente"
   },
   "electricityMeter.currentTariff": {
-    "defaultMessage": "Current Tariff"
+    "defaultMessage": "Tariffa corrente"
   },
   "electricityMeter.customer": {
-    "defaultMessage": "Customer"
+    "defaultMessage": "Cliente"
   },
   "electricityMeter.estimatedCost": {
-    "defaultMessage": "Estimated Cost"
+    "defaultMessage": "Costo stimato"
   },
   "electricityMeter.meterId": {
-    "defaultMessage": "Meter ID"
+    "defaultMessage": "ID contatore"
   },
   "electricityMeter.peakDemand": {
-    "defaultMessage": "Peak Demand"
+    "defaultMessage": "Domanda massima"
   },
   "electricityMeter.periodConsumption": {
-    "defaultMessage": "Period Consumption"
+    "defaultMessage": "Consumo periodo"
   },
   "electricityMeter.previousReading": {
-    "defaultMessage": "Previous Reading"
+    "defaultMessage": "Lettura precedente"
   },
   "electricityMeter.readingDate": {
-    "defaultMessage": "Reading Date"
+    "defaultMessage": "Data lettura"
   },
   "electricityMeter.status": {
-    "defaultMessage": "Status"
+    "defaultMessage": "Stato"
   },
   "electricityMeter.title": {
-    "defaultMessage": "Electricity Meter"
+    "defaultMessage": "Contatore elettrico"
   },
   "imageFormatError": {
-    "defaultMessage": "Backend rejected the image format."
+    "defaultMessage": "Il backend ha rifiutato il formato dell’immagine."
   },
   "industrialAlertManagement.dischargePressure": {
-    "defaultMessage": "DISCHARGE PRESSURE"
+    "defaultMessage": "PRESSIONE DI SCARICO"
   },
   "industrialAlertManagement.energyConsumption": {
-    "defaultMessage": "ENERGY CONSUMPTION"
+    "defaultMessage": "CONSUMO ENERGETICO"
   },
   "industrialAlertManagement.fanSpeed": {
-    "defaultMessage": "FAN SPEED"
+    "defaultMessage": "VELOCITÀ VENTOLA"
   },
   "industrialAlertManagement.internalHumidity": {
-    "defaultMessage": "INTERNAL HUMIDITY"
+    "defaultMessage": "UMIDITÀ INTERNA"
   },
   "industrialAlertManagement.suctionPressure": {
-    "defaultMessage": "SUCTION PRESSURE"
+    "defaultMessage": "PRESSIONE ASPIRAZIONE"
   },
   "industrialAlertManagement.systemStatus": {
-    "defaultMessage": "SYSTEM STATUS"
+    "defaultMessage": "STATO SISTEMA"
   },
   "medicalAlertManagement.coolingSystem": {
-    "defaultMessage": "COOLING SYSTEM"
+    "defaultMessage": "SISTEMA DI RAFFREDDAMENTO"
   },
   "medicalAlertManagement.gantryTemperature": {
-    "defaultMessage": "GANTRY TEMPERATURE"
+    "defaultMessage": "TEMPERATURA GANTRY"
   },
   "medicalAlertManagement.systemStatus": {
-    "defaultMessage": "SYSTEM STATUS"
+    "defaultMessage": "STATO SISTEMA"
   },
   "medicalAlertManagement.tubeCurrent": {
-    "defaultMessage": "TUBE CURRENT"
+    "defaultMessage": "CORRENTE TUBO"
   },
   "medicalAlertManagement.tubeStatus": {
-    "defaultMessage": "TUBE STATUS"
+    "defaultMessage": "STATO TUBO"
   },
   "pages.Dashboard.discover": {
-    "defaultMessage": "Discover our demos"
+    "defaultMessage": "Scopri le nostre demo"
   },
   "pages.Dashboard.title": {
-    "defaultMessage": "Device Status"
+    "defaultMessage": "Stato dispositivo"
   },
   "pages.DemoApp.industrialAutomation.desc": {
-    "defaultMessage": "Monitor machines and resolve alerts in the factory"
+    "defaultMessage": "Monitora le macchine e risolvi gli allarmi in fabbrica"
   },
   "pages.DemoApp.industrialAutomation.title": {
-    "defaultMessage": "Industrial Automation"
+    "defaultMessage": "Automazione industriale"
   },
   "pages.DemoApp.medical.desc": {
-    "defaultMessage": "Monitor machines and resolve alerts in the factory"
+    "defaultMessage": "Monitora le macchine e risolvi gli allarmi in fabbrica"
   },
   "pages.DemoApp.medical.title": {
-    "defaultMessage": "Medical"
+    "defaultMessage": "Medico"
   },
   "pages.DemoApp.smartBuilding.desc": {
-    "defaultMessage": "Control building systems and detect issues in real time"
+    "defaultMessage": "Controlla i sistemi dell’edificio e rileva problemi in tempo reale"
   },
   "pages.DemoApp.smartBuilding.title": {
     "defaultMessage": "Smart Building"
   },
   "pages.DemoApp.title": {
-    "defaultMessage": "Demo apps"
+    "defaultMessage": "App demo"
   },
   "pages.IndustrialAutomation.plant.desc": {
-    "defaultMessage": "Get reports and insights as the plant manager."
+    "defaultMessage": "Ottieni report e informazioni come responsabile dello stabilimento."
   },
   "pages.IndustrialAutomation.plant.title": {
-    "defaultMessage": "Plant Management"
+    "defaultMessage": "Gestione stabilimento"
   },
   "pages.IndustrialAutomation.qualityInspection.desc": {
-    "defaultMessage": "Inspect objects and analyze their faults and conformity."
+    "defaultMessage": "Ispeziona gli oggetti e analizza difetti e conformità."
   },
   "pages.IndustrialAutomation.qualityInspection.title": {
-    "defaultMessage": "Quality Inspection"
+    "defaultMessage": "Ispezione qualità"
   },
   "pages.Medical.check.desc": {
-    "defaultMessage": "Detect defects and verify sample integrity."
+    "defaultMessage": "Rileva difetti e verifica l’integrità del campione."
   },
   "pages.Medical.check.title": {
-    "defaultMessage": "Sample Integrity Check"
+    "defaultMessage": "Controllo integrità campione"
   },
   "pages.Medical.smartClinicalRecord.desc": {
-    "defaultMessage": "Access patient data and request info and updates."
+    "defaultMessage": "Accedi ai dati del paziente e richiedi informazioni e aggiornamenti."
   },
   "pages.Medical.smartClinicalRecord.title": {
-    "defaultMessage": "Smart Clinical Record"
+    "defaultMessage": "Cartella clinica intelligente"
   },
   "pages.SmartBuilding.smartLobby.desc": {
-    "defaultMessage": "Recognize residents and access condo info."
+    "defaultMessage": "Riconosci i residenti e accedi alle informazioni del condominio."
   },
   "pages.SmartBuilding.smartLobby.title": {
-    "defaultMessage": "Smart Lobby"
+    "defaultMessage": "Lobby intelligente"
   },
   "pages.SmartClinical.age": {
-    "defaultMessage": "Age:"
+    "defaultMessage": "Età:"
   },
   "pages.SmartClinical.bloodCountButton": {
-    "defaultMessage": "Blood Count(CBC)"
+    "defaultMessage": "Emocromo (CBC)"
   },
   "pages.SmartClinical.bloodPressure": {
-    "defaultMessage": "Blood Pressure"
+    "defaultMessage": "Pressione sanguigna"
   },
   "pages.SmartClinical.bloodType": {
-    "defaultMessage": "Blood Type:"
+    "defaultMessage": "Gruppo sanguigno:"
   },
   "pages.SmartClinical.height": {
-    "defaultMessage": "Height:"
+    "defaultMessage": "Altezza:"
   },
   "pages.SmartClinical.oxygenSaturation": {
-    "defaultMessage": "Oxygen Saturation"
+    "defaultMessage": "Saturazione ossigeno"
   },
   "pages.SmartClinical.physician": {
-    "defaultMessage": "Attending Physician:"
+    "defaultMessage": "Medico curante:"
   },
   "pages.SmartClinical.realTimeAssistant": {
-    "defaultMessage": "Real time assistant"
+    "defaultMessage": "Assistente in tempo reale"
   },
   "pages.SmartClinical.realTimeAssistantMessage": {
-    "defaultMessage": "Of course, here is the last laboratory test for the patient."
+    "defaultMessage": "Certo, ecco l’ultimo esame di laboratorio del paziente."
   },
   "pages.SmartClinical.reasonForHospitalization": {
-    "defaultMessage": "Reason for hospitalization:"
+    "defaultMessage": "Motivo del ricovero:"
   },
   "pages.SmartClinical.weight": {
-    "defaultMessage": "Weight:"
+    "defaultMessage": "Peso:"
   },
   "pages.SmartLobby.ElectricityMeterReading": {
-    "defaultMessage": "Electricity Meter Reading"
+    "defaultMessage": "Lettura contatore elettrico"
   },
   "pages.SmartLobby.car.price": {
-    "defaultMessage": "Starting from {price}"
+    "defaultMessage": "A partire da {price}"
   },
   "pages.SmartLobby.car.title": {
-    "defaultMessage": "CAR"
+    "defaultMessage": "AUTOMOBILE"
   },
   "pages.SmartLobby.locker.description": {
-    "defaultMessage": "Scan the QR code with the Condominium App to unlock your smart locker."
+    "defaultMessage": "Scansiona il codice QR con l’App del condominio per sbloccare il tuo armadietto intelligente."
   },
   "pages.SmartLobby.locker.title": {
-    "defaultMessage": "SMART LOCKER"
+    "defaultMessage": "ARMADIETTO INTELLIGENTE"
   },
   "pages.SmartLobby.messages.title": {
-    "defaultMessage": "Messages"
+    "defaultMessage": "Messaggi"
   },
   "pages.SmartLobby.profile.inbox": {
-    "defaultMessage": "INBOX MESSAGES"
+    "defaultMessage": "MESSAGGI IN ARRIVO"
   },
   "pages.SmartLobby.profile.name": {
     "defaultMessage": "EMILY CARTER"
   },
   "pages.SmartLobby.profile.nextMeeting": {
-    "defaultMessage": "NEXT CONDO MEETING"
+    "defaultMessage": "PROSSIMA RIUNIONE DI CONDOMINIO"
   },
   "pages.SmartLobby.profile.nextRent": {
-    "defaultMessage": "NEXT RENT PAYMENT"
+    "defaultMessage": "PROSSIMO PAGAMENTO AFFITTO"
   },
   "pages.SmartLobby.profile.unscheduled": {
-    "defaultMessage": "Unscheduled"
+    "defaultMessage": "Non programmato"
   },
   "pages.SmartLobby.weather.day": {
-    "defaultMessage": "Monday"
+    "defaultMessage": "Lunedì"
   },
   "pages.SmartLobby.weather.location": {
     "defaultMessage": "New York, USA"
@@ -360,54 +360,54 @@
     "defaultMessage": "28°c"
   },
   "pages.TestingTool.highResolution": {
-    "defaultMessage": "High-resolution visuals"
+    "defaultMessage": "Visuali ad alta risoluzione"
   },
   "pages.TestingTool.rgbPattern": {
-    "defaultMessage": "RGB pattern"
+    "defaultMessage": "Schema RGB"
   },
   "pages.TestingTool.title": {
-    "defaultMessage": "Testing Tools"
+    "defaultMessage": "Strumenti di test"
   },
   "pages.TestingTool.videoPlayer": {
-    "defaultMessage": "Video player"
+    "defaultMessage": "Lettore video"
   },
   "pages.general.alertManagement.desc": {
-    "defaultMessage": "View and resolve machine alerts."
+    "defaultMessage": "Visualizza e risolvi gli allarmi delle macchine."
   },
   "pages.general.alertManagement.title": {
-    "defaultMessage": "Alert Management"
+    "defaultMessage": "Gestione allarmi"
   },
   "pages.general.desc": {
-    "defaultMessage": "Choose one of the options below to get started."
+    "defaultMessage": "Scegli una delle opzioni qui sotto per iniziare."
   },
   "pages.general.title": {
-    "defaultMessage": "What would you like to do?"
+    "defaultMessage": "Cosa vuoi fare?"
   },
   "qualityInspection.analyseMessage": {
     "defaultMessage": "Scanning in progress..."
   },
   "qualityInspection.anomaliesDetectedMessage": {
-    "defaultMessage": "Anomalies detected"
+    "defaultMessage": "Anomalie rilevate"
   },
   "qualityInspection.missingHole": {
-    "defaultMessage": "Missing hole"
+    "defaultMessage": "Foro mancante"
   },
   "qualityInspection.shortCircuit": {
-    "defaultMessage": "Short circuit"
+    "defaultMessage": "Corto circuito"
   },
   "smartAlertManagement.gantryTemperature": {
-    "defaultMessage": "GANTRY TEMPERATURE"
+    "defaultMessage": "TEMPERATURA GANTRY"
   },
   "smartAlertManagement.inverterStatus": {
-    "defaultMessage": "INVERTER STATUS"
+    "defaultMessage": "STATO INVERTER"
   },
   "smartAlertManagement.plantStatus": {
-    "defaultMessage": "PLANT STATUS"
+    "defaultMessage": "STATO IMPIANTO"
   },
   "smartAlertManagement.powerSentToGrid": {
-    "defaultMessage": "POWER SENT TO GRID"
+    "defaultMessage": "ENERGIA INVIATA ALLA RETE"
   },
   "smartAlertManagement.selfConsumption": {
-    "defaultMessage": "SELF-CONSUMPTION"
+    "defaultMessage": "AUTOCONSUMO"
   }
 }
