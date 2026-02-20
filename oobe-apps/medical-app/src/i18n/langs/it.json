@@ -1,65 +1,65 @@
 {
   "loading": {
-    "defaultMessage": "Loading..."
+    "defaultMessage": "Caricamento..."
   },
   "overview": {
-    "defaultMessage": "Patient Overview"
+    "defaultMessage": "Quadro clinico del paziente"
   },
   "overview.BloodType": {
-    "defaultMessage": "Blood Type"
+    "defaultMessage": "Gruppo sanguigno"
   },
   "overview.Name": {
-    "defaultMessage": "Name"
+    "defaultMessage": "Nome"
   },
   "overview.patientAge": {
-    "defaultMessage": "Age"
+    "defaultMessage": "Età"
   },
   "overview.patientAttendingPhysician": {
-    "defaultMessage": "Attending Physician"
+    "defaultMessage": "Medico curante"
   },
   "overview.patientHeight": {
-    "defaultMessage": "Height"
+    "defaultMessage": "Altezza"
   },
   "overview.patientWeight": {
-    "defaultMessage": "Weight"
+    "defaultMessage": "Peso"
   },
   "overview.reasonDetails": {
-    "defaultMessage": "Reason for hospitalization and details"
+    "defaultMessage": "Motivo del ricovero e dettagli"
   },
   "overview.title": {
-    "defaultMessage": "Patient Overview"
+    "defaultMessage": "Quadro clinico del paziente"
   },
   "reports": {
-    "defaultMessage": "Medical Reports"
+    "defaultMessage": "Referti medici"
   },
   "reports.date": {
-    "defaultMessage": "Date of medical service"
+    "defaultMessage": "Data della prestazione medica"
   },
   "reports.facility": {
-    "defaultMessage": "Performing facility"
+    "defaultMessage": "Struttura esecutrice"
   },
   "reports.noMedicalReports": {
-    "defaultMessage": "No medical reports available."
+    "defaultMessage": "Nessun referto medico disponibile."
   },
   "reports.tableName": {
-    "defaultMessage": "Patient Medical Reports"
+    "defaultMessage": "Referti medici del paziente"
   },
   "reports.type": {
-    "defaultMessage": "Type"
+    "defaultMessage": "Categoria"
   },
   "vital.bloodPressure": {
-    "defaultMessage": "Blood Pressure"
+    "defaultMessage": "Pressione sanguigna"
   },
   "vital.ecgRecording": {
-    "defaultMessage": "ECG Recording"
+    "defaultMessage": "Registrazione ECG"
   },
   "vital.oxygenSaturation": {
-    "defaultMessage": "Oxygen Saturation"
+    "defaultMessage": "Saturazione O2"
   },
   "vital.realTimeName": {
-    "defaultMessage": "Real Time Vital Signs"
+    "defaultMessage": "Parametri vitali in tempo reale"
   },
   "vitalSigns": {
-    "defaultMessage": "Vital Signs"
+    "defaultMessage": "Parametri vitali"
   }
 }
