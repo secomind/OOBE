@@ -9,6 +9,7 @@ import { NavLink } from "react-router-dom";
 import type { APIClient, SmartUpdate } from "../api/APIClient";
 import { useEffect, useState } from "react";
 import { defineMessages } from "react-intl";
+import AlarmResolvingSidebar from "../components/AlarmResolvingSidebar";
 
 interface SmartAlertManagementProps {
   apiClient: APIClient;
@@ -58,6 +59,7 @@ const SmartAlertManagement = ({ apiClient }: SmartAlertManagementProps) => {
   const [realTimeInvTemp, setRealTimeInvTemp] = useState(0);
   const [realTimeSelfConsupmtion, setRealTimeSelfConsupmtion] = useState(0);
   const [realTimeInvStatus, setRealTimeInvStatus] = useState<string>("");
+  const [showSidebar, setShowSidebar] = useState(false);
 
   const updateTime = () => {
     const now = new Date();
@@ -201,7 +203,17 @@ const SmartAlertManagement = ({ apiClient }: SmartAlertManagementProps) => {
             realTimeData={realTimeSelfConsupmtion.toFixed().toString() + "%"}
           />
         </Col>
-        <Col xs={12} md={6} lg={4} className="d-flex">
+        <Col
+          xs={12}
+          md={6}
+          lg={4}
+          className="d-flex"
+          onClick={() => {
+            if (realTimeInvStatus === "fault") {
+              setShowSidebar(true);
+            }
+          }}
+        >
           <PropertyChart
             chartName={messages.inverterStatus.defaultMessage}
             chartColor="green"
@@ -210,6 +222,11 @@ const SmartAlertManagement = ({ apiClient }: SmartAlertManagementProps) => {
           />
         </Col>
       </Row>
+      <AlarmResolvingSidebar
+        show={showSidebar}
+        onHide={() => setShowSidebar(false)}
+        apiClient={apiClient}
+      />
     </Container>
   );
 };

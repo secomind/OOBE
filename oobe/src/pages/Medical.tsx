@@ -1,4 +1,4 @@
-import { Container, Image, Col, Button } from "react-bootstrap";
+import { Container, Image, Col, Button, Nav } from "react-bootstrap";
 import "./Medical.scss";
 import CardComponent from "../components/CardComponent";
 import { cardiology, logo, settingsEthernet, warning } from "../assets/images";
@@ -6,8 +6,16 @@ import { FormattedMessage } from "react-intl";
 import { NavLink } from "react-router-dom";
 import { faAngleLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import FaceRecognitionModal from "../components/FaceRecognitionModal";
+import { useState } from "react";
+import type { APIClient } from "../api/APIClient";
 
-const Medical = () => {
+interface MedicalProps {
+  apiClient: APIClient;
+}
+
+const Medical = ({ apiClient }: MedicalProps) => {
+  const [showModal, setShowModal] = useState(false);
   return (
     <Container fluid className="medical-container p-3">
       <Col xs={2} sm={6} md="auto" className="back-button-medical">
@@ -37,7 +45,11 @@ const Medical = () => {
 
       <div className="cards-wrapper-medical">
         <Col>
-          <NavLink to="/smart-clinical" className="nav-link">
+          <Nav.Link
+            as="button"
+            onClick={() => setShowModal(true)}
+            className="modal-nav-link"
+          >
             <CardComponent
               icon={cardiology}
               title={
@@ -53,8 +65,15 @@ const Medical = () => {
                 />
               }
             />
-          </NavLink>
+          </Nav.Link>
         </Col>
+
+        <FaceRecognitionModal
+          show={showModal}
+          onHide={() => setShowModal(false)}
+          url="/smart-clinical"
+          apiClient={apiClient}
+        />
 
         <Col>
           <NavLink to="/medical-alert-management" className="nav-link">

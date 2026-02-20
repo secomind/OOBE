@@ -9,6 +9,7 @@ import { NavLink } from "react-router-dom";
 import type { APIClient, MedicalUpdate } from "../api/APIClient";
 import { useEffect, useState } from "react";
 import { defineMessages } from "react-intl";
+import AlarmResolvingSidebar from "../components/AlarmResolvingSidebar";
 
 interface MedicalAlertManagementProps {
   apiClient: APIClient;
@@ -61,6 +62,7 @@ const MedicalAlertManagement = ({ apiClient }: MedicalAlertManagementProps) => {
   const [realTimeCoolingSystem, setRealTimeCoolingSystem] =
     useState<string>("");
   const [realTimeSystemStatus, setRealTimeSystemStatus] = useState<string>("");
+  const [showSidebar, setShowSidebar] = useState(false);
 
   const updateTime = () => {
     const now = new Date();
@@ -207,7 +209,17 @@ const MedicalAlertManagement = ({ apiClient }: MedicalAlertManagementProps) => {
             realTimeData={realTimeCoolingSystem}
           />
         </Col>
-        <Col xs={12} md={6} lg={4} className="d-flex">
+        <Col
+          xs={12}
+          md={6}
+          lg={4}
+          className="d-flex"
+          onClick={() => {
+            if (realTimeSystemStatus === "fault") {
+              setShowSidebar(true);
+            }
+          }}
+        >
           <PropertyChart
             chartName={messages.systemStatus.defaultMessage}
             chartColor="green"
@@ -216,6 +228,11 @@ const MedicalAlertManagement = ({ apiClient }: MedicalAlertManagementProps) => {
           />
         </Col>
       </Row>
+      <AlarmResolvingSidebar
+        show={showSidebar}
+        onHide={() => setShowSidebar(false)}
+        apiClient={apiClient}
+      />
     </Container>
   );
 };

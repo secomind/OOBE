@@ -56,9 +56,18 @@ function App() {
             />
             <Route path="/demo" element={<DemoApp />} />
             <Route path="/tool" element={<TestingTool />} />
-            <Route path="/smart-building" element={<SmartBuilding />} />
-            <Route path="/medical" element={<Medical />} />
-            <Route path="/industrial" element={<IndustrialAutomation />} />
+            <Route
+              path="/smart-building"
+              element={<SmartBuilding apiClient={apiClient} />}
+            />
+            <Route
+              path="/medical"
+              element={<Medical apiClient={apiClient} />}
+            />
+            <Route
+              path="/industrial"
+              element={<IndustrialAutomation apiClient={apiClient} />}
+            />
             <Route path="/smart-loby" element={<SmartLoby />} />
             <Route
               path="/smart-alert-management"

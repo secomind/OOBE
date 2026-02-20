@@ -1,4 +1,4 @@
-import { Container, Image, Col, Button } from "react-bootstrap";
+import { Container, Image, Col, Button, Nav } from "react-bootstrap";
 import "./IndustrialAutomation.scss";
 import CardComponent from "../components/CardComponent";
 import { logo, settingsEthernet, warehouse, warning } from "../assets/images";
@@ -6,8 +6,16 @@ import { FormattedMessage } from "react-intl";
 import { NavLink } from "react-router-dom";
 import { faAngleLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import FaceRecognitionModal from "../components/FaceRecognitionModal";
+import { useState } from "react";
+import type { APIClient } from "../api/APIClient";
 
-const IndustrialAutomation = () => {
+interface IndustrialAutomationProps {
+  apiClient: APIClient;
+}
+
+const IndustrialAutomation = ({ apiClient }: IndustrialAutomationProps) => {
+  const [showModal, setShowModal] = useState(false);
   return (
     <Container fluid className="industrial-container p-3">
       <Col xs={2} sm={6} md="auto" className="back-button-industrial">
@@ -38,22 +46,35 @@ const IndustrialAutomation = () => {
 
       <div className="cards-wrapper">
         <Col>
-          <CardComponent
-            icon={warehouse}
-            title={
-              <FormattedMessage
-                id="pages.IndustrialAutomation.plant.title"
-                defaultMessage="Plant Management"
-              />
-            }
-            description={
-              <FormattedMessage
-                id="pages.IndustrialAutomation.plant.desc"
-                defaultMessage="Get reports and insights as the plant manager."
-              />
-            }
-          />
+          <Nav.Link
+            as="button"
+            onClick={() => setShowModal(true)}
+            className="modal-nav-link"
+          >
+            <CardComponent
+              icon={warehouse}
+              title={
+                <FormattedMessage
+                  id="pages.IndustrialAutomation.plant.title"
+                  defaultMessage="Plant Management"
+                />
+              }
+              description={
+                <FormattedMessage
+                  id="pages.IndustrialAutomation.plant.desc"
+                  defaultMessage="Get reports and insights as the plant manager."
+                />
+              }
+            />
+          </Nav.Link>
         </Col>
+
+        <FaceRecognitionModal
+          show={showModal}
+          onHide={() => setShowModal(false)}
+          url="#"
+          apiClient={apiClient}
+        />
 
         <Col>
           <NavLink to="/industrial-alert-management" className="nav-link">

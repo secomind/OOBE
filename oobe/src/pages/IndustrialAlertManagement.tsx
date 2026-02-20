@@ -9,6 +9,7 @@ import { NavLink } from "react-router-dom";
 import type { APIClient, IndustrialUpdate } from "../api/APIClient";
 import { useEffect, useState } from "react";
 import { defineMessages } from "react-intl";
+import AlarmResolvingSidebar from "../components/AlarmResolvingSidebar";
 
 interface IndustrialAlertManagementProps {
   apiClient: APIClient;
@@ -67,6 +68,7 @@ const IndustrialAlertManagement = ({
   const [realTimeInternalHumidity, setRealTimeInternalHumidity] = useState(0);
   const [realTimeFanSpeed, setRealTimeFanSpeed] = useState(0);
   const [realTimeSystemStatus, setRealTimeSystemStatus] = useState<string>("");
+  const [showSidebar, setShowSidebar] = useState(false);
 
   const updateTime = () => {
     const now = new Date();
@@ -224,7 +226,17 @@ const IndustrialAlertManagement = ({
             realTimeData={realTimeFanSpeed.toFixed().toString() + " RPM"}
           />
         </Col>
-        <Col xs={12} md={6} lg={4} className="d-flex">
+        <Col
+          xs={12}
+          md={6}
+          lg={4}
+          className="d-flex"
+          onClick={() => {
+            if (realTimeSystemStatus === "fault") {
+              setShowSidebar(true);
+            }
+          }}
+        >
           <PropertyChart
             chartName={messages.systemStatus.defaultMessage}
             chartColor="green"
@@ -233,6 +245,11 @@ const IndustrialAlertManagement = ({
           />
         </Col>
       </Row>
+      <AlarmResolvingSidebar
+        show={showSidebar}
+        onHide={() => setShowSidebar(false)}
+        apiClient={apiClient}
+      />
     </Container>
   );
 };

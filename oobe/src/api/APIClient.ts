@@ -81,6 +81,18 @@ interface AIDetectionResult {
   score: number;
 }
 
+export type FaceRecognitionUpdate = {
+  cX: number;
+  cY: number;
+  score: number;
+  label: string;
+};
+
+type FaceRecognitionMessage = {
+  view: "faceRecognition";
+  data: FaceRecognitionUpdate;
+};
+
 export class APIClient {
   private config: Config;
   private axiosInstance: AxiosInstance;
@@ -373,6 +385,45 @@ export class APIClient {
     };
   }
 
+  connectFaceRecognition(onUpdate: (update: FaceRecognitionUpdate) => void) {
+    this.ws = new WebSocket(
+      `${this.config.apiUrl.toString().replace(/\/$/, "")}/ws`.replace(
+        /^http/,
+        "ws",
+      ),
+    );
+
+    this.ws.onopen = () => {
+      console.log("WebSocket connected");
+
+      const subscribeMsg: ClientMessage = {
+        action: "subscribe",
+        views: ["faceRecognition"],
+      };
+      this.ws?.send(JSON.stringify(subscribeMsg));
+    };
+
+    this.ws.onmessage = (event) => {
+      try {
+        const msg: FaceRecognitionMessage = JSON.parse(event.data);
+
+        if (msg.view === "faceRecognition") {
+          onUpdate(msg.data);
+        }
+      } catch (err) {
+        console.error("Failed to parse WS message:", err);
+      }
+    };
+
+    this.ws.onerror = (err) => {
+      console.error("WebSocket error:", err);
+    };
+
+    this.ws.onclose = () => {
+      console.log("WebSocket closed");
+    };
+  }
+
   disconnectDashboard() {
     this.ws?.close();
     this.ws = undefined;
@@ -394,6 +445,11 @@ export class APIClient {
   }
 
   disconnectSmartClinicalRecord() {
+    this.ws?.close();
+    this.ws = undefined;
+  }
+
+  disconnectFaceRecognition() {
     this.ws?.close();
     this.ws = undefined;
   }

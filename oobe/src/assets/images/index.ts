@@ -44,6 +44,8 @@ import blisterPackPartial07 from "./partial_07.jpg";
 import blisterPackPartial08 from "./partial_08.jpg";
 import blisterPackPartial09 from "./partial_09.jpg";
 import blisterPackPartial10 from "./partial_10.jpg";
+import padlockLocked from "./padlock_locked.png";
+import padlockUnlocked from "./padlock_unlocked.png";
 
 export {
   logo,
@@ -92,4 +94,6 @@ export {
   blisterPackPartial08,
   blisterPackPartial09,
   blisterPackPartial10,
+  padlockLocked,
+  padlockUnlocked,
 };

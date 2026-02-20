@@ -39,6 +39,17 @@
   height: 80px !important;
 }
 
+.nav-link {
+  text-decoration: none;
+}
+
+.modal-nav-link {
+  background: none;
+  border: none;
+  padding: 0;
+  width: 100%;
+}
+
 .back-button-industrial {
   position: absolute;
   top: 8px;
