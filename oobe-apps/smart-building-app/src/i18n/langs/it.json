@@ -38,6 +38,9 @@
   "no_data": {
     "defaultMessage": "N/A"
   },
+  "peopleDetected": {
+    "defaultMessage": "People detected"
+  },
   "singlePerson": {
     "defaultMessage": "Single Person"
   },

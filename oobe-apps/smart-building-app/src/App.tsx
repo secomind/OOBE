@@ -13,6 +13,7 @@ import RangeSelect, {
 } from "./components/RangeSelect";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSync } from "@fortawesome/free-solid-svg-icons";
+import LineChart from "./components/LineChart";
 
 export type AppProps = {
   astarteUrl: URL;
@@ -198,7 +199,7 @@ const App = ({ astarteUrl, realm, deviceId, token }: AppProps) => {
 
   return (
     <Row className="app-container p-4">
-      <Col className="px-4">
+      <Col>
         {dataFetching ? (
           <div className="text-center">
             <div className="d-inline-flex align-items-center justify-content-center m-3">
@@ -291,6 +292,10 @@ const App = ({ astarteUrl, realm, deviceId, token }: AppProps) => {
             </h5>
 
             <HistoryCameraTable data={historyData} />
+            <hr />
+            <div className="d-flex justify-content-center">
+              <LineChart data={historyData} minX={start} maxX={end} />
+            </div>
           </>
         )}
       </Col>
