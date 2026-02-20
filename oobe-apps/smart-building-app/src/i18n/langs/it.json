@@ -1,53 +1,53 @@
 {
   "appTitle": {
-    "defaultMessage": "People counter"
+    "defaultMessage": "Conteggio persone"
   },
   "busiestTime": {
-    "defaultMessage": "Busiest Time"
+    "defaultMessage": "Orario di punta"
   },
   "cameraHistoryTable.date": {
-    "defaultMessage": "Date"
+    "defaultMessage": "Data"
   },
   "cameraHistoryTable.event": {
-    "defaultMessage": "Event"
+    "defaultMessage": "Evento"
   },
   "cameraHistoryTable.number": {
-    "defaultMessage": "Number"
+    "defaultMessage": "Numero"
   },
   "cameraHistoryTable.time": {
-    "defaultMessage": "Time"
+    "defaultMessage": "Ora"
   },
   "day": {
-    "defaultMessage": "Day"
+    "defaultMessage": "Giorno"
   },
   "groups": {
-    "defaultMessage": "Groups"
+    "defaultMessage": "Gruppi"
   },
   "highestValue": {
-    "defaultMessage": "Highest Values Recorded This Week"
+    "defaultMessage": "Valori più alti registrati questa settimana"
   },
   "historyTable": {
-    "defaultMessage": "History"
+    "defaultMessage": "Storico"
   },
   "loading": {
-    "defaultMessage": "Loading..."
+    "defaultMessage": "Caricamento…"
   },
   "month": {
-    "defaultMessage": "Month"
+    "defaultMessage": "Mese"
   },
   "no_data": {
-    "defaultMessage": "N/A"
+    "defaultMessage": "N/D"
   },
   "singlePerson": {
-    "defaultMessage": "Single Person"
+    "defaultMessage": "Persona individuale"
   },
   "totalPeople": {
-    "defaultMessage": "Total People"
+    "defaultMessage": "Totale persone"
   },
   "week": {
-    "defaultMessage": "Week"
+    "defaultMessage": "Settimana"
   },
   "year": {
-    "defaultMessage": "Year"
+    "defaultMessage": "Anno"
   }
 }
