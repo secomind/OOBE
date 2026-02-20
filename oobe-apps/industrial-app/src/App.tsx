@@ -139,8 +139,8 @@ const App = ({ astarteUrl, realm, deviceId, token }: AppProps) => {
               categories={categories}
               series={series}
               title={intl.formatMessage({
-                id: "defections",
-                defaultMessage: "Defections",
+                id: "defects",
+                defaultMessage: "Defects",
               })}
             />
           ) : (

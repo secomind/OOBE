@@ -8,8 +8,8 @@
   "chart.shortCircuit": {
     "defaultMessage": "Short Circuit (SC)"
   },
-  "defections": {
-    "defaultMessage": "Defections"
+  "defects": {
+    "defaultMessage": "Defects"
   },
   "fetchData.error": {
     "defaultMessage": "Failed to fetch data."

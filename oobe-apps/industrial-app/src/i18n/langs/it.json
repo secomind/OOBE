@@ -1,50 +1,50 @@
 {
   "chart.drillError": {
-    "defaultMessage": "Drill Error (Hole)"
+    "defaultMessage": "Errore di foratura (foro)"
   },
   "chart.industrialProduction": {
-    "defaultMessage": "Industrial Production"
+    "defaultMessage": "Produzione industriale"
   },
   "chart.shortCircuit": {
-    "defaultMessage": "Short Circuit (SC)"
+    "defaultMessage": "Cortocircuito (SC)"
   },
-  "defections": {
-    "defaultMessage": "Defections"
+  "defects": {
+    "defaultMessage": "Difetti"
   },
   "fetchData.error": {
-    "defaultMessage": "Failed to fetch data."
+    "defaultMessage": "Errore nel recupero dei dati."
   },
   "noData": {
-    "defaultMessage": "No data available."
+    "defaultMessage": "Dati non disponibili."
   },
   "stats.drillError": {
-    "defaultMessage": "Drill Error"
+    "defaultMessage": "Errore di foratura"
   },
   "stats.highestValuesRecordedTitle": {
-    "defaultMessage": "Highest Values Recorded"
+    "defaultMessage": "Valori massimi registrati"
   },
   "stats.qualityKo": {
-    "defaultMessage": "Quality KO"
+    "defaultMessage": "Qualità non conforme (KO)"
   },
   "stats.qualityOk": {
-    "defaultMessage": "Quality OK"
+    "defaultMessage": "Qualità conforme (OK)"
   },
   "stats.qualityRate": {
-    "defaultMessage": "Quality Rate"
+    "defaultMessage": "Indice di qualità"
   },
   "stats.shortCircuit": {
-    "defaultMessage": "Short Circuit"
+    "defaultMessage": "Cortocircuito"
   },
   "stats.totalPieces": {
-    "defaultMessage": "Total Pieces"
+    "defaultMessage": "Totale pezzi prodotti"
   },
   "stats.uniqueImages": {
-    "defaultMessage": "Unique Images"
+    "defaultMessage": "Immagini univoche"
   },
   "topBar.qualityInspection": {
-    "defaultMessage": "Quality inspection"
+    "defaultMessage": "Controllo qualità"
   },
   "topProducts": {
-    "defaultMessage": "Top Products"
+    "defaultMessage": "Prodotti d'eccellenza"
   }
 }
