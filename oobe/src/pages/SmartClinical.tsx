@@ -4,7 +4,7 @@ import { Button, Col, Container, Row, Image } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import { expand, logo, person } from "../assets/images";
 import "./SmartClinical.scss";
-import DataStreamChart from "../components/DataStreamChart";
+import ECGChart from "../components/ECGChart";
 import { useEffect, useState } from "react";
 import type { APIClient, SmartClinicalRecordUpdate } from "../api/APIClient";
 import LaboratoryReportModal from "../components/BloodCountModal";
@@ -252,13 +252,13 @@ const SmartClinical = ({ apiClient }: SmartClinicalProps) => {
           <Col md={8}>
             <Row className="g-3 mb-3">
               <Col xs={12} md={12} lg={12} className="d-flex">
-                <DataStreamChart
-                  chartType="line"
-                  leftTitle={"ECG Recording"}
-                  leftSubtitle={
+                <ECGChart
+                  title={"ECG Recording"}
+                  subtitle={
                     realTimeBpmCurrent.toFixed(1).toString() + " bpm"
                   }
-                  chartData1={ecgCurrent}
+                  data={ecgCurrent}
+                  color="#165BAA"
                 />
               </Col>
             </Row>
