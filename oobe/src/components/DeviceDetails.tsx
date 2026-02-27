@@ -13,7 +13,7 @@ export type DeviceInfo = {
   cpuModelCode: string;
   cpuModelName: string;
   cpuVendor: string;
-  totalMemory?: string;
+  deviceId?: string;
 };
 
 const DeviceDetailsCard = ({ apiClient }: DeviceDetailsCardProps) => {
@@ -102,12 +102,12 @@ const DeviceDetailsCard = ({ apiClient }: DeviceDetailsCardProps) => {
       <Row className="device-details-card__item align-items-start">
         <Col className="device-details-card__label">
           <FormattedMessage
-            id="components.DeviceDetailsCard.totalMemory"
-            defaultMessage="Total memory"
+            id="components.DeviceDetailsCard.deviceId"
+            defaultMessage="Device ID"
           />
         </Col>
         <Col className="device-details-card__value">
-          {deviceInfo?.totalMemory ?? "N/A"}
+          {deviceInfo?.deviceId ?? "[DEVICE ID NOT AVAILABLE]"}
         </Col>
       </Row>
     </>

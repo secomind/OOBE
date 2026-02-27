@@ -92,11 +92,11 @@
   "components.DeviceDetailsCard.cpuVendor": {
     "defaultMessage": "CPU vendor"
   },
+  "components.DeviceDetailsCard.deviceId": {
+    "defaultMessage": "Device ID"
+  },
   "components.DeviceDetailsCard.title": {
     "defaultMessage": "Device details"
-  },
-  "components.DeviceDetailsCard.totalMemory": {
-    "defaultMessage": "Total memory"
   },
   "components.GeolocalizationCard.addressLabel": {
     "defaultMessage": "Address:"
