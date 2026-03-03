@@ -105,6 +105,8 @@ type FaceRecognitionMessage = {
   data: FaceRecognitionUpdate[];
 };
 
+export type AnalysisMode = "cpu" | "npu";
+
 export class APIClient {
   private config: Config;
   private axiosInstance: AxiosInstance;
@@ -128,9 +130,12 @@ export class APIClient {
     return response.data;
   }
 
-  async getDefectResult(imageFile: File): Promise<DefectResult[]> {
+  async getDefectResult(
+    imageFile: File,
+    mode: AnalysisMode,
+  ): Promise<DefectResult[]> {
     const response = await this.axiosInstance.post<AIDetectionResult[]>(
-      "/pcb-defect-detect",
+      `/pcb-defect-detect-${mode}`,
       imageFile,
       {
         headers: {

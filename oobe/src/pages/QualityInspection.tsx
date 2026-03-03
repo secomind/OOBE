@@ -18,7 +18,7 @@ import {
   pcbShortCircuit04,
   pcbShortCircuit05,
 } from "../assets/images";
-import { APIClient } from "../api/APIClient";
+import { APIClient, type AnalysisMode } from "../api/APIClient";
 import ImageCarousel from "./ImageCarousel";
 
 const MISSING_HOLE_COLOR = "#FF0000";
@@ -58,6 +58,7 @@ const urlToFile = async (url: string): Promise<File> => {
 
 const QualityInspection = ({ apiClient }: QualityInspectionProps) => {
   const [defectResults, setDefectResults] = useState<DefectResult[]>([]);
+  const [analysisMode, setAnalysisMode] = useState<AnalysisMode>("cpu");
   const [error, setError] = useState<string | null>(null);
   const [status, setStatus] = useState("greeting");
   const [currentImage, setCurrentImage] = useState(pcbMissingHole00);
@@ -98,7 +99,7 @@ const QualityInspection = ({ apiClient }: QualityInspectionProps) => {
       try {
         setDefectResults([]);
         const file = await urlToFile(currentImage);
-        const data = await apiClient.getDefectResult(file);
+        const data = await apiClient.getDefectResult(file, analysisMode);
         setDefectResults(data);
       } catch {
         setError(
@@ -111,7 +112,7 @@ const QualityInspection = ({ apiClient }: QualityInspectionProps) => {
     };
 
     if (currentImage) processImage();
-  }, [apiClient, currentImage, status, intl]);
+  }, [apiClient, currentImage, status, intl, analysisMode]);
 
   const handleBBoxColor = (categoryId: number) => {
     switch (categoryId) {
@@ -172,10 +173,17 @@ const QualityInspection = ({ apiClient }: QualityInspectionProps) => {
             status === "greeting" ? "greeting-message" : "analysis-message"
           }
         >
-          <FormattedMessage
-            id="components.QualityInspection.mainMessage"
-            defaultMessage="This is a demo environment, the camera feed is simulated. Click ‘Start analysis’ to run inference."
-          />
+          {status === "greeting" ? (
+            <FormattedMessage
+              id="components.QualityInspection.startAnalysisMessage"
+              defaultMessage="This is a demo environment, the camera feed is simulated. Click ‘Start Analysis’ to run inference."
+            />
+          ) : (
+            <FormattedMessage
+              id="components.QualityInspection.analyzeNextMessage"
+              defaultMessage="This is a demo environment, the camera feed is simulated. Click ‘NPU Analysis’ or `CPU Analysis` to run inference"
+            />
+          )}
         </h2>
       </div>
 
@@ -216,7 +224,7 @@ const QualityInspection = ({ apiClient }: QualityInspectionProps) => {
                 currentImage={currentImage}
                 onSelect={(img) => {
                   setCurrentImage(img);
-                  setStatus("analysis");
+                  setDefectResults([]);
                 }}
               />
             </div>
@@ -270,40 +278,30 @@ const QualityInspection = ({ apiClient }: QualityInspectionProps) => {
               <Button
                 variant="light"
                 disabled={status === "analysis"}
-                className="try-again-button py-2 px-5 fw-bold"
-                onClick={() => setStatus("analysis")}
+                className={`analyze-cpu-button py-2 px-5 fw-bold ${status === "analysis" && analysisMode === "cpu" ? "active-analysis" : ""}`}
+                onClick={() => {
+                  setStatus("analysis");
+                  setAnalysisMode("cpu");
+                }}
               >
                 <FormattedMessage
-                  id="components.QualityInspection.tryAgainButton"
-                  defaultMessage="Try Again"
+                  id="components.QualityInspection.cpuAnalysisButton"
+                  defaultMessage="CPU Analysis"
                 />
               </Button>
 
               <Button
                 variant="light"
-                className="analyze-next-button py-2 px-5 fw-bold"
+                disabled={status === "analysis"}
+                className={`analyze-npu-button py-2 px-5 fw-bold ${status === "analysis" && analysisMode === "npu" ? "active-analysis" : ""}`}
                 onClick={() => {
-                  const images = [
-                    pcbMissingHole00,
-                    pcbMissingHole01,
-                    pcbMissingHole02,
-                    pcbMissingHole03,
-                    pcbMissingHole04,
-                    pcbShortCircuit01,
-                    pcbShortCircuit02,
-                    pcbShortCircuit03,
-                    pcbShortCircuit04,
-                    pcbShortCircuit05,
-                  ];
-                  const nextIdx =
-                    (images.indexOf(currentImage) + 1) % images.length;
-                  setCurrentImage(images[nextIdx]);
                   setStatus("analysis");
+                  setAnalysisMode("npu");
                 }}
               >
                 <FormattedMessage
-                  id="components.QualityInspection.analyzeNextObjectButton"
-                  defaultMessage="Analyze next object"
+                  id="components.QualityInspection.npuAnalysisButton"
+                  defaultMessage="NPU Analysis"
                 />
               </Button>
             </div>
@@ -316,7 +314,10 @@ const QualityInspection = ({ apiClient }: QualityInspectionProps) => {
           <Button
             variant="light"
             className="greeting-button py-2 px-5 fw-bold"
-            onClick={() => setStatus("analysis")}
+            onClick={() => {
+              setStatus("analysis");
+              setAnalysisMode("cpu");
+            }}
           >
             <FormattedMessage
               id="components.QualityInspection.startAnalysisButton"

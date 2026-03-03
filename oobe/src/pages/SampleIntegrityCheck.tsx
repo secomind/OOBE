@@ -184,10 +184,17 @@ const SampleIntegrityCheck = ({ apiClient }: SampleIntegrityCheckProps) => {
             status === "greeting" ? "greeting-message" : "analysis-message"
           }
         >
-          <FormattedMessage
-            id="components.SampleIntegrityCheck.mainMessage"
-            defaultMessage="This is a demo environment, the camera feed is simulated. Click ‘Start analysis’ to run inference."
-          />
+          {status === "greeting" ? (
+            <FormattedMessage
+              id="components.SampleIntegrityCheck.startAnalysisMessage"
+              defaultMessage="This is a demo environment, the camera feed is simulated. Click ‘Start Analysis’ to run inference."
+            />
+          ) : (
+            <FormattedMessage
+              id="components.SampleIntegrityCheck.analyzeNextMessage"
+              defaultMessage="This is a demo environment, the camera feed is simulated. Click ‘Analyze next object’ to run inference."
+            />
+          )}
         </h2>
       </div>
 

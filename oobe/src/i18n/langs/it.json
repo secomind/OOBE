@@ -122,23 +122,29 @@
   "components.GeolocalizationCard.title": {
     "defaultMessage": "Geolocalization"
   },
-  "components.QualityInspection.analyzeNextObjectButton": {
-    "defaultMessage": "Analyze next object"
+  "components.QualityInspection.npuAnalysisButton": {
+    "defaultMessage": "NPU Analysis"
   },
-  "components.QualityInspection.mainMessage": {
-    "defaultMessage": "This is a demo environment, the camera feed is simulated. Click ‘Start analysis’ to run inference."
+  "components.QualityInspection.startAnalysisMessage": {
+    "defaultMessage": "This is a demo environment, the camera feed is simulated. Click ‘Start Analysis’ to run inference."
+  },
+  "components.QualityInspection.analyzeNextMessage": {
+    "defaultMessage": "This is a demo environment, the camera feed is simulated. Click ‘CPU Analysis’ or 'NPU Analysis' to run inference."
   },
   "components.QualityInspection.startAnalysisButton": {
     "defaultMessage": "Start analysis"
   },
-  "components.QualityInspection.tryAgainButton": {
-    "defaultMessage": "Try Again"
+  "components.QualityInspection.cpuAnalysisButton": {
+    "defaultMessage": "CPU Analysis"
   },
   "components.SampleIntegrityCheck.analyzeNextButton": {
     "defaultMessage": "Analyze next object"
   },
-  "components.SampleIntegrityCheck.mainMessage": {
-    "defaultMessage": "This is a demo environment, the camera feed is simulated. Click ‘Start analysis’ to run inference."
+  "components.SampleIntegrityCheck.startAnalysisMessage": {
+    "defaultMessage": "This is a demo environment, the camera feed is simulated. Click ‘Start Analysis’ to run inference."
+  },
+  "components.SampleIntegrityCheck.analyzeNextMessage": {
+    "defaultMessage": "This is a demo environment, the camera feed is simulated. Click ‘Analyze next object’ to run inference."
   },
   "components.SampleIntegrityCheck.startButton": {
     "defaultMessage": "Start analysis"
