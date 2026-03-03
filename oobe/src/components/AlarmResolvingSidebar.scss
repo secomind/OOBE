@@ -42,8 +42,11 @@
   }
 
   .padlock-logo {
-    height: 150px;
+    max-height: 20vh;
     width: auto;
+    object-fit: contain;
+    margin-top: 1rem !important;
+    margin-bottom: 1rem !important;
   }
 
   .spinner {
