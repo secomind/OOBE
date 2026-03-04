@@ -10,7 +10,12 @@ const LocalVideoPlayer: React.FC = () => {
       <Row className="w-100 m-0">
         <Col xs={12} md={11} lg={10} className="mx-auto">
           <div className="ratio ratio-16x9 shadow-lg border border-secondary border-opacity-25 rounded">
-            <video controls preload="metadata" className="w-100 h-100 rounded">
+            <video
+              controls
+              loop
+              preload="metadata"
+              className="w-100 h-100 rounded"
+            >
               <source src={video} type="video/webm" />
               Your browser does not support the video tag.
             </video>
