@@ -116,6 +116,7 @@ export class APIClient {
   private config: Config;
   private axiosInstance: AxiosInstance;
   private ws?: WebSocket;
+  private faceWs?: WebSocket;
 
   constructor() {
     this.config = {
@@ -427,24 +428,24 @@ export class APIClient {
   }
 
   connectFaceRecognition(onUpdate: (update: FaceRecognitionUpdate[]) => void) {
-    this.ws = new WebSocket(
+    this.faceWs = new WebSocket(
       `${this.config.apiUrl.toString().replace(/\/$/, "")}/ws`.replace(
         /^http/,
         "ws",
       ),
     );
 
-    this.ws.onopen = () => {
+    this.faceWs.onopen = () => {
       console.log("WebSocket connected");
 
       const subscribeMsg: ClientMessage = {
         action: "subscribe",
         views: ["faceRecognition"],
       };
-      this.ws?.send(JSON.stringify(subscribeMsg));
+      this.faceWs?.send(JSON.stringify(subscribeMsg));
     };
 
-    this.ws.onmessage = (event) => {
+    this.faceWs.onmessage = (event) => {
       try {
         const msg: FaceRecognitionMessage = JSON.parse(event.data);
 
@@ -456,11 +457,11 @@ export class APIClient {
       }
     };
 
-    this.ws.onerror = (err) => {
+    this.faceWs.onerror = (err) => {
       console.error("WebSocket error:", err);
     };
 
-    this.ws.onclose = () => {
+    this.faceWs.onclose = () => {
       console.log("WebSocket closed");
     };
   }
@@ -485,8 +486,17 @@ export class APIClient {
     );
   }
 
-  disconnectWebSocket() {
-    this.ws?.close();
-    this.ws = undefined;
+  disconnectWebSocket(wsType?: string) {
+    if (wsType === "faceRecognition") {
+      if (this.faceWs) {
+        this.faceWs.close();
+        this.faceWs = undefined;
+      }
+    } else {
+      if (this.ws) {
+        this.ws.close();
+        this.ws = undefined;
+      }
+    }
   }
 }

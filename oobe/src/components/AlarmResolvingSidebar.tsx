@@ -27,7 +27,7 @@ const AlarmResolvingSidebar = ({
     if (!show) {
       isProcessingRef.current = false;
       setStatus("notAuthenticated");
-      apiClient.disconnectWebSocket();
+      apiClient.disconnectWebSocket("faceRecognition");
       return;
     }
 
@@ -55,7 +55,7 @@ const AlarmResolvingSidebar = ({
     if (status === "authenticated") {
       timer = setTimeout(() => {
         setStatus("alarmResolvingInstructions");
-        apiClient.disconnectWebSocket();
+        apiClient.disconnectWebSocket("faceRecognition");
       }, 2000);
     }
 
