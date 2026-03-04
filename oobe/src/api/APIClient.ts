@@ -1,6 +1,6 @@
 import axios, { type AxiosInstance } from "axios";
 import type { DeviceInfo } from "../components/DeviceDetails";
-import type { DefectResult } from "../pages/QualityInspection";
+import type { DefectAnalysisResponse } from "../pages/QualityInspection";
 import type { BlisterPackResult } from "../pages/SampleIntegrityCheck";
 
 type Config = {
@@ -88,6 +88,11 @@ type ClientMessage = {
 };
 
 interface AIDetectionResult {
+  items: AIDetectionResultItem[];
+  inferenceTime: number;
+}
+
+interface AIDetectionResultItem {
   category_id: number;
   bbox: number[];
   score: number;
@@ -133,8 +138,8 @@ export class APIClient {
   async getDefectResult(
     imageFile: File,
     mode: AnalysisMode,
-  ): Promise<DefectResult[]> {
-    const response = await this.axiosInstance.post<AIDetectionResult[]>(
+  ): Promise<DefectAnalysisResponse> {
+    const response = await this.axiosInstance.post<AIDetectionResult>(
       `/pcb-defect-detect-${mode}`,
       imageFile,
       {
@@ -143,17 +148,19 @@ export class APIClient {
         },
       },
     );
-    return response.data.map(
-      (item): DefectResult => ({
+
+    return {
+      results: response.data.items.map((item) => ({
         categoryId: item.category_id,
         bbox: item.bbox,
         score: item.score,
-      }),
-    );
+      })),
+      inferenceTime: response.data.inferenceTime,
+    };
   }
 
   async getBlisterPackResult(imageFile: File): Promise<BlisterPackResult[]> {
-    const response = await this.axiosInstance.post<AIDetectionResult[]>(
+    const response = await this.axiosInstance.post<AIDetectionResult>(
       "/blister-pack-detect",
       imageFile,
       {
@@ -162,7 +169,7 @@ export class APIClient {
         },
       },
     );
-    return response.data.map(
+    return response.data.items.map(
       (item): BlisterPackResult => ({
         categoryId: item.category_id,
         bbox: item.bbox,
