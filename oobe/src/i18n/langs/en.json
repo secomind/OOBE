@@ -123,7 +123,7 @@
     "defaultMessage": "Geolocalization"
   },
   "components.QualityInspection.analyzeNextMessage": {
-    "defaultMessage": "This is a demo environment, the camera feed is simulated. Click ‘NPU Analysis’ or `CPU Analysis` to run inference"
+    "defaultMessage": "This is a demo environment, the camera feed is simulated. Click ‘CPU Analysis’ or 'NPU Analysis' to run inference"
   },
   "components.QualityInspection.cpuAnalysisButton": {
     "defaultMessage": "CPU Analysis"

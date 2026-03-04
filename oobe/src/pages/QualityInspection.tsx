@@ -48,6 +48,11 @@ export type DefectResult = {
   score: number;
 };
 
+export type DefectAnalysisResponse = {
+  results: DefectResult[];
+  inferenceTime: number;
+};
+
 const urlToFile = async (url: string): Promise<File> => {
   const response = await fetch(url);
   if (!response.ok) throw new Error(`Failed to fetch image at ${url}.`);
@@ -59,6 +64,7 @@ const urlToFile = async (url: string): Promise<File> => {
 const QualityInspection = ({ apiClient }: QualityInspectionProps) => {
   const [defectResults, setDefectResults] = useState<DefectResult[]>([]);
   const [analysisMode, setAnalysisMode] = useState<AnalysisMode>("cpu");
+  const [inferenceTime, setInferenceTime] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [status, setStatus] = useState("greeting");
   const [currentImage, setCurrentImage] = useState(pcbMissingHole00);
@@ -88,7 +94,7 @@ const QualityInspection = ({ apiClient }: QualityInspectionProps) => {
 
     const timer = setTimeout(() => {
       if (status === "analysis") setStatus("result");
-    }, 5000);
+    }, 2000);
 
     return () => clearTimeout(timer);
   }, [status, currentImage]);
@@ -98,9 +104,11 @@ const QualityInspection = ({ apiClient }: QualityInspectionProps) => {
     const processImage = async () => {
       try {
         setDefectResults([]);
+        setInferenceTime(null);
         const file = await urlToFile(currentImage);
         const data = await apiClient.getDefectResult(file, analysisMode);
-        setDefectResults(data);
+        setDefectResults(data.results);
+        setInferenceTime(data.inferenceTime);
       } catch {
         setError(
           intl.formatMessage({
@@ -181,7 +189,7 @@ const QualityInspection = ({ apiClient }: QualityInspectionProps) => {
           ) : (
             <FormattedMessage
               id="components.QualityInspection.analyzeNextMessage"
-              defaultMessage="This is a demo environment, the camera feed is simulated. Click ‘NPU Analysis’ or `CPU Analysis` to run inference"
+              defaultMessage="This is a demo environment, the camera feed is simulated. Click ‘CPU Analysis’ or 'NPU Analysis' to run inference"
             />
           )}
         </h2>
@@ -247,6 +255,20 @@ const QualityInspection = ({ apiClient }: QualityInspectionProps) => {
                       id="qualityInspection.anomaliesDetectedMessage"
                       defaultMessage="Anomalies detected"
                     />
+
+                    {status === "result" && inferenceTime !== null && (
+                      <div
+                        className="mb-2"
+                        style={{
+                          fontSize: "1rem",
+                          color: "#fff",
+                          fontStyle: "italic",
+                        }}
+                      >
+                        Inference time:{" "}
+                        <strong>{inferenceTime.toFixed(2)} ms</strong>
+                      </div>
+                    )}
 
                     <div className="d-flex align-items-center">
                       <span
