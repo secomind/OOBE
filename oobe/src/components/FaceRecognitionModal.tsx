@@ -25,23 +25,27 @@ const FaceRecognitionModal = ({
   const navigate = useNavigate();
 
   useEffect(() => {
+    let timer: ReturnType<typeof setTimeout>;
+
     if (show) {
+      setAuthenticated(false);
       apiClient.connectFaceRecognition(
         (updateData: FaceRecognitionUpdate[]) => {
           if (updateData.length && updateData[0].label === "face") {
             setAuthenticated(true);
-            const timer = setTimeout(() => {
+            timer = setTimeout(() => {
               onHide();
               navigate(url);
             }, 1000);
-            return () => clearTimeout(timer);
           }
         },
       );
-    } else {
-      apiClient.disconnectWebSocket();
-      setAuthenticated(false);
     }
+
+    return () => {
+      clearTimeout(timer);
+      apiClient.disconnectWebSocket("faceRecognition");
+    };
   }, [show, apiClient, onHide, url, navigate]);
 
   return (

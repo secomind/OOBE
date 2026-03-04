@@ -428,6 +428,9 @@ export class APIClient {
   }
 
   connectFaceRecognition(onUpdate: (update: FaceRecognitionUpdate[]) => void) {
+    if (this.faceWs) {
+      this.faceWs.close();
+    }
     this.faceWs = new WebSocket(
       `${this.config.apiUrl.toString().replace(/\/$/, "")}/ws`.replace(
         /^http/,
