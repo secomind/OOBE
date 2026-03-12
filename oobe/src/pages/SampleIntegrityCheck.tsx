@@ -1,4 +1,4 @@
-import { Container, Image, Button, Alert } from "react-bootstrap";
+import { Container, Image, Button } from "react-bootstrap";
 import { logo } from "../assets/images";
 import "./SampleIntegrityCheck.scss";
 import { useNavigate } from "react-router-dom";
@@ -25,6 +25,7 @@ import {
 } from "../assets/images";
 import { APIClient } from "../api/APIClient";
 import ImageCarousel from "./ImageCarousel";
+import AIErrorModal from "../components/AIErrorModal";
 
 const EMPTY_BLISTER_COLOR = "#FF0000";
 const FULL_BLISTER_COLOR = "#FFC107";
@@ -52,10 +53,10 @@ const SampleIntegrityCheck = ({ apiClient }: SampleIntegrityCheckProps) => {
   const [blisterPackResults, setBlisterPackResults] = useState<
     BlisterPackResult[]
   >([]);
-  const [error, setError] = useState<string | null>(null);
   const [status, setStatus] = useState("greeting");
   const [currentImage, setCurrentImage] = useState(blisterPackEmpty00);
   const [scale, setScale] = useState({ x: 1, y: 1 });
+  const [showAIErrorModal, setShowAIErrorModal] = useState(false);
 
   const imageRef = useRef<HTMLImageElement>(null);
   const navigate = useNavigate();
@@ -113,12 +114,7 @@ const SampleIntegrityCheck = ({ apiClient }: SampleIntegrityCheckProps) => {
         const data = await apiClient.getBlisterPackResult(file);
         setBlisterPackResults(data);
       } catch {
-        setError(
-          intl.formatMessage({
-            id: "imageFormatError",
-            defaultMessage: "Backend rejected the image format.",
-          }),
-        );
+        setShowAIErrorModal(true);
       }
     };
 
@@ -161,16 +157,25 @@ const SampleIntegrityCheck = ({ apiClient }: SampleIntegrityCheckProps) => {
         <div style={{ width: "24px" }}></div>
       </div>
 
-      {error && (
-        <Alert
-          onClose={() => setError(null)}
-          dismissible
-          variant="danger"
-          className="mb-3"
-        >
-          {error}
-        </Alert>
-      )}
+      <AIErrorModal
+        show={showAIErrorModal}
+        onHide={() => setShowAIErrorModal(false)}
+        onContinue={async () => {
+          try {
+            setBlisterPackResults([]);
+            const file = await urlToFile(currentImage);
+            const data = await apiClient.getBlisterPackResult(file);
+            if (data && data.length) {
+              setBlisterPackResults(data);
+            }
+            setStatus("result");
+            return true;
+          } catch (e) {
+            return false;
+          }
+        }}
+        message="if you see this pop-up, please check that the AI service is available or deployed"
+      />
 
       <div
         className={

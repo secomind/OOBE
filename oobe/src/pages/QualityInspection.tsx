@@ -1,4 +1,4 @@
-import { Container, Image, Button, Alert } from "react-bootstrap";
+import { Container, Image, Button } from "react-bootstrap";
 import { logo } from "../assets/images";
 import "./QualityInspection.scss";
 import { useNavigate } from "react-router-dom";
@@ -20,6 +20,7 @@ import {
 } from "../assets/images";
 import { APIClient, type AnalysisMode } from "../api/APIClient";
 import ImageCarousel from "./ImageCarousel";
+import AIErrorModal from "../components/AIErrorModal";
 
 const MISSING_HOLE_COLOR = "#FF0000";
 const SHORT_CIRCUIT_COLOR = "#FFC107";
@@ -65,10 +66,10 @@ const QualityInspection = ({ apiClient }: QualityInspectionProps) => {
   const [defectResults, setDefectResults] = useState<DefectResult[]>([]);
   const [analysisMode, setAnalysisMode] = useState<AnalysisMode>("cpu");
   const [inferenceTime, setInferenceTime] = useState<number | null>(null);
-  const [error, setError] = useState<string | null>(null);
   const [status, setStatus] = useState("greeting");
   const [currentImage, setCurrentImage] = useState(pcbMissingHole00);
   const [scale, setScale] = useState({ x: 1, y: 1 });
+  const [showAIErrorModal, setShowAIErrorModal] = useState(false);
 
   const imageRef = useRef<HTMLImageElement>(null);
   const navigate = useNavigate();
@@ -90,14 +91,14 @@ const QualityInspection = ({ apiClient }: QualityInspectionProps) => {
   }, []);
 
   useEffect(() => {
-    if (status !== "analysis") return;
+    if (status !== "analysis" || showAIErrorModal) return;
 
     const timer = setTimeout(() => {
-      if (status === "analysis") setStatus("result");
+      if (status === "analysis" && !showAIErrorModal) setStatus("result");
     }, 2000);
 
     return () => clearTimeout(timer);
-  }, [status, currentImage]);
+  }, [status, currentImage, showAIErrorModal]);
 
   useEffect(() => {
     if (status !== "analysis") return;
@@ -110,12 +111,7 @@ const QualityInspection = ({ apiClient }: QualityInspectionProps) => {
         setDefectResults(data.results);
         setInferenceTime(data.inferenceTime);
       } catch {
-        setError(
-          intl.formatMessage({
-            id: "imageFormatError",
-            defaultMessage: "Backend rejected the image format.",
-          }),
-        );
+        setShowAIErrorModal(true);
       }
     };
 
@@ -158,16 +154,28 @@ const QualityInspection = ({ apiClient }: QualityInspectionProps) => {
         <div style={{ width: "24px" }}></div>
       </div>
 
-      {error && (
-        <Alert
-          onClose={() => setError(null)}
-          dismissible
-          variant="danger"
-          className="mb-3"
-        >
-          {error}
-        </Alert>
-      )}
+      <AIErrorModal
+        show={showAIErrorModal}
+        onHide={() => {
+          setShowAIErrorModal(false);
+          setStatus("result");
+        }}
+        onContinue={async () => {
+          try {
+            setDefectResults([]);
+            setInferenceTime(null);
+            const file = await urlToFile(currentImage);
+            const data = await apiClient.getDefectResult(file, analysisMode);
+            setDefectResults(data.results || []);
+            setInferenceTime(data.inferenceTime || null);
+            setStatus("result");
+            return true;
+          } catch (e) {
+            return false;
+          }
+        }}
+        message="if you see this pop-up, please check that the AI service is available or deployed"
+      />
 
       <div
         className={
