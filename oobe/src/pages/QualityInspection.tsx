@@ -166,7 +166,7 @@ const QualityInspection = ({ apiClient }: QualityInspectionProps) => {
               setStatus("result");
             }
             return true;
-          } catch (e) {
+          } catch {
             return false;
           }
         }}

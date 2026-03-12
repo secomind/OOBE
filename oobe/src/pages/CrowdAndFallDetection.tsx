@@ -420,7 +420,7 @@ const CrowdAndFallDetection = ({ apiClient }: CrowdAndFallDetectionProps) => {
             setAnalysisTime(new Date());
             setStatus("result");
             return true;
-          } catch (e) {
+          } catch {
             return false;
           }
         }}

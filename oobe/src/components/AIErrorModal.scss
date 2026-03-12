@@ -30,6 +30,10 @@
 }
 
 .modal-backdrop.fade {
-  transition: opacity 0.15s linear, backdrop-filter 0.15s linear;
-  -webkit-transition: opacity 0.15s linear, -webkit-backdrop-filter 0.15s linear;
-} 
+  transition:
+    opacity 0.15s linear,
+    backdrop-filter 0.15s linear;
+  -webkit-transition:
+    opacity 0.15s linear,
+    -webkit-backdrop-filter 0.15s linear;
+}

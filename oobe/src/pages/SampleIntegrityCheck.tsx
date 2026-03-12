@@ -167,7 +167,7 @@ const SampleIntegrityCheck = ({ apiClient }: SampleIntegrityCheckProps) => {
               setStatus("result");
             }
             return true;
-          } catch (e) {
+          } catch {
             return false;
           }
         }}
