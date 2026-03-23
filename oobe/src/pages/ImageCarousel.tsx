@@ -53,8 +53,8 @@ const ImageCarousel = ({
                 : "border-secondary opacity-50"
             }`}
             style={{
-              width: "110px",
-              height: "70px",
+              width: "150px",
+              height: "150px",
               transition: "all 0.2s ease-in-out",
             }}
             onClick={() => onSelect(img)}
