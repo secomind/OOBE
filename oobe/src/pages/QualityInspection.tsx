@@ -158,7 +158,10 @@ const QualityInspection = ({ apiClient }: QualityInspectionProps) => {
         show={showAIErrorModal}
         onHide={() => {
           setShowAIErrorModal(false);
-          setStatus("result");
+        }}
+        onExit={() => {
+          setShowAIErrorModal(false);
+          navigate("/industrial");
         }}
         onContinue={async () => {
           try {
@@ -166,15 +169,16 @@ const QualityInspection = ({ apiClient }: QualityInspectionProps) => {
             setInferenceTime(null);
             const file = await urlToFile(currentImage);
             const data = await apiClient.getDefectResult(file, analysisMode);
-            setDefectResults(data.results || []);
-            setInferenceTime(data.inferenceTime || null);
-            setStatus("result");
+            if (data) {
+              setDefectResults(data.results || []);
+              setInferenceTime(data.inferenceTime || null);
+              setStatus("result");
+            }
             return true;
           } catch (e) {
             return false;
           }
         }}
-        message="if you see this pop-up, please check that the AI service is available or deployed"
       />
 
       <div

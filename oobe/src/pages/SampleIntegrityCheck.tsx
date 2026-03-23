@@ -159,7 +159,13 @@ const SampleIntegrityCheck = ({ apiClient }: SampleIntegrityCheckProps) => {
 
       <AIErrorModal
         show={showAIErrorModal}
-        onHide={() => setShowAIErrorModal(false)}
+        onHide={() => {
+          setShowAIErrorModal(false);
+        }}
+        onExit={() => {
+          setShowAIErrorModal(false);
+          navigate("/medical");
+        }}
         onContinue={async () => {
           try {
             setBlisterPackResults([]);
@@ -167,14 +173,13 @@ const SampleIntegrityCheck = ({ apiClient }: SampleIntegrityCheckProps) => {
             const data = await apiClient.getBlisterPackResult(file);
             if (data && data.length) {
               setBlisterPackResults(data);
+              setStatus("result");
             }
-            setStatus("result");
             return true;
           } catch (e) {
             return false;
           }
         }}
-        message="if you see this pop-up, please check that the AI service is available or deployed"
       />
 
       <div

@@ -406,7 +406,10 @@ const CrowdAndFallDetection = ({ apiClient }: CrowdAndFallDetectionProps) => {
         show={showAIErrorModal}
         onHide={() => {
           setShowAIErrorModal(false);
-          setStatus("result");
+        }}
+        onExit={() => {
+          setShowAIErrorModal(false);
+          navigate("/smart-building");
         }}
         onContinue={async () => {
           try {
@@ -421,7 +424,6 @@ const CrowdAndFallDetection = ({ apiClient }: CrowdAndFallDetectionProps) => {
             return false;
           }
         }}
-        message="if you see this pop-up, please check that the AI service is available or deployed"
       />
     </Container>
   );
