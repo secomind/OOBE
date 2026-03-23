@@ -97,22 +97,13 @@ const SampleIntegrityCheck = ({ apiClient }: SampleIntegrityCheckProps) => {
 
   useEffect(() => {
     if (status !== "analysis") return;
-
-    const timer = setTimeout(() => {
-      if (status === "analysis") setStatus("result");
-    }, 5000);
-
-    return () => clearTimeout(timer);
-  }, [status, currentImage]);
-
-  useEffect(() => {
-    if (status !== "analysis") return;
     const processImage = async () => {
       try {
         setBlisterPackResults([]);
         const file = await urlToFile(currentImage);
         const data = await apiClient.getBlisterPackResult(file);
         setBlisterPackResults(data);
+        setStatus("result");
       } catch {
         setShowAIErrorModal(true);
       }
@@ -254,16 +245,16 @@ const SampleIntegrityCheck = ({ apiClient }: SampleIntegrityCheckProps) => {
 
           <div className="col-md-5 d-flex flex-column align-items-center justify-content-center">
             <div className="mb-5 mt-5 text-center">
-              {status === "analysis" && (
+              {status === "analysis" && !showAIErrorModal && (
                 <div className="spinner-border mb-5 spinner" role="status" />
               )}
               <h3 className="fw-bold d-flex flex-column align-items-start text-start">
-                {status === "analysis" ? (
+                {status === "analysis" && !showAIErrorModal ? (
                   <FormattedMessage
                     id="SampleIntegrityCheck.analyseMessage"
                     defaultMessage="Scanning in progress..."
                   />
-                ) : (
+                ) : status === "result" ? (
                   <div className="d-flex flex-column align-items-start gap-1">
                     <FormattedMessage
                       id="SampleIntegrityCheck.anomaliesDetectedMessage"
@@ -291,7 +282,7 @@ const SampleIntegrityCheck = ({ apiClient }: SampleIntegrityCheckProps) => {
                       />
                     </div>
                   </div>
-                )}{" "}
+                ) : null}{" "}
               </h3>
             </div>
 

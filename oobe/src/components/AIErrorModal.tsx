@@ -84,14 +84,7 @@ const AIErrorModal = ({
             className="px-5 py-3 fw-bold"
             style={{ borderRadius: '15px', backgroundColor: '#fff', color: '#000', border: 'none' }}
           >
-            {loading ? (
-              <span className="d-flex align-items-center gap-2">
-                <span className="spinner-border spinner-border-sm" role="status" />
-                Checking...
-              </span>
-            ) : (
-              <h2 className="mb-1" style={{ fontSize: '1.7rem', fontWeight: '800' }}>Check again</h2>
-            )}
+            <h2 className="mb-1" style={{ fontSize: '1.7rem', fontWeight: '800' }}>Check again</h2>
           </Button>
           <Button 
             variant="outline-light" 

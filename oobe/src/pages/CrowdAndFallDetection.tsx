@@ -325,7 +325,7 @@ const CrowdAndFallDetection = ({ apiClient }: CrowdAndFallDetectionProps) => {
             </div>
 
             <div className="flex-grow-1 overflow-auto pe-2 custom-scrollbar mb-3">
-              {status === "analysis" ? (
+              {status === "analysis" && !showAIErrorModal ? (
                 <div className="d-flex align-items-center gap-3 text-info p-4 bg-dark bg-opacity-50 rounded-4 border border-info border-opacity-25">
                   <div className="spinner-border spinner-border-sm" />
                   <FormattedMessage {...messages.scanningMessage} />

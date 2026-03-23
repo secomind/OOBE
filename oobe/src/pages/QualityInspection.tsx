@@ -91,16 +91,6 @@ const QualityInspection = ({ apiClient }: QualityInspectionProps) => {
   }, []);
 
   useEffect(() => {
-    if (status !== "analysis" || showAIErrorModal) return;
-
-    const timer = setTimeout(() => {
-      if (status === "analysis" && !showAIErrorModal) setStatus("result");
-    }, 2000);
-
-    return () => clearTimeout(timer);
-  }, [status, currentImage, showAIErrorModal]);
-
-  useEffect(() => {
     if (status !== "analysis") return;
     const processImage = async () => {
       try {
@@ -110,6 +100,7 @@ const QualityInspection = ({ apiClient }: QualityInspectionProps) => {
         const data = await apiClient.getDefectResult(file, analysisMode);
         setDefectResults(data.results);
         setInferenceTime(data.inferenceTime);
+        setStatus("result");
       } catch {
         setShowAIErrorModal(true);
       }
@@ -245,6 +236,7 @@ const QualityInspection = ({ apiClient }: QualityInspectionProps) => {
                 onSelect={(img) => {
                   setCurrentImage(img);
                   setDefectResults([]);
+                  setStatus("idle");
                 }}
               />
             </div>
@@ -252,16 +244,16 @@ const QualityInspection = ({ apiClient }: QualityInspectionProps) => {
 
           <div className="col-md-5 d-flex flex-column align-items-center justify-content-center">
             <div className="mb-5 mt-5 text-center">
-              {status === "analysis" && (
+              {status === "analysis" && !showAIErrorModal && (
                 <div className="spinner-border mb-5 spinner" role="status" />
               )}
               <h3 className="fw-bold d-flex flex-column align-items-start text-start">
-                {status === "analysis" ? (
+                {status === "analysis" && !showAIErrorModal ? (
                   <FormattedMessage
                     id="qualityInspection.analyseMessage"
                     defaultMessage="Scanning in progress..."
                   />
-                ) : (
+                ) : status === "result" ? (
                   <div className="d-flex flex-column align-items-start gap-1">
                     <FormattedMessage
                       id="qualityInspection.anomaliesDetectedMessage"
@@ -304,7 +296,7 @@ const QualityInspection = ({ apiClient }: QualityInspectionProps) => {
                       />
                     </div>
                   </div>
-                )}
+                ) : null}
               </h3>
             </div>
 
@@ -349,8 +341,7 @@ const QualityInspection = ({ apiClient }: QualityInspectionProps) => {
             variant="light"
             className="greeting-button py-2 px-5 fw-bold"
             onClick={() => {
-              setStatus("analysis");
-              setAnalysisMode("cpu");
+              setStatus("idle");
             }}
           >
             <FormattedMessage
