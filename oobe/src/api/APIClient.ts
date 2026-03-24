@@ -161,7 +161,7 @@ export class APIClient {
   }
 
   async getBlisterPackResult(imageFile: File): Promise<BlisterPackResult[]> {
-    const response = await this.axiosInstance.post<AIDetectionResult>(
+    const response = await this.axiosInstance.post<AIDetectionResultItem[]>(
       "/blister-pack-detect",
       imageFile,
       {
@@ -170,7 +170,7 @@ export class APIClient {
         },
       },
     );
-    return response.data.items.map(
+    return response.data.map(
       (item): BlisterPackResult => ({
         categoryId: item.category_id,
         bbox: item.bbox,

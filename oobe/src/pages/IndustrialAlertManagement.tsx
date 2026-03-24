@@ -142,6 +142,10 @@ const IndustrialAlertManagement = ({
 
   useEffect(() => {
     apiClient.connectIndustrial(handleUpdate);
+
+    return () => {
+      apiClient.disconnectWebSocket();
+    };
   }, [apiClient]);
 
   const closeWsConnection = () => {

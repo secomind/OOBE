@@ -130,6 +130,10 @@ const MedicalAlertManagement = ({ apiClient }: MedicalAlertManagementProps) => {
 
   useEffect(() => {
     apiClient.connectMedical(handleUpdate);
+
+    return () => {
+      apiClient.disconnectWebSocket();
+    };
   }, [apiClient]);
 
   const closeWsConnection = () => {

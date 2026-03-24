@@ -128,6 +128,10 @@ const SmartAlertManagement = ({ apiClient }: SmartAlertManagementProps) => {
 
   useEffect(() => {
     apiClient.connectSmart(handleUpdate);
+
+    return () => {
+      apiClient.disconnectWebSocket();
+    };
   }, [apiClient, handleUpdate]);
 
   const closeWsConnection = () => {
