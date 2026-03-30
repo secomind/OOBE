@@ -257,9 +257,6 @@
   "electricityMeter.title": {
     "defaultMessage": "Electricity Meter"
   },
-  "imageFormatError": {
-    "defaultMessage": "Backend rejected the image format."
-  },
   "faceRecognitionModal.authenticatedUser": {
     "defaultMessage": "Authorization confirmed"
   },
