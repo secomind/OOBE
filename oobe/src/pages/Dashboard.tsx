@@ -80,7 +80,11 @@ const Dashboard = ({ apiClient }: DashboardProps) => {
 
   useEffect(() => {
     apiClient.connectDashboard(handleUpdate);
-  }, [apiClient, handleUpdate]);
+
+    return () => {
+      apiClient.disconnectWebSocket();
+    };
+  }, [apiClient]);
 
   const handleExit = async () => {
     try {

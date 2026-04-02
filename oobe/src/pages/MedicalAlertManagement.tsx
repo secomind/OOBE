@@ -136,10 +136,6 @@ const MedicalAlertManagement = ({ apiClient }: MedicalAlertManagementProps) => {
     };
   }, [apiClient]);
 
-  const closeWsConnection = () => {
-    apiClient.disconnectWebSocket();
-  };
-
   return (
     <Container
       fluid
@@ -153,10 +149,7 @@ const MedicalAlertManagement = ({ apiClient }: MedicalAlertManagementProps) => {
           className="d-flex flex-column align-items-center justify-content-center h-100"
         >
           <NavLink to="/medical" className="nav-link">
-            <Button
-              className="close-icon-button text-white btn-dark"
-              onClick={closeWsConnection}
-            >
+            <Button className="close-icon-button text-white btn-dark">
               <FontAwesomeIcon icon={faX} className="text-white" />
             </Button>
           </NavLink>
