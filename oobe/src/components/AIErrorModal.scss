@@ -23,17 +23,17 @@
 }
 
 .modal-backdrop.show {
-  background-color: rgba(0, 0, 0, 0.1) !important;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background-color: rgba(0, 0, 0, 0.4) !important;
+  background-image: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.1) 1px,
+    transparent 1px
+  );
+  background-size: 3px 3px;
   opacity: 1 !important;
 }
 
 .modal-backdrop.fade {
-  transition:
-    opacity 0.15s linear,
-    backdrop-filter 0.15s linear;
-  -webkit-transition:
-    opacity 0.15s linear,
-    -webkit-backdrop-filter 0.15s linear;
+  transition: none !important;
+  -webkit-transition: none !important;
 }
