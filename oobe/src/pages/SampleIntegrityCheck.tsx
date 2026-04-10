@@ -1,7 +1,7 @@
 import { Container, Image, Button, Alert } from "react-bootstrap";
 import { logo } from "../assets/images";
 import "./SampleIntegrityCheck.scss";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX } from "@fortawesome/free-solid-svg-icons";
 import { FormattedMessage, useIntl } from "react-intl";
@@ -124,6 +124,14 @@ const SampleIntegrityCheck = ({ apiClient }: SampleIntegrityCheckProps) => {
 
     if (currentImage) processImage();
   }, [apiClient, currentImage, status, intl]);
+
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state?.autoStart) {
+      setStatus("analysis");
+    }
+  }, [location.state]);
 
   const handleBBoxColor = (categoryId: number) => {
     switch (categoryId) {
@@ -286,6 +294,13 @@ const SampleIntegrityCheck = ({ apiClient }: SampleIntegrityCheckProps) => {
             </div>
 
             <div className="d-flex flex-wrap justify-content-center gap-3 mt-auto mb-4">
+              <Button
+                variant="light"
+                className="analysis-result-button py-2 px-5 fw-bold"
+                onClick={() => navigate("/sample-integrity-check/webcam")}
+              >
+                Live webcam Analysis
+              </Button>
               <Button
                 variant="light"
                 className="analysis-result-button py-2 px-5 fw-bold"

@@ -1,7 +1,7 @@
 import { Container, Image, Button, Alert } from "react-bootstrap";
 import { logo } from "../assets/images";
 import "./QualityInspection.scss";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX } from "@fortawesome/free-solid-svg-icons";
 import { FormattedMessage, useIntl } from "react-intl";
@@ -121,6 +121,14 @@ const QualityInspection = ({ apiClient }: QualityInspectionProps) => {
 
     if (currentImage) processImage();
   }, [apiClient, currentImage, status, intl, analysisMode]);
+
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state?.autoStart) {
+      setStatus("analysis");
+    }
+  }, [location.state]);
 
   const handleBBoxColor = (categoryId: number) => {
     switch (categoryId) {
@@ -297,6 +305,13 @@ const QualityInspection = ({ apiClient }: QualityInspectionProps) => {
             </div>
 
             <div className="d-flex flex-wrap justify-content-center gap-3 mt-auto mb-4">
+              <Button
+                variant="light"
+                className={`analyze-cpu-button py-2 px-5 fw-bold ${status === "analysis" && analysisMode === "cpu" ? "active-analysis" : ""}`}
+                onClick={() => navigate("/quality-inspection/webcam")}
+              >
+                Live webcam Analysis
+              </Button>
               <Button
                 variant="light"
                 disabled={status === "analysis"}

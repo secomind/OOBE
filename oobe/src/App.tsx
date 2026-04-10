@@ -21,6 +21,9 @@ import SmartClinical from "./pages/SmartClinical";
 import QualityInspection from "./pages/QualityInspection";
 import HighResolutionVisuals from "./pages/HighResolutionVisuals";
 import CrowdAndFallDetection from "./pages/CrowdAndFallDetection";
+import QualityInspectionWebcam from "./pages/QualityInspectionWebcam";
+import SampleIntegrityCheckWebcam from "./pages/SampleIntegrityCheckWebcam";
+import CrowdAndFallDetectionWebcam from "./pages/CrowdAndFallDetectionWebcam";
 
 const HIDE_SIDEBAR_ROUTES = [
   "/medical-alert-management",
@@ -93,12 +96,24 @@ function App() {
               element={<QualityInspection apiClient={apiClient} />}
             />
             <Route
+              path="/quality-inspection/webcam"
+              element={<QualityInspectionWebcam />}
+            />
+            <Route
               path="/sample-integrity-check"
               element={<SampleIntegrityCheck apiClient={apiClient} />}
             />
             <Route
+              path="/sample-integrity-check/webcam"
+              element={<SampleIntegrityCheckWebcam />}
+            />
+            <Route
               path="/crowd-and-fall-detection"
               element={<CrowdAndFallDetection apiClient={apiClient} />}
+            />
+            <Route
+              path="/crowd-and-fall-detection/webcam"
+              element={<CrowdAndFallDetectionWebcam />}
             />
             <Route
               path="/smart-clinical"

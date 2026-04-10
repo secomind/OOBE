@@ -1,6 +1,6 @@
 import { Container, Image, Button, Alert } from "react-bootstrap";
 import { useState, useEffect, useRef, useLayoutEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX, faExclamationTriangle } from "@fortawesome/free-solid-svg-icons";
 import { FormattedMessage, defineMessages } from "react-intl";
@@ -186,6 +186,14 @@ const CrowdAndFallDetection = ({ apiClient }: CrowdAndFallDetectionProps) => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
     return () => clearInterval(timer);
   }, []);
+
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state?.autoStart) {
+      setStatus("analysis");
+    }
+  }, [location.state]);
 
   useEffect(() => {
     if (status !== "analysis") return;
@@ -382,6 +390,13 @@ const CrowdAndFallDetection = ({ apiClient }: CrowdAndFallDetectionProps) => {
                 </span>
               </div>
               <div className="d-flex gap-2">
+                <Button
+                  variant="light"
+                  className="flex-grow-1 py-3 fw-bold"
+                  onClick={() => navigate("/crowd-and-fall-detection/webcam")}
+                >
+                  Live Webcam Analysis
+                </Button>
                 <Button
                   variant="outline-light"
                   className="flex-grow-1 py-3 fw-bold border-2"
