@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX, faExclamationTriangle } from "@fortawesome/free-solid-svg-icons";
 import { FormattedMessage, defineMessages } from "react-intl";
 import ImageCarousel from "./ImageCarousel";
-import { APIClient } from "../api/APIClient";
+import { APIClient, type AnalysisMode } from "../api/APIClient";
 import {
   logo,
   elevator_second_floor_1,
@@ -126,9 +126,11 @@ const urlToFile = async (url: string): Promise<File> => {
 
 const CrowdAndFallDetection = ({ apiClient }: CrowdAndFallDetectionProps) => {
   const [results, setResults] = useState<PersonResult[]>([]);
+  const [analysisMode, setAnalysisMode] = useState<AnalysisMode>("cpu");
+  const [inferenceTime, setInferenceTime] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [status, setStatus] = useState<"greeting" | "analysis" | "result">(
-    "greeting",
+    "analysis",
   );
   const [currentTime, setCurrentTime] = useState(new Date());
   const [analysisTime, setAnalysisTime] = useState<Date | null>(null);
@@ -192,25 +194,20 @@ const CrowdAndFallDetection = ({ apiClient }: CrowdAndFallDetectionProps) => {
     const processImage = async () => {
       try {
         setResults([]);
+        setInferenceTime(null);
         const file = await urlToFile(currentImage);
-        const data = await apiClient.getPersonResult(file);
-        setResults(data);
+        const data = await apiClient.getPersonResult(file, analysisMode);
+        setResults(data.results);
+        setInferenceTime(data.inferenceTime);
         setAnalysisTime(new Date());
         setStatus("result");
       } catch {
         setError("Error");
-        setStatus("greeting");
+        setStatus("analysis");
       }
     };
     processImage();
-  }, [apiClient, currentImage, status]);
-
-  const changeImage = (dir: number) => {
-    const idx = imageOptions.indexOf(currentImage);
-    const next = (idx + dir + imageOptions.length) % imageOptions.length;
-    setCurrentImage(imageOptions[next]);
-    setStatus("analysis");
-  };
+  }, [apiClient, currentImage, status, analysisMode]);
 
   return (
     <Container
@@ -226,181 +223,214 @@ const CrowdAndFallDetection = ({ apiClient }: CrowdAndFallDetectionProps) => {
           <FontAwesomeIcon icon={faX} size="lg" />
         </Button>
         <Image src={logo} alt="SECO" style={{ height: "30px" }} />
-        <div className="text-secondary small">
+        <div className="flex-grow-1 d-flex justify-content-end text-secondary small">
           {formatFullDate(currentTime)}
         </div>
       </div>
 
-      {status === "greeting" ? (
-        <div className="flex-grow-1 d-flex justify-content-center align-items-center">
-          <Button
-            variant="light"
-            size="lg"
-            className="fw-bold px-5 py-3 rounded-pill shadow-lg"
-            onClick={() => setStatus("analysis")}
+      <div className="row flex-grow-1 align-items-center mb-5">
+        <div className="col-md-6 d-flex flex-column align-items-center mx-auto">
+          <div
+            ref={containerRef}
+            className="position-relative flex-grow-1 bg-dark rounded-4 overflow-hidden border border-secondary shadow-lg d-flex align-items-center justify-content-center"
           >
-            <FormattedMessage {...messages.startAnalysis} />
-          </Button>
-        </div>
-      ) : (
-        <div className="row flex-grow-1 overflow-hidden">
-          <div className="col-md-7 d-flex flex-column h-100">
             <div
-              ref={containerRef}
-              className="position-relative flex-grow-1 bg-dark rounded-4 overflow-hidden border border-secondary shadow-lg d-flex align-items-center justify-content-center"
+              className="position-absolute"
+              style={{
+                width: imgRect.width,
+                height: imgRect.height,
+                left: imgRect.left,
+                top: imgRect.top,
+                pointerEvents: "none",
+                zIndex: 10,
+              }}
             >
-              <div
-                className="position-absolute"
-                style={{
-                  width: imgRect.width,
-                  height: imgRect.height,
-                  left: imgRect.left,
-                  top: imgRect.top,
-                  pointerEvents: "none",
-                  zIndex: 10,
+              {status === "result" &&
+                results.map((r, i) => {
+                  const scaleX =
+                    imgRect.width / (imageRef.current?.naturalWidth || 1);
+                  const scaleY =
+                    imgRect.height / (imageRef.current?.naturalHeight || 1);
+                  const isFall = r.categoryId === 1;
+                  const boxColor = isFall
+                    ? "#FF0000"
+                    : DETECTION_COLORS[i % DETECTION_COLORS.length];
+
+                  return (
+                    <div
+                      key={i}
+                      className="position-absolute"
+                      style={{
+                        left: r.bbox[0] * scaleX,
+                        top: r.bbox[1] * scaleY,
+                        width: r.bbox[2] * scaleX,
+                        height: r.bbox[3] * scaleY,
+                        border: `3px solid ${boxColor}`,
+                        boxShadow: isFall
+                          ? `0 0 15px #FF0000`
+                          : `0 0 5px ${boxColor}66`,
+                      }}
+                    ></div>
+                  );
+                })}
+            </div>
+            <Image
+              ref={imageRef}
+              src={currentImage}
+              onLoad={updateLayout}
+              className="mw-100 mh-100 shadow-lg"
+              style={{ objectFit: "contain" }}
+            />
+          </div>
+
+          <div className="py-3 mt-3 w-100">
+            <ImageCarousel
+              images={imageOptions}
+              currentImage={currentImage}
+              onSelect={(img) => {
+                setCurrentImage(img);
+                setStatus("analysis");
+              }}
+            />
+          </div>
+        </div>
+
+        <div className="col-md-5 d-flex flex-column align-items-center justify-content-center h-100 ps-md-4">
+          <div className="d-flex align-items-center gap-2 mb-3">
+            <div
+              className={`status-indicator ${hasFall ? "bg-danger animate-pulse" : "bg-success"}`}
+            ></div>
+            <h2 className="fw-bold h5 text-uppercase m-0 text-white">
+              <FormattedMessage
+                id={getLocationTranslationId(currentImage)}
+                defaultMessage="Location"
+              />
+            </h2>
+          </div>
+
+          {status === "result" && inferenceTime !== null && (
+            <div
+              className="mb-2"
+              style={{
+                fontSize: "1rem",
+                color: "#fff",
+                fontStyle: "italic",
+              }}
+            >
+              Inference time: <strong>{inferenceTime.toFixed(2)} ms</strong>
+            </div>
+          )}
+
+          <div className="flex-grow-1 overflow-auto pe-2 custom-scrollbar mb-3">
+            {status === "analysis" ? (
+              <div className="d-flex align-items-center gap-3 text-info p-4 bg-dark bg-opacity-50 rounded-4 border border-info border-opacity-25">
+                <div className="spinner-border spinner-border-sm" />
+                <FormattedMessage {...messages.scanningMessage} />
+              </div>
+            ) : (
+              <div className="list-group list-group-flush gap-1">
+                {results.length === 0 ? (
+                  <div className="p-4 text-center border border-secondary border-opacity-25 rounded-4">
+                    <p className="text-secondary small m-0">
+                      <FormattedMessage {...messages.noPersonsDetected} />
+                    </p>
+                  </div>
+                ) : (
+                  results.map((r, i) => (
+                    <div
+                      key={i}
+                      className="list-group-item bg-dark bg-opacity-25 text-white border-secondary border-opacity-10 px-3 py-2 rounded-3 d-flex justify-content-between align-items-center"
+                    >
+                      <div className="d-flex align-items-center gap-2">
+                        <span className="text-secondary smaller">#{i + 1}</span>
+                        <span className="fw-medium">
+                          <FormattedMessage {...messages.personDetected} />
+                        </span>
+                      </div>
+                      <div className="d-flex align-items-center gap-3">
+                        <span className="text-secondary smaller">
+                          {analysisTime ? formatFullDate(analysisTime) : ""}
+                        </span>
+                        {r.categoryId === 1 && (
+                          <span className="text-danger small fw-bold d-flex align-items-center gap-1">
+                            <FontAwesomeIcon icon={faExclamationTriangle} />
+                            <FormattedMessage {...messages.fallLabel} />
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            )}
+          </div>
+
+          <div className="pt-3 border-top border-secondary border-opacity-50">
+            <div className="d-flex justify-content-between align-items-end mb-3">
+              <span className="text-secondary text-uppercase small fw-bold tracking-wider">
+                <FormattedMessage {...messages.peopleCounter} />
+              </span>
+              <span
+                className={`display-3 fw-black ${hasFall ? "text-danger" : results.length > 0 ? "text-primary" : "text-white"}`}
+                style={{ lineHeight: 1 }}
+              >
+                {results.length.toString().padStart(2, "0")}
+              </span>
+            </div>
+            <div className="d-flex flex-wrap justify-content-center gap-3 mt-auto mb-4">
+              <Button
+                variant="light"
+                className={`analyze-cpu-button flex-grow-1 py-2 px-2 fw-bold`}
+                onClick={() => navigate("/crowd-and-fall-detection/webcam")}
+              >
+                Live Webcam Analysis
+              </Button>
+              <Button
+                variant="light"
+                disabled={status === "analysis"}
+                className={`analyze-cpu-button flex-grow-1 py-2 px-5 fw-bold ${status === "analysis" && analysisMode === "cpu" ? "active-analysis" : ""}`}
+                onClick={() => {
+                  setStatus("analysis");
+                  setAnalysisMode("cpu");
                 }}
               >
-                {status === "result" &&
-                  results.map((r, i) => {
-                    const scaleX =
-                      imgRect.width / (imageRef.current?.naturalWidth || 1);
-                    const scaleY =
-                      imgRect.height / (imageRef.current?.naturalHeight || 1);
-                    const isFall = r.categoryId === 1;
-                    const boxColor = isFall
-                      ? "#FF0000"
-                      : DETECTION_COLORS[i % DETECTION_COLORS.length];
-
-                    return (
-                      <div
-                        key={i}
-                        className="position-absolute"
-                        style={{
-                          left: r.bbox[0] * scaleX,
-                          top: r.bbox[1] * scaleY,
-                          width: r.bbox[2] * scaleX,
-                          height: r.bbox[3] * scaleY,
-                          border: `3px solid ${boxColor}`,
-                          boxShadow: isFall
-                            ? `0 0 15px #FF0000`
-                            : `0 0 5px ${boxColor}66`,
-                        }}
-                      ></div>
-                    );
-                  })}
-              </div>
-              <Image
-                ref={imageRef}
-                src={currentImage}
-                onLoad={updateLayout}
-                className="mw-100 mh-100 shadow-lg"
-                style={{ objectFit: "contain" }}
-              />
-            </div>
-
-            <div className="py-3 mt-auto">
-              <ImageCarousel
-                images={imageOptions}
-                currentImage={currentImage}
-                onSelect={(img) => {
-                  setCurrentImage(img);
-                  setStatus("analysis");
-                }}
-              />
-            </div>
-          </div>
-
-          <div className="col-md-5 d-flex flex-column ps-md-4 pb-3 h-100">
-            <div className="d-flex align-items-center gap-2 mb-3">
-              <div
-                className={`status-indicator ${hasFall ? "bg-danger animate-pulse" : "bg-success"}`}
-              ></div>
-              <h2 className="fw-bold h5 text-uppercase m-0 text-white">
                 <FormattedMessage
-                  id={getLocationTranslationId(currentImage)}
-                  defaultMessage="Location"
+                  id="components.CrowdAndFallDetection.cpuAnalysisButton"
+                  defaultMessage="CPU Analysis"
                 />
-              </h2>
-            </div>
-
-            <div className="flex-grow-1 overflow-auto pe-2 custom-scrollbar mb-3">
-              {status === "analysis" ? (
-                <div className="d-flex align-items-center gap-3 text-info p-4 bg-dark bg-opacity-50 rounded-4 border border-info border-opacity-25">
-                  <div className="spinner-border spinner-border-sm" />
-                  <FormattedMessage {...messages.scanningMessage} />
-                </div>
-              ) : (
-                <div className="list-group list-group-flush gap-1">
-                  {results.length === 0 ? (
-                    <div className="p-4 text-center border border-secondary border-opacity-25 rounded-4">
-                      <p className="text-secondary small m-0">
-                        <FormattedMessage {...messages.noPersonsDetected} />
-                      </p>
-                    </div>
-                  ) : (
-                    results.map((r, i) => (
-                      <div
-                        key={i}
-                        className="list-group-item bg-dark bg-opacity-25 text-white border-secondary border-opacity-10 px-3 py-2 rounded-3 d-flex justify-content-between align-items-center"
-                      >
-                        <div className="d-flex align-items-center gap-2">
-                          <span className="text-secondary smaller">
-                            #{i + 1}
-                          </span>
-                          <span className="fw-medium">
-                            <FormattedMessage {...messages.personDetected} />
-                          </span>
-                        </div>
-                        <div className="d-flex align-items-center gap-3">
-                          <span className="text-secondary smaller">
-                            {analysisTime ? formatFullDate(analysisTime) : ""}
-                          </span>
-                          {r.categoryId === 1 && (
-                            <span className="text-danger small fw-bold d-flex align-items-center gap-1">
-                              <FontAwesomeIcon icon={faExclamationTriangle} />
-                              <FormattedMessage {...messages.fallLabel} />
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                    ))
-                  )}
-                </div>
-              )}
-            </div>
-
-            <div className="pt-3 border-top border-secondary border-opacity-50">
-              <div className="d-flex justify-content-between align-items-end mb-3">
-                <span className="text-secondary text-uppercase small fw-bold tracking-wider">
-                  <FormattedMessage {...messages.peopleCounter} />
-                </span>
-                <span
-                  className={`display-3 fw-black ${hasFall ? "text-danger" : results.length > 0 ? "text-primary" : "text-white"}`}
-                  style={{ lineHeight: 1 }}
-                >
-                  {results.length.toString().padStart(2, "0")}
-                </span>
-              </div>
-              <div className="d-flex gap-2">
-                <Button
-                  variant="outline-light"
-                  className="flex-grow-1 py-3 fw-bold border-2"
-                  onClick={() => changeImage(-1)}
-                >
-                  <FormattedMessage {...messages.btnPrevious} />
-                </Button>
-                <Button
-                  variant="light"
-                  className="flex-grow-1 py-3 fw-bold"
-                  onClick={() => changeImage(1)}
-                >
-                  <FormattedMessage {...messages.btnNext} />
-                </Button>
-              </div>
+              </Button>
+              <Button
+                variant="light"
+                disabled={status === "analysis"}
+                className={`analyze-gpu-button flex-grow-1 py-2 px-5 fw-bold ${status === "analysis" && analysisMode === "gpu" ? "active-analysis" : ""}`}
+                onClick={() => {
+                  setStatus("analysis");
+                  setAnalysisMode("gpu");
+                }}
+              >
+                <FormattedMessage
+                  id="components.CrowdAndFallDetection.gpuAnalysisButton"
+                  defaultMessage="GPU Analysis"
+                />
+              </Button>
+              <Button
+                variant="light"
+                disabled={status === "analysis"}
+                className={`analyze-npu-button flex-grow-1 py-2 px-5 fw-bold ${status === "analysis" && analysisMode === "npu" ? "active-analysis" : ""}`}
+                onClick={() => {
+                  setStatus("analysis");
+                  setAnalysisMode("npu");
+                }}
+              >
+                <FormattedMessage
+                  id="components.CrowdAndFallDetection.npuAnalysisButton"
+                  defaultMessage="NPU Analysis"
+                />
+              </Button>
             </div>
           </div>
         </div>
-      )}
+      </div>
       {error && (
         <Alert
           variant="danger"

@@ -66,7 +66,7 @@ const QualityInspection = ({ apiClient }: QualityInspectionProps) => {
   const [analysisMode, setAnalysisMode] = useState<AnalysisMode>("cpu");
   const [inferenceTime, setInferenceTime] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [status, setStatus] = useState("greeting");
+  const [status, setStatus] = useState("analysis");
   const [currentImage, setCurrentImage] = useState(pcbMissingHole00);
   const [scale, setScale] = useState({ x: 1, y: 1 });
 
@@ -91,16 +91,6 @@ const QualityInspection = ({ apiClient }: QualityInspectionProps) => {
 
   useEffect(() => {
     if (status !== "analysis") return;
-
-    const timer = setTimeout(() => {
-      if (status === "analysis") setStatus("result");
-    }, 2000);
-
-    return () => clearTimeout(timer);
-  }, [status, currentImage]);
-
-  useEffect(() => {
-    if (status !== "analysis") return;
     const processImage = async () => {
       try {
         setDefectResults([]);
@@ -109,6 +99,7 @@ const QualityInspection = ({ apiClient }: QualityInspectionProps) => {
         const data = await apiClient.getDefectResult(file, analysisMode);
         setDefectResults(data.results);
         setInferenceTime(data.inferenceTime);
+        setStatus("result");
       } catch {
         setError(
           intl.formatMessage({
@@ -139,21 +130,15 @@ const QualityInspection = ({ apiClient }: QualityInspectionProps) => {
       className="quality-inspection-container vh-100 d-flex flex-column p-4 bg-black text-white"
     >
       <div className="d-flex justify-content-between align-items-start w-100 mb-4">
-        {status !== "greeting" && (
-          <Button
-            variant="link"
-            className="close-icon-button p-0"
-            onClick={() => navigate("/industrial")}
-          >
-            <FontAwesomeIcon icon={faX} size="lg" />
-          </Button>
-        )}
+        <Button
+          variant="link"
+          className="close-icon-button p-0"
+          onClick={() => navigate("/industrial")}
+        >
+          <FontAwesomeIcon icon={faX} size="lg" />
+        </Button>
         <div className="flex-grow-1 d-flex justify-content-center">
-          <Image
-            src={logo}
-            alt="SECO Logo"
-            className={status === "greeting" ? "logo-big" : "logo-small"}
-          />
+          <Image src={logo} alt="SECO Logo" className="logo-small" />
         </div>
         <div style={{ width: "24px" }}></div>
       </div>
@@ -169,185 +154,161 @@ const QualityInspection = ({ apiClient }: QualityInspectionProps) => {
         </Alert>
       )}
 
-      <div
-        className={
-          status === "greeting"
-            ? "flex-grow-1 d-flex align-items-center justify-content-center text-center"
-            : "flex-grow-1 d-flex align-items-left mb-4 mt-5 text-center"
-        }
-      >
-        <h2
-          className={
-            status === "greeting" ? "greeting-message" : "analysis-message"
-          }
-        >
-          {status === "greeting" ? (
-            <FormattedMessage
-              id="components.QualityInspection.startAnalysisMessage"
-              defaultMessage="This is a demo environment, the camera feed is simulated. Click ‘Start Analysis’ to run inference."
+      <div className="row flex-grow-1 align-items-center mb-5">
+        <div className="col-md-6 d-flex flex-column align-items-center mx-auto">
+          <div className="position-relative d-inline-block overflow-hidden">
+            {status === "result" &&
+              defectResults.map((defect, index) => (
+                <div
+                  key={index}
+                  className="position-absolute"
+                  style={{
+                    zIndex: 10,
+                    left: `${defect.bbox[0] * scale.x}px`,
+                    top: `${defect.bbox[1] * scale.y}px`,
+                    width: `${defect.bbox[2] * scale.x}px`,
+                    height: `${defect.bbox[3] * scale.y}px`,
+                    border: `3px solid ${handleBBoxColor(defect.categoryId)}`,
+                    backgroundColor: "rgba(255, 0, 0, 0.1)",
+                    pointerEvents: "none",
+                  }}
+                />
+              ))}
+            <Image
+              ref={imageRef}
+              src={currentImage}
+              alt="Sample"
+              fluid
+              onLoad={handleImageLoad}
+              className="image"
             />
-          ) : (
-            <FormattedMessage
-              id="components.QualityInspection.analyzeNextMessage"
-              defaultMessage="This is a demo environment, the camera feed is simulated. Click ‘CPU Analysis’ or 'NPU Analysis' to run inference"
-            />
-          )}
-        </h2>
-      </div>
-
-      {status !== "greeting" && (
-        <div className="row flex-grow-1 align-items-center justify-content-center mb-2">
-          <div className="col-md-7 d-flex flex-column align-items-center justify-content-center">
-            <div className="position-relative d-inline-block mb-4">
-              {status === "result" &&
-                defectResults.map((defect, index) => (
-                  <div
-                    key={index}
-                    className="position-absolute"
-                    style={{
-                      zIndex: 10,
-                      left: `${defect.bbox[0] * scale.x}px`,
-                      top: `${defect.bbox[1] * scale.y}px`,
-                      width: `${defect.bbox[2] * scale.x}px`,
-                      height: `${defect.bbox[3] * scale.y}px`,
-                      border: `3px solid ${handleBBoxColor(defect.categoryId)}`,
-                      backgroundColor: "rgba(255, 0, 0, 0.1)",
-                      pointerEvents: "none",
-                    }}
-                  />
-                ))}
-              <Image
-                ref={imageRef}
-                src={currentImage}
-                alt="Sample"
-                fluid
-                onLoad={handleImageLoad}
-                className="image"
-              />
-            </div>
-
-            <div className="mt-4 ms-5 w-100">
-              <ImageCarousel
-                images={imageOptions}
-                currentImage={currentImage}
-                onSelect={(img) => {
-                  setCurrentImage(img);
-                  setDefectResults([]);
-                }}
-              />
-            </div>
           </div>
 
-          <div className="col-md-5 d-flex flex-column align-items-center justify-content-center">
-            <div className="mb-5 mt-5 text-center">
-              {status === "analysis" && (
-                <div className="spinner-border mb-5 spinner" role="status" />
-              )}
-              <h3 className="fw-bold d-flex flex-column align-items-start text-start">
-                {status === "analysis" ? (
+          <div className="py-3 mt-3 w-100">
+            <ImageCarousel
+              images={imageOptions}
+              currentImage={currentImage}
+              onSelect={(img) => {
+                setCurrentImage(img);
+                setStatus("analysis");
+              }}
+            />
+          </div>
+        </div>
+
+        <div className="col-md-5 d-flex flex-column align-items-center justify-content-center">
+          <div className="mb-5 mt-5 text-center">
+            {status === "analysis" && (
+              <div className="spinner-border mb-5 spinner" role="status" />
+            )}
+            <h3 className="fw-bold d-flex flex-column align-items-start text-start">
+              {status === "analysis" ? (
+                <FormattedMessage
+                  id="qualityInspection.analyseMessage"
+                  defaultMessage="Scanning in progress..."
+                />
+              ) : (
+                <div className="d-flex flex-column align-items-start gap-1">
                   <FormattedMessage
-                    id="qualityInspection.analyseMessage"
-                    defaultMessage="Scanning in progress..."
+                    id="qualityInspection.anomaliesDetectedMessage"
+                    defaultMessage="Anomalies detected"
                   />
-                ) : (
-                  <div className="d-flex flex-column align-items-start gap-1">
+
+                  {status === "result" && inferenceTime !== null && (
+                    <div
+                      className="mb-2"
+                      style={{
+                        fontSize: "1rem",
+                        color: "#fff",
+                        fontStyle: "italic",
+                      }}
+                    >
+                      Inference time:{" "}
+                      <strong>{inferenceTime.toFixed(2)} ms</strong>
+                    </div>
+                  )}
+
+                  <div className="d-flex align-items-center">
+                    <span
+                      className="status-box me-2"
+                      style={{ borderColor: MISSING_HOLE_COLOR }}
+                    ></span>
                     <FormattedMessage
-                      id="qualityInspection.anomaliesDetectedMessage"
-                      defaultMessage="Anomalies detected"
+                      id="qualityInspection.missingHole"
+                      defaultMessage="Missing hole"
                     />
-
-                    {status === "result" && inferenceTime !== null && (
-                      <div
-                        className="mb-2"
-                        style={{
-                          fontSize: "1rem",
-                          color: "#fff",
-                          fontStyle: "italic",
-                        }}
-                      >
-                        Inference time:{" "}
-                        <strong>{inferenceTime.toFixed(2)} ms</strong>
-                      </div>
-                    )}
-
-                    <div className="d-flex align-items-center">
-                      <span
-                        className="status-box me-2"
-                        style={{ borderColor: MISSING_HOLE_COLOR }}
-                      ></span>
-                      <FormattedMessage
-                        id="qualityInspection.missingHole"
-                        defaultMessage="Missing hole"
-                      />
-                    </div>
-
-                    <div className="d-flex align-items-center">
-                      <span
-                        className="status-box me-2"
-                        style={{ borderColor: SHORT_CIRCUIT_COLOR }}
-                      ></span>
-                      <FormattedMessage
-                        id="qualityInspection.shortCircuit"
-                        defaultMessage="Short circuit"
-                      />
-                    </div>
                   </div>
-                )}
-              </h3>
-            </div>
 
-            <div className="d-flex flex-wrap justify-content-center gap-3 mt-auto mb-4">
-              <Button
-                variant="light"
-                disabled={status === "analysis"}
-                className={`analyze-cpu-button py-2 px-5 fw-bold ${status === "analysis" && analysisMode === "cpu" ? "active-analysis" : ""}`}
-                onClick={() => {
-                  setStatus("analysis");
-                  setAnalysisMode("cpu");
-                }}
-              >
-                <FormattedMessage
-                  id="components.QualityInspection.cpuAnalysisButton"
-                  defaultMessage="CPU Analysis"
-                />
-              </Button>
+                  <div className="d-flex align-items-center">
+                    <span
+                      className="status-box me-2"
+                      style={{ borderColor: SHORT_CIRCUIT_COLOR }}
+                    ></span>
+                    <FormattedMessage
+                      id="qualityInspection.shortCircuit"
+                      defaultMessage="Short circuit"
+                    />
+                  </div>
+                </div>
+              )}
+            </h3>
+          </div>
 
-              <Button
-                variant="light"
-                disabled={status === "analysis"}
-                className={`analyze-npu-button py-2 px-5 fw-bold ${status === "analysis" && analysisMode === "npu" ? "active-analysis" : ""}`}
-                onClick={() => {
-                  setStatus("analysis");
-                  setAnalysisMode("npu");
-                }}
-              >
-                <FormattedMessage
-                  id="components.QualityInspection.npuAnalysisButton"
-                  defaultMessage="NPU Analysis"
-                />
-              </Button>
-            </div>
+          <div className="d-flex flex-wrap justify-content-center gap-3 mt-auto mb-4">
+            <Button
+              variant="light"
+              className={`analyze-cpu-button py-2 px-3 fw-bold`}
+              onClick={() => navigate("/quality-inspection/webcam")}
+            >
+              Live webcam Analysis
+            </Button>
+            <Button
+              variant="light"
+              disabled={status === "analysis"}
+              className={`analyze-cpu-button py-2 px-5 fw-bold ${status === "analysis" && analysisMode === "cpu" ? "active-analysis" : ""}`}
+              onClick={() => {
+                setStatus("analysis");
+                setAnalysisMode("cpu");
+              }}
+            >
+              <FormattedMessage
+                id="components.QualityInspection.cpuAnalysisButton"
+                defaultMessage="CPU Analysis"
+              />
+            </Button>
+
+            <Button
+              variant="light"
+              disabled={status === "analysis"}
+              className={`analyze-gpu-button py-2 px-5 fw-bold ${status === "analysis" && analysisMode === "gpu" ? "active-analysis" : ""}`}
+              onClick={() => {
+                setStatus("analysis");
+                setAnalysisMode("gpu");
+              }}
+            >
+              <FormattedMessage
+                id="components.QualityInspection.gpuAnalysisButton"
+                defaultMessage="GPU Analysis"
+              />
+            </Button>
+
+            <Button
+              variant="light"
+              disabled={status === "analysis"}
+              className={`analyze-npu-button py-2 px-5 fw-bold ${status === "analysis" && analysisMode === "npu" ? "active-analysis" : ""}`}
+              onClick={() => {
+                setStatus("analysis");
+                setAnalysisMode("npu");
+              }}
+            >
+              <FormattedMessage
+                id="components.QualityInspection.npuAnalysisButton"
+                defaultMessage="NPU Analysis"
+              />
+            </Button>
           </div>
         </div>
-      )}
-
-      {status === "greeting" && (
-        <div className="d-flex justify-content-center pb-5">
-          <Button
-            variant="light"
-            className="greeting-button py-2 px-5 fw-bold"
-            onClick={() => {
-              setStatus("analysis");
-              setAnalysisMode("cpu");
-            }}
-          >
-            <FormattedMessage
-              id="components.QualityInspection.startAnalysisButton"
-              defaultMessage="Start analysis"
-            />
-          </Button>
-        </div>
-      )}
+      </div>
     </Container>
   );
 };

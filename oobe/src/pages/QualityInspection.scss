@@ -65,6 +65,7 @@
   }
 
   .analyze-cpu-button,
+  .analyze-gpu-button,
   .analyze-npu-button {
     @extend .greeting-button;
     height: 52px;

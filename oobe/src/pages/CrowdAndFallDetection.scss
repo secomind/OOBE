@@ -37,6 +37,41 @@
     }
   }
 
+  .greeting-button {
+    background-color: #e2e5f3;
+    border: none;
+    border-radius: 6px;
+    color: #1a1a1a;
+    font-size: 1rem;
+    min-width: 200px;
+    height: 52px;
+
+    &:hover {
+      background-color: #d1d5e8;
+    }
+  }
+
+  .analyze-cpu-button,
+  .analyze-gpu-button,
+  .analyze-npu-button {
+    @extend .greeting-button;
+    height: 52px;
+    transition: all 0.3s ease;
+
+    &.active-analysis {
+      color: #919191 !important;
+      background-color: #e2e5f3 !important;
+      opacity: 0.6;
+      cursor: wait;
+    }
+
+    &:disabled:not(.active-analysis) {
+      opacity: 0.8;
+      background-color: #ffffff;
+      color: #ccc;
+    }
+  }
+
   @media (max-width: 768px) {
     overflow-y: auto !important;
     .vh-100 {
