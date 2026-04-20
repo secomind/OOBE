@@ -1,7 +1,7 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useMemo } from "react";
 import { Container, Button, Alert, Image } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { APIClient } from "../api/APIClient";
+import { APIClient, type AnalysisMode } from "../api/APIClient";
 import { logo } from "../assets/images";
 import { FormattedMessage } from "react-intl";
 
@@ -20,22 +20,22 @@ const SampleIntegrityCheckWebcam = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
-  const [status, setStatus] = useState("greeting");
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isAnalyzingRef = useRef(false);
+
+  const [status, setStatus] = useState("idle");
   const [blisterPackResults, setBlisterPackResults] = useState<
     BlisterPackResult[]
   >([]);
+  const [inferenceTime, setInferenceTime] = useState<number | null>(null);
+  const [analysisMode, setAnalysisMode] = useState<AnalysisMode>("cpu");
   const [error, setError] = useState<string | null>(null);
   const [captured, setCaptured] = useState<string | null>(null);
   const [currentTime] = useState(new Date());
-  const [scale] = useState({ x: 1, y: 1 });
   const navigate = useNavigate();
-  const apiClient = new APIClient();
+  const apiClient = useMemo(() => new APIClient(), []);
 
   React.useEffect(() => {
-    navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
-      streamRef.current = stream;
-      if (videoRef.current) videoRef.current.srcObject = stream;
-    });
     return () => {
       if (streamRef.current) {
         streamRef.current.getTracks().forEach((track) => track.stop());
@@ -43,42 +43,80 @@ const SampleIntegrityCheckWebcam = () => {
     };
   }, []);
 
+  const startWebcam = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      streamRef.current = stream;
+      setStatus("greeting");
+    } catch {
+      setError(
+        "Failed to access webcam. Please ensure you have given permission.",
+      );
+    }
+  };
+
   React.useEffect(() => {
     if (status === "greeting" && videoRef.current && streamRef.current) {
       videoRef.current.srcObject = streamRef.current;
     }
   }, [status]);
 
-  const dataURLtoFile = (dataurl: string, filename: string) => {
-    const arr = dataurl.split(",");
-    const mime = arr[0].match(/:(.*?);/)![1];
-    const bstr = atob(arr[1]);
-    const u8arr = new Uint8Array(bstr.length);
-    for (let i = 0; i < bstr.length; i++) u8arr[i] = bstr.charCodeAt(i);
-    return new File([u8arr], filename, { type: mime });
-  };
+  React.useEffect(() => {
+    let active = true;
+    const analyzeLoop = async () => {
+      if (
+        status !== "greeting" ||
+        !streamRef.current ||
+        !videoRef.current ||
+        !canvasRef.current
+      )
+        return;
+      if (isAnalyzingRef.current) return;
 
-  const handleCapture = async () => {
-    if (videoRef.current && canvasRef.current) {
-      const ctx = canvasRef.current.getContext("2d");
-      if (ctx) {
-        ctx.drawImage(videoRef.current, 0, 0, 960, 720);
-        const dataUrl = canvasRef.current.toDataURL("image/png");
-        setCaptured(dataUrl);
-        setStatus("analysis");
-        setError(null);
-        try {
-          const file = dataURLtoFile(dataUrl, "webcam.png");
-          const data = await apiClient.getBlisterPackResult(file);
-          setBlisterPackResults(data);
-          setStatus("result");
-        } catch {
-          setError("Backend rejected the image format or analysis failed.");
-          setStatus("greeting");
+      isAnalyzingRef.current = true;
+      try {
+        const ctx = canvasRef.current.getContext("2d", { alpha: false });
+        if (ctx) {
+          ctx.drawImage(videoRef.current, 0, 0, 960, 720);
+
+          const blob = await new Promise<Blob | null>((resolve) =>
+            canvasRef.current?.toBlob((b) => resolve(b), "image/jpeg", 0.7),
+          );
+
+          if (blob && active && status === "greeting") {
+            const file = new File([blob], "webcam.jpg", { type: "image/jpeg" });
+            const data = await apiClient.getBlisterPackResult(
+              file,
+              analysisMode,
+            );
+            if (active && status === "greeting") {
+              const url = URL.createObjectURL(blob);
+              setCaptured((prev) => {
+                if (prev && prev.startsWith("blob:")) URL.revokeObjectURL(prev);
+                return url;
+              });
+              setBlisterPackResults(data.results);
+              setInferenceTime(data.inferenceTime);
+            }
+          }
+        }
+      } catch (err) {
+        console.error("Loop analysis error:", err);
+      } finally {
+        isAnalyzingRef.current = false;
+        if (active && status === "greeting") {
+          setTimeout(analyzeLoop, 100);
         }
       }
+    };
+
+    if (status === "greeting") {
+      analyzeLoop();
     }
-  };
+    return () => {
+      active = false;
+    };
+  }, [status, analysisMode, apiClient]);
 
   const formatFullDate = (date: Date): string => {
     const time = date.toLocaleTimeString("en-GB", { hour12: false });
@@ -90,26 +128,16 @@ const SampleIntegrityCheckWebcam = () => {
     return `${time} - ${dayMonthYear}`;
   };
 
-  const handleRestartWebcam = () => {
-    setCaptured(null);
-    setBlisterPackResults([]);
-    setError(null);
-    setStatus("greeting");
-  };
-
-  const handleCaptureAndAnalysis = () => {
-    setCaptured(null);
-    setBlisterPackResults([]);
-    setError(null);
-    setStatus("greeting");
-    setTimeout(() => handleCapture(), 100);
+  const handleAnalysisClick = (mode: AnalysisMode) => {
+    setAnalysisMode(mode);
+    if (status === "idle") {
+      startWebcam();
+    }
   };
 
   const handleReturnPage = () => {
-    if (videoRef.current && videoRef.current.srcObject) {
-      (videoRef.current.srcObject as MediaStream)
-        .getTracks()
-        .forEach((track) => track.stop());
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach((track) => track.stop());
     }
     navigate("/sample-integrity-check", { state: { autoStart: true } });
   };
@@ -123,6 +151,38 @@ const SampleIntegrityCheckWebcam = () => {
       default:
         return DEFAULT_COLOR;
     }
+  };
+
+  const renderBBoxes = () => {
+    const media = imageRef.current || videoRef.current;
+    const container = containerRef.current;
+    if (!media || !container || blisterPackResults.length === 0) return null;
+
+    const rect = media.getBoundingClientRect();
+    const containerRect = container.getBoundingClientRect();
+
+    const scaleX = rect.width / 960;
+    const scaleY = rect.height / 720;
+
+    const offsetX = rect.left - containerRect.left;
+    const offsetY = rect.top - containerRect.top;
+
+    return blisterPackResults.map((defect, index) => (
+      <div
+        key={index}
+        className="position-absolute"
+        style={{
+          zIndex: 10,
+          left: offsetX + defect.bbox[0] * scaleX,
+          top: offsetY + defect.bbox[1] * scaleY,
+          width: defect.bbox[2] * scaleX,
+          height: defect.bbox[3] * scaleY,
+          border: `3px solid ${handleBBoxColor(defect.categoryId)}`,
+          backgroundColor: "rgba(255, 0, 0, 0.1)",
+          pointerEvents: "none",
+        }}
+      />
+    ));
   };
 
   return (
@@ -156,10 +216,34 @@ const SampleIntegrityCheckWebcam = () => {
       <div className="row flex-grow-1 overflow-hidden">
         <div className="col-md-7 d-flex flex-column h-100">
           <div
+            ref={containerRef}
             className="position-relative flex-grow-1 bg-dark rounded-4 overflow-hidden border border-secondary shadow-lg d-flex align-items-center justify-content-center"
             style={{ minHeight: 320 }}
           >
+            {status === "idle" && (
+              <div className="text-secondary text-center">
+                <p>Webcam inactive.</p>
+                <p className="small">Click an analysis mode to start.</p>
+              </div>
+            )}
+
             {status === "greeting" && (
+              <video
+                ref={videoRef}
+                width={960}
+                height={720}
+                autoPlay
+                muted
+                playsInline
+                style={{
+                  position: "absolute",
+                  opacity: 0,
+                  pointerEvents: "none",
+                }}
+              />
+            )}
+
+            {(status === "greeting" || captured) && (
               <div
                 style={{
                   position: "absolute",
@@ -172,19 +256,16 @@ const SampleIntegrityCheckWebcam = () => {
                   justifyContent: "center",
                 }}
               >
-                <video
-                  ref={videoRef}
-                  width={960}
-                  height={720}
-                  autoPlay
-                  muted
-                  playsInline
-                  style={{
-                    background: "#222",
-                    maxWidth: "100%",
-                    maxHeight: "100%",
-                  }}
-                />
+                {captured ? (
+                  <Image
+                    ref={imageRef}
+                    src={captured}
+                    className="mw-100 mh-100 shadow-lg"
+                    style={{ objectFit: "contain" }}
+                  />
+                ) : status === "greeting" ? (
+                  <div className="spinner-border text-light" role="status" />
+                ) : null}
                 <canvas
                   ref={canvasRef}
                   width={960}
@@ -194,103 +275,94 @@ const SampleIntegrityCheckWebcam = () => {
               </div>
             )}
 
-            {captured && (status === "analysis" || status === "result") && (
-              <div className="position-relative d-inline-block mb-4">
-                <Image
-                  ref={imageRef}
-                  src={captured}
-                  className="mw-100 mh-100 shadow-lg"
-                  style={{ objectFit: "contain" }}
-                />
-                {status === "result" &&
-                  blisterPackResults.map((defect, index) => (
-                    <div
-                      key={index}
-                      className="position-absolute"
-                      style={{
-                        zIndex: 10,
-                        left: `${defect.bbox[0] * scale.x}px`,
-                        top: `${defect.bbox[1] * scale.y}px`,
-                        width: `${defect.bbox[2] * scale.x}px`,
-                        height: `${defect.bbox[3] * scale.y}px`,
-                        border: `3px solid ${handleBBoxColor(defect.categoryId)}`,
-                        backgroundColor: "rgba(255, 0, 0, 0.1)",
-                        pointerEvents: "none",
-                      }}
-                    />
-                  ))}
-              </div>
-            )}
+            {renderBBoxes()}
           </div>
         </div>
         <div className="col-md-5 d-flex flex-column align-items-center justify-content-center">
           <div className="mb-5 mt-5 text-center">
-            {status === "analysis" && (
-              <div className="spinner-border mb-5 spinner" role="status" />
-            )}
             <h3 className="fw-bold d-flex flex-column align-items-start text-start">
-              {status === "analysis" ? (
+              <div className="d-flex flex-column align-items-start gap-1">
                 <FormattedMessage
-                  id="SampleIntegrityCheck.analyseMessage"
-                  defaultMessage="Scanning in progress..."
+                  id="SampleIntegrityCheck.anomaliesDetectedMessage"
+                  defaultMessage="Anomalies detected"
                 />
-              ) : (
-                <div className="d-flex flex-column align-items-start gap-1">
-                  <FormattedMessage
-                    id="SampleIntegrityCheck.anomaliesDetectedMessage"
-                    defaultMessage="Anomalies detected"
-                  />
 
-                  <div className="d-flex align-items-center">
-                    <span
-                      className="status-box me-2"
-                      style={{ borderColor: EMPTY_BLISTER_COLOR }}
-                    ></span>
-                    <FormattedMessage
-                      id="SampleIntegrityCheck.emptyBlister"
-                      defaultMessage="Empty blister"
-                    />
+                {inferenceTime !== null && (
+                  <div
+                    className="mb-2"
+                    style={{
+                      fontSize: "1rem",
+                      color: "#fff",
+                      fontStyle: "italic",
+                    }}
+                  >
+                    Inference time:{" "}
+                    <strong>{inferenceTime.toFixed(2)} ms</strong>
                   </div>
-                  <div className="d-flex align-items-center">
-                    <span
-                      className="status-box me-2"
-                      style={{ borderColor: FULL_BLISTER_COLOR }}
-                    ></span>
-                    <FormattedMessage
-                      id="SampleIntegrityCheck.fullBlister"
-                      defaultMessage="Full blister"
-                    />
-                  </div>
+                )}
+
+                <div className="d-flex align-items-center">
+                  <span
+                    className="status-box me-2"
+                    style={{ borderColor: EMPTY_BLISTER_COLOR }}
+                  ></span>
+                  <FormattedMessage
+                    id="SampleIntegrityCheck.emptyBlister"
+                    defaultMessage="Empty blister"
+                  />
                 </div>
-              )}{" "}
+                <div className="d-flex align-items-center">
+                  <span
+                    className="status-box me-2"
+                    style={{ borderColor: FULL_BLISTER_COLOR }}
+                  ></span>
+                  <FormattedMessage
+                    id="SampleIntegrityCheck.fullBlister"
+                    defaultMessage="Full blister"
+                  />
+                </div>
+              </div>
             </h3>
           </div>
         </div>
-        <div></div>
       </div>
-      <div className="pt-3 d-flex gap-2">
+      <div className="mt-3 d-flex justify-content-center d-flex gap-2">
         <Button
           variant="light"
-          className="analysis-result-button flex-grow-1 py-3 fw-bold"
+          className="analyze-cpu-button flex-grow-1 py-3 px-5 fw-bold"
           onClick={handleReturnPage}
         >
           Gallery
         </Button>
         <Button
           variant="light"
-          className="analysis-result-button flex-grow-1 py-3 fw-bold border-2"
-          onClick={handleCaptureAndAnalysis}
-          disabled={status === "analysis"}
+          className={`analyze-cpu-button flex-grow-1 py-2 px-5 fw-bold ${analysisMode === "cpu" && status !== "idle" ? "active-analysis" : ""}`}
+          onClick={() => handleAnalysisClick("cpu")}
         >
-          {status === "analysis" ? "Scanning in progress..." : "Start Analysis"}
+          <FormattedMessage
+            id="components.SampleIntegrityCheck.cpuAnalysisButton"
+            defaultMessage="CPU Analysis"
+          />
         </Button>
         <Button
           variant="light"
-          className="analysis-result-button flex-grow-1 py-3 fw-bold"
-          onClick={handleRestartWebcam}
-          disabled={status === "greeting"}
+          className={`analyze-gpu-button flex-grow-1 py-2 px-5 fw-bold ${analysisMode === "gpu" && status !== "idle" ? "active-analysis" : ""}`}
+          onClick={() => handleAnalysisClick("gpu")}
         >
-          Live Webcam Feedback
+          <FormattedMessage
+            id="components.SampleIntegrityCheck.gpuAnalysisButton"
+            defaultMessage="GPU Analysis"
+          />
+        </Button>
+        <Button
+          variant="light"
+          className={`analyze-npu-button flex-grow-1 py-2 px-5 fw-bold ${analysisMode === "npu" && status !== "idle" ? "active-analysis" : ""}`}
+          onClick={() => handleAnalysisClick("npu")}
+        >
+          <FormattedMessage
+            id="components.SampleIntegrityCheck.npuAnalysisButton"
+            defaultMessage="NPU Analysis"
+          />
         </Button>
       </div>
     </Container>

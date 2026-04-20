@@ -23,12 +23,6 @@ export type PersonResult = {
   score: number;
 };
 
-interface BackendPersonResult {
-  category_id: number;
-  bbox: number[];
-  score: number;
-}
-
 export type InverterStatus = "ready" | "fault";
 export type SmartUpdate =
   | { field: "plantStatus"; value: string }
@@ -110,7 +104,12 @@ type FaceRecognitionMessage = {
   data: FaceRecognitionUpdate[];
 };
 
-export type AnalysisMode = "cpu" | "npu";
+export type AnalysisMode = "cpu" | "gpu" | "npu";
+
+export interface DetectionResponse<T> {
+  results: T[];
+  inferenceTime: number;
+}
 
 export class APIClient {
   private config: Config;
@@ -160,9 +159,12 @@ export class APIClient {
     };
   }
 
-  async getBlisterPackResult(imageFile: File): Promise<BlisterPackResult[]> {
-    const response = await this.axiosInstance.post<AIDetectionResultItem[]>(
-      "/blister-pack-detect",
+  async getBlisterPackResult(
+    imageFile: File,
+    mode: AnalysisMode,
+  ): Promise<DetectionResponse<BlisterPackResult>> {
+    const response = await this.axiosInstance.post<AIDetectionResult>(
+      `/blister-pack-detect-${mode}`,
       imageFile,
       {
         headers: {
@@ -170,13 +172,14 @@ export class APIClient {
         },
       },
     );
-    return response.data.map(
-      (item): BlisterPackResult => ({
+    return {
+      results: response.data.items.map((item) => ({
         categoryId: item.category_id,
         bbox: item.bbox,
         score: item.score,
-      }),
-    );
+      })),
+      inferenceTime: response.data.inferenceTime,
+    };
   }
 
   async exitApp(): Promise<void> {
@@ -469,9 +472,12 @@ export class APIClient {
     };
   }
 
-  async getPersonResult(imageFile: File): Promise<PersonResult[]> {
-    const response = await this.axiosInstance.post<BackendPersonResult[]>(
-      "/people-detect",
+  async getPersonResult(
+    imageFile: File,
+    mode: AnalysisMode,
+  ): Promise<DetectionResponse<PersonResult>> {
+    const response = await this.axiosInstance.post<AIDetectionResult>(
+      `/people-detect-${mode}`,
       imageFile,
       {
         headers: {
@@ -480,13 +486,14 @@ export class APIClient {
       },
     );
 
-    return response.data.map(
-      (item): PersonResult => ({
+    return {
+      results: response.data.items.map((item) => ({
         categoryId: item.category_id,
         bbox: item.bbox,
         score: item.score,
-      }),
-    );
+      })),
+      inferenceTime: response.data.inferenceTime,
+    };
   }
 
   disconnectWebSocket(wsType?: string) {

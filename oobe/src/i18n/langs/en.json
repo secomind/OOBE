@@ -80,6 +80,15 @@
   "components.BloodCountMedical.unit": {
     "defaultMessage": "Unit"
   },
+  "components.CrowdAndFallDetection.cpuAnalysisButton": {
+    "defaultMessage": "CPU Analysis"
+  },
+  "components.CrowdAndFallDetection.gpuAnalysisButton": {
+    "defaultMessage": "GPU Analysis"
+  },
+  "components.CrowdAndFallDetection.npuAnalysisButton": {
+    "defaultMessage": "NPU Analysis"
+  },
   "components.DeviceDetailsCard.cpuArchitecture": {
     "defaultMessage": "CPU architecture"
   },
@@ -122,32 +131,23 @@
   "components.GeolocalizationCard.title": {
     "defaultMessage": "Geolocalization"
   },
-  "components.QualityInspection.analyzeNextMessage": {
-    "defaultMessage": "This is a demo environment, the camera feed is simulated. Click ‘CPU Analysis’ or 'NPU Analysis' to run inference"
-  },
   "components.QualityInspection.cpuAnalysisButton": {
     "defaultMessage": "CPU Analysis"
+  },
+  "components.QualityInspection.gpuAnalysisButton": {
+    "defaultMessage": "GPU Analysis"
   },
   "components.QualityInspection.npuAnalysisButton": {
     "defaultMessage": "NPU Analysis"
   },
-  "components.QualityInspection.startAnalysisButton": {
-    "defaultMessage": "Start analysis"
+  "components.SampleIntegrityCheck.cpuAnalysisButton": {
+    "defaultMessage": "CPU Analysis"
   },
-  "components.QualityInspection.startAnalysisMessage": {
-    "defaultMessage": "This is a demo environment, the camera feed is simulated. Click ‘Start Analysis’ to run inference."
+  "components.SampleIntegrityCheck.gpuAnalysisButton": {
+    "defaultMessage": "GPU Analysis"
   },
-  "components.SampleIntegrityCheck.analyzeNextButton": {
-    "defaultMessage": "Analyze next object"
-  },
-  "components.SampleIntegrityCheck.analyzeNextMessage": {
-    "defaultMessage": "This is a demo environment, the camera feed is simulated. Click ‘Analyze next object’ to run inference."
-  },
-  "components.SampleIntegrityCheck.startAnalysisMessage": {
-    "defaultMessage": "This is a demo environment, the camera feed is simulated. Click ‘Start Analysis’ to run inference."
-  },
-  "components.SampleIntegrityCheck.startButton": {
-    "defaultMessage": "Start analysis"
+  "components.SampleIntegrityCheck.npuAnalysisButton": {
+    "defaultMessage": "NPU Analysis"
   },
   "components.Sidebar.dashboard": {
     "defaultMessage": "Dashboard"

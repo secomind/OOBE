@@ -1,8 +1,9 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useMemo } from "react";
 import { Container, Button, Alert, Image } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { APIClient } from "../api/APIClient";
+import { APIClient, type AnalysisMode } from "../api/APIClient";
 import { logo } from "../assets/images";
+import { FormattedMessage } from "react-intl";
 
 const DETECTION_COLORS = [
   "#00FF00",
@@ -29,21 +30,20 @@ const CrowdAndFallDetectionWebcam = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const isAnalyzingRef = useRef(false);
 
-  const [status, setStatus] = useState("greeting");
+  const [status, setStatus] = useState("idle");
   const [results, setResults] = useState<PersonResult[]>([]);
+  const [inferenceTime, setInferenceTime] = useState<number | null>(null);
+  const [analysisMode, setAnalysisMode] = useState<AnalysisMode>("cpu");
   const [error, setError] = useState<string | null>(null);
   const [captured, setCaptured] = useState<string | null>(null);
   const [currentTime] = useState(new Date());
 
   const navigate = useNavigate();
-  const apiClient = new APIClient();
+  const apiClient = useMemo(() => new APIClient(), []);
 
   React.useEffect(() => {
-    navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
-      streamRef.current = stream;
-      if (videoRef.current) videoRef.current.srcObject = stream;
-    });
     return () => {
       if (streamRef.current) {
         streamRef.current.getTracks().forEach((track) => track.stop());
@@ -51,43 +51,77 @@ const CrowdAndFallDetectionWebcam = () => {
     };
   }, []);
 
+  const startWebcam = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      streamRef.current = stream;
+      setStatus("greeting");
+    } catch {
+      setError(
+        "Failed to access webcam. Please ensure you have given permission.",
+      );
+    }
+  };
+
   React.useEffect(() => {
     if (status === "greeting" && videoRef.current && streamRef.current) {
       videoRef.current.srcObject = streamRef.current;
     }
   }, [status]);
 
-  const dataURLtoFile = (dataurl: string, filename: string) => {
-    const arr = dataurl.split(",");
-    const mime = arr[0].match(/:(.*?);/)![1];
-    const bstr = atob(arr[1]);
-    const u8arr = new Uint8Array(bstr.length);
-    for (let i = 0; i < bstr.length; i++) u8arr[i] = bstr.charCodeAt(i);
-    return new File([u8arr], filename, { type: mime });
-  };
+  React.useEffect(() => {
+    let active = true;
+    const analyzeLoop = async () => {
+      if (
+        status !== "greeting" ||
+        !streamRef.current ||
+        !videoRef.current ||
+        !canvasRef.current
+      )
+        return;
+      if (isAnalyzingRef.current) return;
 
-  const handleCapture = async () => {
-    if (videoRef.current && canvasRef.current) {
-      const ctx = canvasRef.current.getContext("2d");
-      if (ctx) {
-        ctx.drawImage(videoRef.current, 0, 0, 960, 720);
-        const dataUrl = canvasRef.current.toDataURL("image/png");
-        setCaptured(dataUrl);
-        setStatus("analysis");
-        setError(null);
+      isAnalyzingRef.current = true;
+      try {
+        const ctx = canvasRef.current.getContext("2d", { alpha: false });
+        if (ctx) {
+          ctx.drawImage(videoRef.current, 0, 0, 980, 720);
 
-        try {
-          const file = dataURLtoFile(dataUrl, "webcam.png");
-          const data = await apiClient.getPersonResult(file);
-          setResults(data);
-          setStatus("result");
-        } catch {
-          setError("Backend rejected the image format or analysis failed.");
-          setStatus("greeting");
+          const blob = await new Promise<Blob | null>((resolve) =>
+            canvasRef.current?.toBlob((b) => resolve(b), "image/jpeg", 0.6),
+          );
+
+          if (blob && active && status === "greeting") {
+            const file = new File([blob], "webcam.jpg", { type: "image/jpeg" });
+            const data = await apiClient.getPersonResult(file, analysisMode);
+            if (active && status === "greeting") {
+              const url = URL.createObjectURL(blob);
+              setCaptured((prev) => {
+                if (prev && prev.startsWith("blob:")) URL.revokeObjectURL(prev);
+                return url;
+              });
+              setResults(data.results);
+              setInferenceTime(data.inferenceTime);
+            }
+          }
+        }
+      } catch (err) {
+        console.error("Loop analysis error:", err);
+      } finally {
+        isAnalyzingRef.current = false;
+        if (active && status === "greeting") {
+          setTimeout(analyzeLoop, 50);
         }
       }
+    };
+
+    if (status === "greeting") {
+      analyzeLoop();
     }
-  };
+    return () => {
+      active = false;
+    };
+  }, [status, analysisMode, apiClient]);
 
   const formatFullDate = (date: Date): string => {
     const time = date.toLocaleTimeString("en-GB", { hour12: false });
@@ -99,28 +133,56 @@ const CrowdAndFallDetectionWebcam = () => {
     return `${time} - ${dayMonthYear}`;
   };
 
-  const handleRestartWebcam = () => {
-    setCaptured(null);
-    setResults([]);
-    setError(null);
-    setStatus("greeting");
-  };
-
-  const handleCaptureAndAnalysis = () => {
-    setCaptured(null);
-    setResults([]);
-    setError(null);
-    setStatus("greeting");
-    setTimeout(() => handleCapture(), 100);
+  const handleAnalysisClick = (mode: AnalysisMode) => {
+    setAnalysisMode(mode);
+    if (status === "idle") {
+      startWebcam();
+    }
   };
 
   const handleReturnPage = () => {
-    if (videoRef.current && videoRef.current.srcObject) {
-      (videoRef.current.srcObject as MediaStream)
-        .getTracks()
-        .forEach((track) => track.stop());
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach((track) => track.stop());
     }
     navigate("/crowd-and-fall-detection", { state: { autoStart: true } });
+  };
+
+  const renderBBoxes = () => {
+    const media = imageRef.current || videoRef.current;
+    const container = containerRef.current;
+    if (!media || !container || results.length === 0) return null;
+
+    const rect = media.getBoundingClientRect();
+    const containerRect = container.getBoundingClientRect();
+
+    const scaleX = rect.width / 980;
+    const scaleY = rect.height / 720;
+
+    const offsetX = rect.left - containerRect.left;
+    const offsetY = rect.top - containerRect.top;
+
+    return results.map((r, i) => {
+      const isFall = r.categoryId === 1;
+      const boxColor = isFall
+        ? "#FF0000"
+        : DETECTION_COLORS[i % DETECTION_COLORS.length];
+      return (
+        <div
+          key={i}
+          className="position-absolute"
+          style={{
+            left: offsetX + r.bbox[0] * scaleX,
+            top: offsetY + r.bbox[1] * scaleY,
+            width: r.bbox[2] * scaleX,
+            height: r.bbox[3] * scaleY,
+            border: `3px solid ${boxColor}`,
+            boxShadow: isFall ? `0 0 15px #FF0000` : `0 0 5px ${boxColor}66`,
+            pointerEvents: "none",
+            zIndex: 10,
+          }}
+        />
+      );
+    });
   };
 
   return (
@@ -154,10 +216,42 @@ const CrowdAndFallDetectionWebcam = () => {
       <div className="row flex-grow-1 overflow-hidden">
         <div className="col-md-7 d-flex flex-column h-100">
           <div
+            ref={containerRef}
             className="position-relative flex-grow-1 bg-dark rounded-4 overflow-hidden border border-secondary shadow-lg d-flex align-items-center justify-content-center"
             style={{ minHeight: 320 }}
           >
+            {status === "idle" && (
+              <div className="text-secondary text-center">
+                <p>Webcam inactive.</p>
+                <p className="small">Click an analysis mode to start.</p>
+              </div>
+            )}
+
             {status === "greeting" && (
+              <video
+                ref={videoRef}
+                width={980}
+                height={720}
+                autoPlay
+                muted
+                playsInline
+                style={{
+                  position: "absolute",
+                  opacity: 0,
+                  pointerEvents: "none",
+                  maxWidth: "100%",
+                  maxHeight: "100%",
+                  width: "auto",
+                  height: "auto",
+                  aspectRatio: "980 / 720",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                }}
+              />
+            )}
+
+            {(status === "greeting" || captured) && (
               <div
                 style={{
                   position: "absolute",
@@ -170,43 +264,7 @@ const CrowdAndFallDetectionWebcam = () => {
                   justifyContent: "center",
                 }}
               >
-                <video
-                  ref={videoRef}
-                  width={960}
-                  height={720}
-                  autoPlay
-                  muted
-                  playsInline
-                  style={{
-                    background: "#222",
-                    maxWidth: "100%",
-                    maxHeight: "100%",
-                  }}
-                />
-                <canvas
-                  ref={canvasRef}
-                  width={960}
-                  height={720}
-                  style={{ display: "none" }}
-                />
-              </div>
-            )}
-
-            {captured && status !== "greeting" && (
-              <>
-                <div
-                  ref={containerRef}
-                  style={{
-                    position: "absolute",
-                    left: 0,
-                    top: 0,
-                    width: "100%",
-                    height: "100%",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
+                {captured ? (
                   <Image
                     ref={imageRef}
                     src={captured}
@@ -215,52 +273,24 @@ const CrowdAndFallDetectionWebcam = () => {
                       objectFit: "contain",
                       maxWidth: "100%",
                       maxHeight: "100%",
-                      width: 960,
-                      height: 720,
+                      width: "auto",
+                      height: "auto",
+                      aspectRatio: "980 / 720",
                     }}
                   />
-                </div>
-
-                {status === "result" &&
-                  results.map((r, i) => {
-                    const img = imageRef.current;
-                    const container = containerRef.current;
-                    if (!img || !container) return null;
-
-                    const rect = img.getBoundingClientRect();
-                    const containerRect = container.getBoundingClientRect();
-
-                    const scaleX = rect.width / 960;
-                    const scaleY = rect.height / 720;
-
-                    const offsetX = rect.left - containerRect.left;
-                    const offsetY = rect.top - containerRect.top;
-
-                    const isFall = r.categoryId === 1;
-                    const boxColor = isFall
-                      ? "#FF0000"
-                      : DETECTION_COLORS[i % DETECTION_COLORS.length];
-
-                    return (
-                      <div
-                        key={i}
-                        className="position-absolute"
-                        style={{
-                          left: offsetX + r.bbox[0] * scaleX,
-                          top: offsetY + r.bbox[1] * scaleY,
-                          width: r.bbox[2] * scaleX,
-                          height: r.bbox[3] * scaleY,
-                          border: `3px solid ${boxColor}`,
-                          boxShadow: isFall
-                            ? `0 0 15px #FF0000`
-                            : `0 0 5px ${boxColor}66`,
-                          pointerEvents: "none",
-                        }}
-                      ></div>
-                    );
-                  })}
-              </>
+                ) : (
+                  <div className="spinner-border text-light" role="status" />
+                )}
+                <canvas
+                  ref={canvasRef}
+                  width={980}
+                  height={720}
+                  style={{ display: "none" }}
+                />
+              </div>
             )}
+
+            {renderBBoxes()}
           </div>
         </div>
 
@@ -274,35 +304,41 @@ const CrowdAndFallDetectionWebcam = () => {
             </h2>
           </div>
 
+          {inferenceTime !== null && (
+            <div
+              className="mb-2"
+              style={{
+                fontSize: "1rem",
+                color: "#fff",
+                fontStyle: "italic",
+              }}
+            >
+              Inference time: <strong>{inferenceTime.toFixed(2)} ms</strong>
+            </div>
+          )}
+
           <div className="flex-grow-1 overflow-auto pe-2 custom-scrollbar mb-3">
-            {status === "analysis" ? (
-              <div className="d-flex align-items-center gap-3 text-info p-4 bg-dark bg-opacity-50 rounded-4 border border-info border-opacity-25">
-                <div className="spinner-border spinner-border-sm" />
-                Scanning in progress...
-              </div>
-            ) : (
-              <div className="list-group list-group-flush gap-1">
-                {results.length === 0 ? (
-                  <div className="p-4 text-center border border-secondary border-opacity-25 rounded-4">
-                    <p className="text-secondary small m-0">
-                      No people detected.
-                    </p>
-                  </div>
-                ) : (
-                  results.map((r, i) => (
-                    <div
-                      key={i}
-                      className="list-group-item bg-dark bg-opacity-25 text-white border-secondary border-opacity-10 px-3 py-2 rounded-3 d-flex justify-content-between align-items-center"
-                    >
-                      <div className="d-flex align-items-center gap-2">
-                        <span className="text-secondary smaller">#{i + 1}</span>
-                        <span className="fw-medium">Person detected</span>
-                      </div>
+            <div className="list-group list-group-flush gap-1">
+              {results.length === 0 ? (
+                <div className="p-4 text-center border border-secondary border-opacity-25 rounded-4">
+                  <p className="text-secondary small m-0">
+                    No people detected.
+                  </p>
+                </div>
+              ) : (
+                results.map((r, i) => (
+                  <div
+                    key={i}
+                    className="list-group-item bg-dark bg-opacity-25 text-white border-secondary border-opacity-10 px-3 py-2 rounded-3 d-flex justify-content-between align-items-center"
+                  >
+                    <div className="d-flex align-items-center gap-2">
+                      <span className="text-secondary smaller">#{i + 1}</span>
+                      <span className="fw-medium">Person detected</span>
                     </div>
-                  ))
-                )}
-              </div>
-            )}
+                  </div>
+                ))
+              )}
+            </div>
           </div>
 
           <div className="pt-3 border-top border-secondary border-opacity-50">
@@ -327,29 +363,43 @@ const CrowdAndFallDetectionWebcam = () => {
         </div>
       </div>
 
-      <div className="pt-3 d-flex gap-2">
+      <div className="mt-3 d-flex justify-content-center d-flex gap-2">
         <Button
           variant="light"
-          className="flex-grow-1 py-3 fw-bold"
+          className="analyze-cpu-button flex-grow-1 py-3 px-5 fw-bold"
           onClick={handleReturnPage}
         >
           Gallery
         </Button>
         <Button
-          variant="outline-light"
-          className="flex-grow-1 py-3 fw-bold border-2"
-          onClick={handleCaptureAndAnalysis}
-          disabled={status === "analysis"}
+          variant="light"
+          className={`analyze-cpu-button flex-grow-1 py-2 px-5 fw-bold ${analysisMode === "cpu" && status !== "idle" ? "active-analysis" : ""}`}
+          onClick={() => handleAnalysisClick("cpu")}
         >
-          {status === "analysis" ? "Scanning in progress..." : "Start Analysis"}
+          <FormattedMessage
+            id="components.CrowdAndFallDetection.cpuAnalysisButton"
+            defaultMessage="CPU Analysis"
+          />
         </Button>
         <Button
           variant="light"
-          className="flex-grow-1 py-3 fw-bold"
-          onClick={handleRestartWebcam}
-          disabled={status === "greeting"}
+          className={`analyze-gpu-button flex-grow-1 py-2 px-5 fw-bold ${analysisMode === "gpu" && status !== "idle" ? "active-analysis" : ""}`}
+          onClick={() => handleAnalysisClick("gpu")}
         >
-          Live Webcam Feedback
+          <FormattedMessage
+            id="components.CrowdAndFallDetection.gpuAnalysisButton"
+            defaultMessage="GPU Analysis"
+          />
+        </Button>
+        <Button
+          variant="light"
+          className={`analyze-npu-button flex-grow-1 py-2 px-5 fw-bold ${analysisMode === "npu" && status !== "idle" ? "active-analysis" : ""}`}
+          onClick={() => handleAnalysisClick("npu")}
+        >
+          <FormattedMessage
+            id="components.CrowdAndFallDetection.npuAnalysisButton"
+            defaultMessage="NPU Analysis"
+          />
         </Button>
       </div>
     </Container>
