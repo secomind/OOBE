@@ -269,9 +269,6 @@
   "faceRecognitionModal.tenantRecognized": {
     "defaultMessage": "Tenant successfully recognized."
   },
-  "imageFormatError": {
-    "defaultMessage": "Backend rejected the image format."
-  },
   "industrialAlertManagement.dischargePressure": {
     "defaultMessage": "DISCHARGE PRESSURE"
   },

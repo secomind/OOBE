@@ -1,4 +1,4 @@
-import { Container, Image, Button, Alert } from "react-bootstrap";
+import { Container, Image, Button } from "react-bootstrap";
 import { logo } from "../assets/images";
 import "./SampleIntegrityCheck.scss";
 import { useNavigate } from "react-router-dom";
@@ -25,6 +25,7 @@ import {
 } from "../assets/images";
 import { APIClient } from "../api/APIClient";
 import ImageCarousel from "./ImageCarousel";
+import AIErrorModal from "../components/AIErrorModal";
 
 const EMPTY_BLISTER_COLOR = "#FF0000";
 const FULL_BLISTER_COLOR = "#FFC107";
@@ -52,10 +53,10 @@ const SampleIntegrityCheck = ({ apiClient }: SampleIntegrityCheckProps) => {
   const [blisterPackResults, setBlisterPackResults] = useState<
     BlisterPackResult[]
   >([]);
-  const [error, setError] = useState<string | null>(null);
   const [status, setStatus] = useState("greeting");
   const [currentImage, setCurrentImage] = useState(blisterPackEmpty00);
   const [scale, setScale] = useState({ x: 1, y: 1 });
+  const [showAIErrorModal, setShowAIErrorModal] = useState(false);
 
   const imageRef = useRef<HTMLImageElement>(null);
   const navigate = useNavigate();
@@ -96,29 +97,15 @@ const SampleIntegrityCheck = ({ apiClient }: SampleIntegrityCheckProps) => {
 
   useEffect(() => {
     if (status !== "analysis") return;
-
-    const timer = setTimeout(() => {
-      if (status === "analysis") setStatus("result");
-    }, 5000);
-
-    return () => clearTimeout(timer);
-  }, [status, currentImage]);
-
-  useEffect(() => {
-    if (status !== "analysis") return;
     const processImage = async () => {
       try {
         setBlisterPackResults([]);
         const file = await urlToFile(currentImage);
         const data = await apiClient.getBlisterPackResult(file);
         setBlisterPackResults(data);
+        setStatus("result");
       } catch {
-        setError(
-          intl.formatMessage({
-            id: "imageFormatError",
-            defaultMessage: "Backend rejected the image format.",
-          }),
-        );
+        setShowAIErrorModal(true);
       }
     };
 
@@ -161,16 +148,30 @@ const SampleIntegrityCheck = ({ apiClient }: SampleIntegrityCheckProps) => {
         <div style={{ width: "24px" }}></div>
       </div>
 
-      {error && (
-        <Alert
-          onClose={() => setError(null)}
-          dismissible
-          variant="danger"
-          className="mb-3"
-        >
-          {error}
-        </Alert>
-      )}
+      <AIErrorModal
+        show={showAIErrorModal}
+        onHide={() => {
+          setShowAIErrorModal(false);
+        }}
+        onExit={() => {
+          setShowAIErrorModal(false);
+          navigate("/medical");
+        }}
+        onContinue={async () => {
+          try {
+            setBlisterPackResults([]);
+            const file = await urlToFile(currentImage);
+            const data = await apiClient.getBlisterPackResult(file);
+            if (data && data.length) {
+              setBlisterPackResults(data);
+              setStatus("result");
+            }
+            return true;
+          } catch {
+            return false;
+          }
+        }}
+      />
 
       <div
         className={
@@ -244,16 +245,16 @@ const SampleIntegrityCheck = ({ apiClient }: SampleIntegrityCheckProps) => {
 
           <div className="col-md-5 d-flex flex-column align-items-center justify-content-center">
             <div className="mb-5 mt-5 text-center">
-              {status === "analysis" && (
+              {status === "analysis" && !showAIErrorModal && (
                 <div className="spinner-border mb-5 spinner" role="status" />
               )}
               <h3 className="fw-bold d-flex flex-column align-items-start text-start">
-                {status === "analysis" ? (
+                {status === "analysis" && !showAIErrorModal ? (
                   <FormattedMessage
                     id="SampleIntegrityCheck.analyseMessage"
                     defaultMessage="Scanning in progress..."
                   />
-                ) : (
+                ) : status === "result" ? (
                   <div className="d-flex flex-column align-items-start gap-1">
                     <FormattedMessage
                       id="SampleIntegrityCheck.anomaliesDetectedMessage"
@@ -281,7 +282,7 @@ const SampleIntegrityCheck = ({ apiClient }: SampleIntegrityCheckProps) => {
                       />
                     </div>
                   </div>
-                )}{" "}
+                ) : null}{" "}
               </h3>
             </div>
 

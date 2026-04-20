@@ -1,10 +1,11 @@
-import { Container, Image, Button, Alert } from "react-bootstrap";
+import { Container, Image, Button } from "react-bootstrap";
 import { useState, useEffect, useRef, useLayoutEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX, faExclamationTriangle } from "@fortawesome/free-solid-svg-icons";
 import { FormattedMessage, defineMessages } from "react-intl";
 import ImageCarousel from "./ImageCarousel";
+import AIErrorModal from "../components/AIErrorModal";
 import { APIClient } from "../api/APIClient";
 import {
   logo,
@@ -126,7 +127,6 @@ const urlToFile = async (url: string): Promise<File> => {
 
 const CrowdAndFallDetection = ({ apiClient }: CrowdAndFallDetectionProps) => {
   const [results, setResults] = useState<PersonResult[]>([]);
-  const [error, setError] = useState<string | null>(null);
   const [status, setStatus] = useState<"greeting" | "analysis" | "result">(
     "greeting",
   );
@@ -139,6 +139,7 @@ const CrowdAndFallDetection = ({ apiClient }: CrowdAndFallDetectionProps) => {
     left: 0,
     top: 0,
   });
+  const [showAIErrorModal, setShowAIErrorModal] = useState(false);
 
   const imageRef = useRef<HTMLImageElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -198,8 +199,8 @@ const CrowdAndFallDetection = ({ apiClient }: CrowdAndFallDetectionProps) => {
         setAnalysisTime(new Date());
         setStatus("result");
       } catch {
-        setError("Error");
-        setStatus("greeting");
+        setShowAIErrorModal(true);
+        // keep status as 'analysis' so the modal overlays the spinner and user can retry
       }
     };
     processImage();
@@ -324,7 +325,7 @@ const CrowdAndFallDetection = ({ apiClient }: CrowdAndFallDetectionProps) => {
             </div>
 
             <div className="flex-grow-1 overflow-auto pe-2 custom-scrollbar mb-3">
-              {status === "analysis" ? (
+              {status === "analysis" && !showAIErrorModal ? (
                 <div className="d-flex align-items-center gap-3 text-info p-4 bg-dark bg-opacity-50 rounded-4 border border-info border-opacity-25">
                   <div className="spinner-border spinner-border-sm" />
                   <FormattedMessage {...messages.scanningMessage} />
@@ -401,16 +402,29 @@ const CrowdAndFallDetection = ({ apiClient }: CrowdAndFallDetectionProps) => {
           </div>
         </div>
       )}
-      {error && (
-        <Alert
-          variant="danger"
-          className="position-fixed bottom-0 start-0 m-3 z-3 shadow-lg border-0 rounded-3"
-          onClose={() => setError(null)}
-          dismissible
-        >
-          <FormattedMessage {...messages.errorMsg} />
-        </Alert>
-      )}
+      <AIErrorModal
+        show={showAIErrorModal}
+        onHide={() => {
+          setShowAIErrorModal(false);
+        }}
+        onExit={() => {
+          setShowAIErrorModal(false);
+          navigate("/smart-building");
+        }}
+        onContinue={async () => {
+          try {
+            setResults([]);
+            const file = await urlToFile(currentImage);
+            const data = await apiClient.getPersonResult(file);
+            setResults(data || []);
+            setAnalysisTime(new Date());
+            setStatus("result");
+            return true;
+          } catch {
+            return false;
+          }
+        }}
+      />
     </Container>
   );
 };
